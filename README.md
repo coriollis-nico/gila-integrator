@@ -1,4 +1,6 @@
-Friedmann equation implementation and RK4 integration for GILA and GR in Fortran 2008.
+# GILA Integrator
+
+Friedmann equation implementation and RK4 integration for GILA (exponential) and GR in Fortran 2008.
 
 ## Featured in...
 
@@ -39,11 +41,3 @@ Also expect to be executed from project root directory
 ## Main references
 
 - TOFILL
-
-----
- 
-<a href="https://humanmademark.com/">
-<img alt="Human Made Mark"
-src="https://raw.githubusercontent.com/coriollis-nico/HumanMadeMark-com/main/docs/white-bg.svg"
-height="60">
-</a>

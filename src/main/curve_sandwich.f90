@@ -14,7 +14,7 @@ program curve_sandwich
 
   integer, dimension(3), parameter  :: m = [ 3,         8,         10 ]
   !! [[gila_conditions:m]]
-  integer, dimension(3), parameter  :: p = [ 1,         4,         10 ]
+  integer, dimension(3), parameter  :: p = [ 1,         2,         10 ]
   !! [[gila_conditions:p]]
   real(qp), dimension(3), parameter :: l = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
   !! [[gila_conditions:l]]
@@ -40,9 +40,9 @@ program curve_sandwich
   character(len=*), parameter :: data_dir = "data/sims/curve_sandwich"
 
   integer :: x_grid
-  integer :: m03p01l17, m08p04l17, m10p10l17
-  integer :: m03p01l22, m08p04l22, m10p10l22
-  integer :: m03p01l27, m08p04l27, m10p10l27
+  integer :: m03p01l17, m08p02l17, m10p10l17
+  integer :: m03p01l22, m08p02l22, m10p10l22
+  integer :: m03p01l27, m08p02l27, m10p10l27
 
 ! ------------------------------------------------------------------------------------ !
 
@@ -118,7 +118,7 @@ close(m03p01l27)
 
 ! --- m(2), p(2), l(...)
 
-call safe_open("m08p04l17.dat", m08p04l17, file_dir=data_dir)
+call safe_open("m08p02l17.dat", m08p02l17, file_dir=data_dir)
 
   conditions%m = m(2)
   conditions%p = p(2)
@@ -126,17 +126,17 @@ call safe_open("m08p04l17.dat", m08p04l17, file_dir=data_dir)
 
   call save_gila_genconditions(conditions, stdout)
 
-  call save_gila_genconditions(conditions, m08p04l17)
-  call save_integral_conditions(x, yi, m08p04l17)
+  call save_gila_genconditions(conditions, m08p02l17)
+  call save_integral_conditions(x, yi, m08p02l17)
 
   y = gila_solution(x, yi, 4, conditions)
 
-  call matrix_to_file(y, m08p04l17)
+  call matrix_to_file(y, m08p02l17)
 
-close(m08p04l17)
+close(m08p02l17)
 
 
-call safe_open("m08p04l22.dat", m08p04l22, file_dir=data_dir)
+call safe_open("m08p02l22.dat", m08p02l22, file_dir=data_dir)
 
   conditions%m = m(2)
   conditions%p = p(2)
@@ -144,16 +144,16 @@ call safe_open("m08p04l22.dat", m08p04l22, file_dir=data_dir)
 
   call save_gila_genconditions(conditions, stdout)
 
-  call save_gila_genconditions(conditions, m08p04l22)
-  call save_integral_conditions(x, yi, m08p04l22)
+  call save_gila_genconditions(conditions, m08p02l22)
+  call save_integral_conditions(x, yi, m08p02l22)
 
   y = gila_solution(x, yi, 4, conditions)
 
-  call matrix_to_file(y, m08p04l22)
+  call matrix_to_file(y, m08p02l22)
 
-close(m08p04l22)
+close(m08p02l22)
 
-call safe_open("m08p04l27.dat", m08p04l27, file_dir=data_dir)
+call safe_open("m08p02l27.dat", m08p02l27, file_dir=data_dir)
 
   conditions%m = m(2)
   conditions%p = p(2)
@@ -161,14 +161,14 @@ call safe_open("m08p04l27.dat", m08p04l27, file_dir=data_dir)
 
   call save_gila_genconditions(conditions, stdout)
 
-  call save_gila_genconditions(conditions, m08p04l27)
-  call save_integral_conditions(x, yi, m08p04l27)
+  call save_gila_genconditions(conditions, m08p02l27)
+  call save_integral_conditions(x, yi, m08p02l27)
 
   y = gila_solution(x, yi, 4, conditions)
 
-  call matrix_to_file(y, m08p04l27)
+  call matrix_to_file(y, m08p02l27)
 
-close(m08p04l27)
+close(m08p02l27)
 
 
 ! --- m(3), p(4), l(...)

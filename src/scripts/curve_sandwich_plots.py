@@ -36,19 +36,19 @@ m03p01l17 = np.loadtxt("data/sims/curve_sandwich/m03p01l17.dat", comments='#')
 m03p01l22 = np.loadtxt("data/sims/curve_sandwich/m03p01l22.dat", comments='#')
 m03p01l27 = np.loadtxt("data/sims/curve_sandwich/m03p01l27.dat", comments='#')
 
-m08p04l17 = np.loadtxt("data/sims/curve_sandwich/m08p04l17.dat", comments='#')
-m08p04l22 = np.loadtxt("data/sims/curve_sandwich/m08p04l22.dat", comments='#')
-m08p04l27 = np.loadtxt("data/sims/curve_sandwich/m08p04l27.dat", comments='#')
+m08p02l17 = np.loadtxt("data/sims/curve_sandwich/m08p02l17.dat", comments='#')
+m08p02l22 = np.loadtxt("data/sims/curve_sandwich/m08p02l22.dat", comments='#')
+m08p02l27 = np.loadtxt("data/sims/curve_sandwich/m08p02l27.dat", comments='#')
 
 m10p10l17 = np.loadtxt("data/sims/curve_sandwich/m10p10l17.dat", comments='#')
 m10p10l22 = np.loadtxt("data/sims/curve_sandwich/m10p10l22.dat", comments='#')
 m10p10l27 = np.loadtxt("data/sims/curve_sandwich/m10p10l27.dat", comments='#')
 
-sandwich_curves = [m03p01l17, m08p04l17, m10p10l17,
-                   m03p01l22, m08p04l22, m10p10l22,
-                   m03p01l27, m08p04l27, m10p10l27]
+sandwich_curves = [m03p01l17, m08p02l17, m10p10l17,
+                   m03p01l22, m08p02l22, m10p10l22,
+                   m03p01l27, m08p02l27, m10p10l27]
 
-mp_pairs = np.array([[3, 1], [8,4], [10,10]])
+mp_pairs = np.array([[3, 1], [8,2], [10,10]])
 l = np.array([1e-17, 1e-22, 1e-27])
 
 
