@@ -7,6 +7,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+plt.style.use('seaborn-v0_8-colorblind')
 
 from os import makedirs
 
@@ -19,6 +20,7 @@ def notification(info):
 fig_dpi = 300
 
 fig_dir = "plots/curve_sandwich"
+data_dir = "data/sims/curve_sandwich"
 makedirs(fig_dir, exist_ok = True)
 
 ## 0)
@@ -27,29 +29,29 @@ notification("Reading `gr.dat`")
 gr_integration = np.loadtxt("data/sims/gr/gr.dat", comments='#')
 
 notification("Reading sandwich_curves")
-x = np.loadtxt("data/sims/curve_sandwich/x_grid.dat", comments='#')
+x = np.loadtxt(data_dir+"/x_grid.dat", comments='#')
 
 # Columnas: y // e_j
 #           0     j(->4)
 
-m03p01l17 = np.loadtxt("data/sims/curve_sandwich/m03p01l17.dat", comments='#')
-m03p01l22 = np.loadtxt("data/sims/curve_sandwich/m03p01l22.dat", comments='#')
-m03p01l27 = np.loadtxt("data/sims/curve_sandwich/m03p01l27.dat", comments='#')
+m03p01l17 = np.loadtxt(data_dir+"/m03p01l1.0E-17.dat", comments='#')
+m03p01l22 = np.loadtxt(data_dir+"/m03p01l1.0E-22.dat", comments='#')
+m03p01l27 = np.loadtxt(data_dir+"/m03p01l1.0E-27.dat", comments='#')
 
-m08p02l17 = np.loadtxt("data/sims/curve_sandwich/m08p02l17.dat", comments='#')
-m08p02l22 = np.loadtxt("data/sims/curve_sandwich/m08p02l22.dat", comments='#')
-m08p02l27 = np.loadtxt("data/sims/curve_sandwich/m08p02l27.dat", comments='#')
+m08p02l17 = np.loadtxt(data_dir+"/m08p02l1.0E-17.dat", comments='#')
+m08p02l22 = np.loadtxt(data_dir+"/m08p02l1.0E-22.dat", comments='#')
+m08p02l27 = np.loadtxt(data_dir+"/m08p02l1.0E-27.dat", comments='#')
 
-m10p10l17 = np.loadtxt("data/sims/curve_sandwich/m10p10l17.dat", comments='#')
-m10p10l22 = np.loadtxt("data/sims/curve_sandwich/m10p10l22.dat", comments='#')
-m10p10l27 = np.loadtxt("data/sims/curve_sandwich/m10p10l27.dat", comments='#')
+m10p10l17 = np.loadtxt(data_dir+"/m10p10l1.0E-17.dat", comments='#')
+m10p10l22 = np.loadtxt(data_dir+"/m10p10l1.0E-22.dat", comments='#')
+m10p10l27 = np.loadtxt(data_dir+"/m10p10l1.0E-27.dat", comments='#')
 
 sandwich_curves = [m03p01l17, m08p02l17, m10p10l17,
                    m03p01l22, m08p02l22, m10p10l22,
                    m03p01l27, m08p02l27, m10p10l27]
 
-mp_pairs = np.array([[3, 1], [8,2], [10,10]])
-l = np.array([1e-17, 1e-22, 1e-27])
+mp_pairs = np.loadtxt(data_dir+"/mp.dat", comments="#", dtype=int)
+l = np.loadtxt(data_dir+"/l.dat", comments="#")
 
 
 ## 1)
@@ -76,7 +78,7 @@ notification("Creating plots...")
 for i in range(0,9,3):
 
   # Solutions
-  plt.figure(dpi=fig_dpi)
+  plt.figure()
 
   plt.title("Solutions (l = {})".format(l[i//3]))
 
@@ -85,19 +87,19 @@ for i in range(0,9,3):
 
   plt.ylim(-5,75)
 
-  plt.plot(gr_integration[:,0], gr_integration[:,1], '--', label="GR", color='0.5')
+  plt.plot(gr_integration[0:380,0], gr_integration[0:380,1], '--', label="GR", color='0.5')
 
   for k in range(3):
     plt.plot(x , sandwich_curves[i+k][:,0], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left")
+    plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/sol_{}.png".format(i//3))
+  plt.savefig(fig_dir+"/sol_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 1
-  plt.figure(dpi=fig_dpi)
+  plt.figure()
 
   plt.title("1st slow-roll parameter (l = {})".format(l[i//3]))
 
@@ -108,13 +110,13 @@ for i in range(0,9,3):
     plt.plot(x , sandwich_curves[i+k][:,1], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left")
+    plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/e1_{}.png".format(i//3))
+  plt.savefig(fig_dir+"/e1_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 2
-  plt.figure(dpi=fig_dpi)
+  plt.figure()
 
   plt.title("2st slow-roll parameter (l = {})".format(l[i//3]))
 
@@ -125,43 +127,47 @@ for i in range(0,9,3):
     plt.plot(x , sandwich_curves[i+k][:,2], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left")
+    plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/e2_{}.png".format(i//3))
+  plt.savefig(fig_dir+"/e2_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 3
-  plt.figure(dpi=fig_dpi)
+  plt.figure()
 
   plt.title("3rd slow-roll parameter (l = {})".format(l[i//3]))
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_3 $")
 
+  plt.ticklabel_format(axis='y', style='scientific')
+
   for k in range(3):
     plt.plot(x , sandwich_curves[i+k][:,3], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left")
+    plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/e3_{}.png".format(i//3))
+  plt.savefig(fig_dir+"/e3_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 4
-  plt.figure(dpi=fig_dpi)
+  plt.figure()
 
   plt.title("4th slow-roll parameter (l = {})".format(l[i//3]))
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_4 $")
 
+  plt.ticklabel_format(axis='y', style='scientific')
+
   for k in range(3):
     plt.plot(x , sandwich_curves[i+k][:,4], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left")
+    plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/e4_{}.png".format(i//3))
+  plt.savefig(fig_dir+"/e4_{}.svg".format(i//3))
   plt.close()
 
 exit()
