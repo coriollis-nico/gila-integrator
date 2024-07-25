@@ -124,6 +124,8 @@ for i in range(0,9,3):
 
   plt.title("1st slow-roll parameter (l = {})".format(l[i//3]))
 
+  plt.ylim(-3.6e-2,0)
+
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_1 $")
 
@@ -161,6 +163,8 @@ for i in range(0,9,3):
   plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
 
   plt.title("2st slow-roll parameter (l = {})".format(l[i//3]))
+
+  plt.ylim(-6.9e-2,-2.5e-2)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_2 $")
@@ -201,6 +205,8 @@ for i in range(0,9,3):
 
   plt.title("3rd slow-roll parameter (l = {})".format(l[i//3]))
 
+  plt.ylim(-4.8e-3,0)
+
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_3 $")
 
@@ -239,6 +245,8 @@ for i in range(0,9,3):
   plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
 
   plt.title("4th slow-roll parameter (l = {})".format(l[i//3]))
+
+  plt.ylim(-1.3e-2,-2e-3)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_4 $")
