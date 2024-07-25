@@ -30,6 +30,7 @@ gr_integration = np.loadtxt("data/sims/gr/gr.dat", comments='#')
 
 notification("Reading sandwich_curves")
 x = np.loadtxt(data_dir+"/x_grid.dat", comments='#')
+zoom = ( x > -60 ) & ( x < -50 )
 
 # Columnas: y // e_j
 #           0     j(->4)
@@ -101,6 +102,8 @@ for i in range(0,9,3):
   # slow-roll 1
   plt.figure()
 
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
   plt.title("1st slow-roll parameter (l = {})".format(l[i//3]))
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
@@ -115,8 +118,28 @@ for i in range(0,9,3):
   plt.savefig(fig_dir+"/e1_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
+  plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
+  plt.title("1st slow-roll parameter (l = {})".format(l[i//3]))
+
+  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
+  plt.ylabel(r"$ \epsilon_1 $")
+
+  for k in range(3):
+    plt.plot(x[zoom] , sandwich_curves[i+k][zoom,1], label="m = {}, p = {}"
+             .format(mp_pairs[k,0], mp_pairs[k,1]))
+
+    plt.legend(loc="lower left", frameon=False)
+
+  plt.savefig(fig_dir+"/e1z_{}.png".format(i//3), dpi=fig_dpi)
+  plt.close()
+
   # slow-roll 2
   plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
 
   plt.title("2st slow-roll parameter (l = {})".format(l[i//3]))
 
@@ -132,8 +155,29 @@ for i in range(0,9,3):
   plt.savefig(fig_dir+"/e2_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
+
+  plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
+  plt.title("2st slow-roll parameter (l = {})".format(l[i//3]))
+
+  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
+  plt.ylabel(r"$ \epsilon_2 $")
+
+  for k in range(3):
+    plt.plot(x[zoom] , sandwich_curves[i+k][zoom,2], label="m = {}, p = {}"
+             .format(mp_pairs[k,0], mp_pairs[k,1]))
+
+    plt.legend(loc="lower left", frameon=False)
+
+  plt.savefig(fig_dir+"/e2z_{}.png".format(i//3), dpi=fig_dpi)
+  plt.close()
+
   # slow-roll 3
   plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
 
   plt.title("3rd slow-roll parameter (l = {})".format(l[i//3]))
 
@@ -151,8 +195,28 @@ for i in range(0,9,3):
   plt.savefig(fig_dir+"/e3_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
+  plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
+  plt.title("3rd slow-roll parameter (l = {})".format(l[i//3]))
+
+  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
+  plt.ylabel(r"$ \epsilon_3 $")
+
+  for k in range(3):
+    plt.plot(x[zoom] , sandwich_curves[i+k][zoom,3], label="m = {}, p = {}"
+             .format(mp_pairs[k,0], mp_pairs[k,1]))
+
+    plt.legend(loc="lower left", frameon=False)
+
+  plt.savefig(fig_dir+"/e3z_{}.png".format(i//3), dpi=fig_dpi)
+  plt.close()
+
   # slow-roll 4
   plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
 
   plt.title("4th slow-roll parameter (l = {})".format(l[i//3]))
 
@@ -168,6 +232,24 @@ for i in range(0,9,3):
     plt.legend(loc="best", frameon=False)
 
   plt.savefig(fig_dir+"/e4_{}.png".format(i//3), dpi=fig_dpi)
+  plt.close()
+
+  plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
+  plt.title("4th slow-roll parameter (l = {})".format(l[i//3]))
+
+  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
+  plt.ylabel(r"$ \epsilon_4 $")
+
+  for k in range(3):
+    plt.plot(x[zoom] , sandwich_curves[i+k][zoom,4], label="m = {}, p = {}"
+             .format(mp_pairs[k,0], mp_pairs[k,1]))
+
+    plt.legend(loc="lower left", frameon=False)
+
+  plt.savefig(fig_dir+"/e4z_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
 exit()
