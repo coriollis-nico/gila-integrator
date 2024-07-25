@@ -95,7 +95,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/sol_{}.svg".format(i//3))
+  plt.savefig(fig_dir+"/sol_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
   # slow-roll 1
@@ -112,7 +112,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/e1_{}.svg".format(i//3))
+  plt.savefig(fig_dir+"/e1_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
   # slow-roll 2
@@ -129,7 +129,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/e2_{}.svg".format(i//3))
+  plt.savefig(fig_dir+"/e2_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
   # slow-roll 3
@@ -148,7 +148,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="lower left", frameon=False)
 
-  plt.savefig(fig_dir+"/e3_{}.svg".format(i//3))
+  plt.savefig(fig_dir+"/e3_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
   # slow-roll 4
@@ -167,7 +167,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/e4_{}.svg".format(i//3))
+  plt.savefig(fig_dir+"/e4_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
 
 exit()
