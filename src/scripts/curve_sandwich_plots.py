@@ -54,6 +54,9 @@ sandwich_curves = [m03p01l17, m08p02l17, m10p10l17,
 mp_pairs = np.loadtxt(data_dir+"/mp.dat", comments="#", dtype=int)
 l = np.loadtxt(data_dir+"/l.dat", comments="#")
 
+e1_limits = (-1, 0.97e-2)
+e2_limits = (2.6e-2, 4.1e-2)
+e3_limits = (-340e-3, 640e-3)
 
 ## 1)
 
@@ -81,6 +84,8 @@ for i in range(0,9,3):
   # Solutions
   plt.figure()
 
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
   plt.title("Solutions (l = {})".format(l[i//3]))
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
@@ -94,7 +99,7 @@ for i in range(0,9,3):
     plt.plot(x , sandwich_curves[i+k][:,0], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
 
   plt.savefig(fig_dir+"/sol_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
@@ -113,7 +118,7 @@ for i in range(0,9,3):
     plt.plot(x , sandwich_curves[i+k][:,1], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
 
   plt.savefig(fig_dir+"/e1_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
@@ -133,7 +138,10 @@ for i in range(0,9,3):
     plt.plot(x[zoom] , sandwich_curves[i+k][zoom,1], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
+
+  plt.fill_between(x[zoom], e1_limits[0], e1_limits[1], label="Planck constraint (95% CL)",
+                   alpha = 0.15, color = 'purple', lw = 0)
 
   plt.savefig(fig_dir+"/e1z_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
@@ -152,7 +160,7 @@ for i in range(0,9,3):
     plt.plot(x , sandwich_curves[i+k][:,2], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
 
   plt.savefig(fig_dir+"/e2_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
@@ -164,7 +172,7 @@ for i in range(0,9,3):
 
   plt.title("2st slow-roll parameter (l = {})".format(l[i//3]))
 
-  plt.ylim(-6.9e-2,-2.5e-2)
+  plt.ylim(2.5e-2, 6.9e-2)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_2 $")
@@ -173,7 +181,10 @@ for i in range(0,9,3):
     plt.plot(x[zoom] , sandwich_curves[i+k][zoom,2], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
+
+  plt.fill_between(x[zoom], e2_limits[0], e2_limits[1], label="Planck constraint (68% CL)",
+                   alpha = 0.15, color = 'red', lw = 0)
 
   plt.savefig(fig_dir+"/e2z_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
@@ -194,7 +205,7 @@ for i in range(0,9,3):
     plt.plot(x , sandwich_curves[i+k][:,3], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
 
   plt.savefig(fig_dir+"/e3_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
@@ -205,7 +216,7 @@ for i in range(0,9,3):
 
   plt.title("3rd slow-roll parameter (l = {})".format(l[i//3]))
 
-  plt.ylim(-4.8e-3,0)
+  plt.ylim(-5e-3, 0)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_3 $")
@@ -214,7 +225,10 @@ for i in range(0,9,3):
     plt.plot(x[zoom] , sandwich_curves[i+k][zoom,3], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
+
+  plt.fill_between(x[zoom], e3_limits[0], e3_limits[1], label="Planck constraint (95% CL)",
+                   alpha = 0.15, color = 'purple', lw = 0)
 
   plt.savefig(fig_dir+"/e3z_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()
@@ -246,7 +260,7 @@ for i in range(0,9,3):
 
   plt.title("4th slow-roll parameter (l = {})".format(l[i//3]))
 
-  plt.ylim(-1.3e-2,-2e-3)
+  plt.ylim(2e-3, 1.3e-2)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_4 $")
@@ -255,7 +269,7 @@ for i in range(0,9,3):
     plt.plot(x[zoom] , sandwich_curves[i+k][zoom,4], label="m = {}, p = {}"
              .format(mp_pairs[k,0], mp_pairs[k,1]))
 
-    plt.legend(loc="lower left", frameon=False)
+    plt.legend(loc="best", frameon=False)
 
   plt.savefig(fig_dir+"/e4z_{}.png".format(i//3), dpi=fig_dpi)
   plt.close()

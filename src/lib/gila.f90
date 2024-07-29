@@ -224,7 +224,7 @@ function gila_solution(x, y0, n, user_conditions)
   do i = 2, n
     gila_solution(:,i+1) = fd_c5curve(gila_solution(:,2), x(2)-x(1), i-1)
     do j = 1, size(x,1)
-      gila_solution(j,i+1) = - gila_solution(j,i+1) / gila_solution(j,i)
+      gila_solution(j,i+1) = gila_solution(j,i+1) / gila_solution(j,i)
     end do
   end do
 

@@ -103,6 +103,7 @@ do k = 1, 3
     y = gila_solution(x, yi, 4, conditions)
 
     call save_gila_genconditions(conditions, out_id)
+    call save_gila_genconditions(conditions, stdout)
     call save_integral_conditions(x, yi, out_id)
 
     call matrix_to_file(y, out_id)
