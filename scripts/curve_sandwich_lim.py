@@ -117,6 +117,27 @@ for i in range(0,9,3):
   plt.savefig(fig_dir+"/e1crit_{}.svg".format(i//3))
   plt.close()
 
+  ## unzoom
+  plt.figure()
+
+  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
+
+  plt.title("Slow-roll 1 (l = {})".format(l[i//3]))
+
+  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
+  plt.ylabel(r"$ \epsilon_1 $")
+
+  plt.plot(x, limit_curves[i//3][:,1], label=r"$ m,p \to \infty $", color='k', lw=0.9)
+
+  for k in range(3):
+    plt.plot(x , sandwich_curves[i+k][:,1], ls='--', label="m = {}, p = {}"
+             .format(mp_pairs[k,0], mp_pairs[k,1]))
+
+  plt.legend(loc="best", frameon=False)
+
+  plt.savefig(fig_dir+"/e1uzcrit_{}.svg".format(i//3))
+  plt.close()
+
   # slow-roll 2
   plt.figure()
 
