@@ -91,7 +91,7 @@ for i in range(0,9,3):
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \ln{\frac{H}{H_0}} $")
 
-  plt.ylim(-5,75)
+  plt.ylim(-1,70)
 
   plt.plot(gr_integration[0:380,0], gr_integration[0:380,1], '--', label="GR", color='0.5')
 
@@ -129,7 +129,7 @@ for i in range(0,9,3):
 
   plt.title("1st slow-roll parameter (l = {})".format(l[i//3]))
 
-  plt.ylim(-3.6e-2,0)
+  plt.ylim(0,0.037)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_1 $")
@@ -153,26 +153,7 @@ for i in range(0,9,3):
 
   plt.title("2st slow-roll parameter (l = {})".format(l[i//3]))
 
-  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
-  plt.ylabel(r"$ \epsilon_2 $")
-
-  for k in range(3):
-    plt.plot(x , sandwich_curves[i+k][:,2], label="m = {}, p = {}"
-             .format(mp_pairs[k,0], mp_pairs[k,1]))
-
-    plt.legend(loc="best", frameon=False)
-
-  plt.savefig(fig_dir+"/e2_{}.svg".format(i//3))
-  plt.close()
-
-
-  plt.figure()
-
-  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
-
-  plt.title("2st slow-roll parameter (l = {})".format(l[i//3]))
-
-  plt.ylim(2.5e-2, 6.9e-2)
+  plt.ylim(2.6e-2, 7e-2)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_2 $")
@@ -196,27 +177,7 @@ for i in range(0,9,3):
 
   plt.title("3rd slow-roll parameter (l = {})".format(l[i//3]))
 
-  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
-  plt.ylabel(r"$ \epsilon_3 $")
-
-  plt.ticklabel_format(axis='y', style='scientific')
-
-  for k in range(3):
-    plt.plot(x , sandwich_curves[i+k][:,3], label="m = {}, p = {}"
-             .format(mp_pairs[k,0], mp_pairs[k,1]))
-
-    plt.legend(loc="best", frameon=False)
-
-  plt.savefig(fig_dir+"/e3_{}.svg".format(i//3))
-  plt.close()
-
-  plt.figure()
-
-  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
-
-  plt.title("3rd slow-roll parameter (l = {})".format(l[i//3]))
-
-  plt.ylim(-5e-3, 0)
+  plt.ylim(2.5e-2,6.5e-2)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_3 $")
@@ -240,27 +201,7 @@ for i in range(0,9,3):
 
   plt.title("4th slow-roll parameter (l = {})".format(l[i//3]))
 
-  plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
-  plt.ylabel(r"$ \epsilon_4 $")
-
-  plt.ticklabel_format(axis='y', style='scientific')
-
-  for k in range(3):
-    plt.plot(x , sandwich_curves[i+k][:,4], label="m = {}, p = {}"
-             .format(mp_pairs[k,0], mp_pairs[k,1]))
-
-    plt.legend(loc="best", frameon=False)
-
-  plt.savefig(fig_dir+"/e4_{}.svg".format(i//3))
-  plt.close()
-
-  plt.figure()
-
-  plt.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
-
-  plt.title("4th slow-roll parameter (l = {})".format(l[i//3]))
-
-  plt.ylim(2e-3, 1.3e-2)
+  plt.ylim(2.6e-2, 6.25e-2)
 
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_4 $")

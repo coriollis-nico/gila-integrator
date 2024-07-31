@@ -10,7 +10,7 @@ module finite_diff
   implicit none
 
   private
-  public fd_c5curve
+  public center5_diff, fd_c5curve
 
 contains
 

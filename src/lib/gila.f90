@@ -270,6 +270,7 @@ function gila_solution(x, y0, n, user_conditions)
   !!
   !! - ´y(i,1)´ is \( y(x_i) \)
   !! - ´y(i,j)´ is \( \epsilon_j \)
+  !! TODO: Consider changing to 7 point deravative to reduce error
 
   real(qp), intent(in) :: x(:)
   real(qp), intent(in) :: y0
@@ -302,12 +303,12 @@ function gila_solution(x, y0, n, user_conditions)
     gila_solution(i, 1) = gila_solution(i-1, 1) &
                         & + h * ( k1 + 2.0_qp * k2 + 2.0_qp * k3 + k4 ) / 6.0_qp
     if (n >= 1) then
-      gila_solution(i, 2) = k1
+      gila_solution(i, 2) = -k1
     end if
   end do
 
   do i = 2, n
-    gila_solution(:,i+1) = fd_c5curve(gila_solution(:,2), x(2)-x(1), i-1)
+    gila_solution(:,i+1) = fd_c5curve(gila_solution(:,i), x(2)-x(1), 1)
     do j = 1, size(x,1)
       gila_solution(j,i+1) = gila_solution(j,i+1) / gila_solution(j,i)
     end do
@@ -345,25 +346,25 @@ function gila_solution_limit(x, y0, n, user_conditions)
   end if
 
   gila_solution_limit(1, 1) = y0
-  gila_solution_limit(1, 2) = gila_friedmann(x(1), y0, cond)
+  gila_solution_limit(1, 2) = gila_friedmann_limit(x(1), y0, cond)
 
   do i = 2, size(x, 1)
     h = x(i) - x(i-1)
 
-    k1 = gila_friedmann(x(i-1), gila_solution_limit(i-1, 1), cond)
-    k2 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k1/2.0_qp, cond)
-    k3 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k2/2.0_qp, cond)
-    k4 = gila_friedmann(x(i-1) + h, gila_solution_limit(i-1, 1) + h*k3, cond)
+    k1 = gila_friedmann_limit(x(i-1), gila_solution_limit(i-1, 1), cond)
+    k2 = gila_friedmann_limit(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k1/2.0_qp, cond)
+    k3 = gila_friedmann_limit(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k2/2.0_qp, cond)
+    k4 = gila_friedmann_limit(x(i-1) + h, gila_solution_limit(i-1, 1) + h*k3, cond)
 
     gila_solution_limit(i, 1) = gila_solution_limit(i-1, 1) &
                         & + h * ( k1 + 2.0_qp * k2 + 2.0_qp * k3 + k4 ) / 6.0_qp
     if (n >= 1) then
-      gila_solution_limit(i, 2) = k1
+      gila_solution_limit(i, 2) = -k1
     end if
   end do
 
   do i = 2, n
-    gila_solution_limit(:,i+1) = fd_c5curve(gila_solution_limit(:,2), x(2)-x(1), i-1)
+    gila_solution_limit(:,i+1) = fd_c5curve(gila_solution_limit(:,i), x(2)-x(1), 1)
     do j = 1, size(x,1)
       gila_solution_limit(j,i+1) = gila_solution_limit(j,i+1) / gila_solution_limit(j,i)
     end do

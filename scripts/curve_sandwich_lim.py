@@ -76,7 +76,7 @@ for i in range(0,9,3):
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \ln{\frac{H}{H_0}} $")
 
-  plt.ylim(-5,75)
+  plt.ylim(-1,70)
 
   plt.plot(gr_integration[0:380,0], gr_integration[0:380,1], ':', label="GR", color='0.75')
 
@@ -101,7 +101,7 @@ for i in range(0,9,3):
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_1 $")
 
-  plt.ylim(-3.6e-2,0)
+  plt.ylim(-0.2e-2,0.037)
 
   plt.plot(x[zoom], limit_curves[i//3][zoom,1], label=r"$ m,p \to \infty $", color='k', lw=0.9)
 
@@ -148,9 +148,7 @@ for i in range(0,9,3):
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_2 $")
 
-  plt.ylim(2.5e-2, 6.9e-2)
-
-  plt.plot(x[zoom], limit_curves[i//3][zoom,2], label=r"$ m,p \to \infty $", color='k', lw=0.9)
+  plt.ylim(2.6e-2, 7e-2)
 
   for k in range(3):
     plt.plot(x[zoom] , sandwich_curves[i+k][zoom,2], ls='--', label="m = {}, p = {}"
@@ -174,9 +172,7 @@ for i in range(0,9,3):
   plt.xlabel(r"$ \ln{\frac{a}{a_0}} $")
   plt.ylabel(r"$ \epsilon_3 $")
 
-  plt.ylim(-5e-3, 0)
-
-  plt.plot(x[zoom], limit_curves[i//3][zoom,3], label=r"$ m,p \to \infty $", color='k', lw=0.9)
+  plt.ylim(2.5e-2,6.5e-2)
 
   for k in range(3):
     plt.plot(x[zoom] , sandwich_curves[i+k][zoom,3], ls='--', label="m = {}, p = {}"
