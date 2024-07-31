@@ -101,7 +101,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/sol_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/sol_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 1
@@ -120,7 +120,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/e1_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e1_{}.svg".format(i//3))
   plt.close()
 
   plt.figure()
@@ -143,7 +143,7 @@ for i in range(0,9,3):
   plt.fill_between(x[zoom], e1_limits[0], e1_limits[1], label="Planck constraint (95% CL)",
                    alpha = 0.15, color = 'purple', lw = 0)
 
-  plt.savefig(fig_dir+"/e1z_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e1z_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 2
@@ -162,7 +162,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/e2_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e2_{}.svg".format(i//3))
   plt.close()
 
 
@@ -186,7 +186,7 @@ for i in range(0,9,3):
   plt.fill_between(x[zoom], e2_limits[0], e2_limits[1], label="Planck constraint (68% CL)",
                    alpha = 0.15, color = 'red', lw = 0)
 
-  plt.savefig(fig_dir+"/e2z_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e2z_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 3
@@ -207,7 +207,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/e3_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e3_{}.svg".format(i//3))
   plt.close()
 
   plt.figure()
@@ -230,7 +230,7 @@ for i in range(0,9,3):
   plt.fill_between(x[zoom], e3_limits[0], e3_limits[1], label="Planck constraint (95% CL)",
                    alpha = 0.15, color = 'purple', lw = 0)
 
-  plt.savefig(fig_dir+"/e3z_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e3z_{}.svg".format(i//3))
   plt.close()
 
   # slow-roll 4
@@ -251,7 +251,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/e4_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e4_{}.svg".format(i//3))
   plt.close()
 
   plt.figure()
@@ -271,7 +271,7 @@ for i in range(0,9,3):
 
     plt.legend(loc="best", frameon=False)
 
-  plt.savefig(fig_dir+"/e4z_{}.png".format(i//3), dpi=fig_dpi)
+  plt.savefig(fig_dir+"/e4z_{}.svg".format(i//3))
   plt.close()
 
 exit()

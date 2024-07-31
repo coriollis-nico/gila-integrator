@@ -10,8 +10,8 @@ module gila
 
 private
 public gila_conditions, gila_grdefault
-public save_gila_genconditions
-public gila_friedmann, gila_solution
+public save_gila_genconditions, save_gila_limconditions
+public gila_friedmann, gila_friedmann_limit, gila_solution, gila_solution_limit
 
 type :: gila_conditions
   !! Derived type for specifying [[gila:gila_friedmann]] parameters
@@ -108,6 +108,50 @@ subroutine save_gila_genconditions(conditions, file_id)
 
 end subroutine save_gila_genconditions
 
+subroutine save_gila_limconditions(conditions, file_id)
+
+  !! Saves relevant [[gila_conditions]] parameters to a file
+
+  type(gila_conditions), intent(in) :: conditions
+  integer, intent(in) :: file_id
+
+  character(len=2) :: c = "# "
+  !! Comment marker
+
+  write(file_id, *) c//"- Cosmos: "//trim(conditions%cosmos)
+  select case(conditions%cosmos)
+    case("early")
+      write(file_id, *) c//"lambda: ", conditions%lambda
+      write(file_id, *) c//"l: ", conditions%l
+      write(file_id, *) c//"m: -> oo"
+      write(file_id, *) c//"p: -> oo"
+      write(file_id, *) c//"a0: ", conditions%a0
+      write(file_id, *) c//"Omega_m: ", conditions%omega_m
+      write(file_id, *) c//"Omega_r: ", conditions%omega_r
+    case("late")
+      write(file_id, *) c//"beta: ", conditions%beta
+      write(file_id, *) c//"l_tilde: ", conditions%l_tilde
+      write(file_id, *) c//"r: -> oo"
+      write(file_id, *) c//"s: -> oo"
+      write(file_id, *) c//"a0: ", conditions%a0
+      write(file_id, *) c//"Omega_m: ", conditions%omega_m
+      write(file_id, *) c//"Omega_r: ", conditions%omega_r
+    case default
+      write(file_id, *) c//"lambda: ", conditions%lambda
+      write(file_id, *) c//"beta: ", conditions%beta
+      write(file_id, *) c//"l: ", conditions%l
+      write(file_id, *) c//"l_tilde: ", conditions%l_tilde
+      write(file_id, *) c//"m: -> oo"
+      write(file_id, *) c//"p: -> oo"
+      write(file_id, *) c//"r: -> oo"
+      write(file_id, *) c//"s: -> oo"
+      write(file_id, *) c//"a0: ", conditions%a0
+      write(file_id, *) c//"Omega_m: ", conditions%omega_m
+      write(file_id, *) c//"Omega_r: ", conditions%omega_r
+  end select
+
+end subroutine save_gila_limconditions
+
 function gila_friedmann(x, y, user_conditions)
 
   !! Finds the value \( y'(x) \) of the GILA Friedmann equations.
@@ -176,6 +220,47 @@ function gila_friedmann(x, y, user_conditions)
 
 end function gila_friedmann
 
+function gila_friedmann_limit(x, y, user_conditions)
+
+  !! Finds the value \( y'(x) \) of [[gila_friedmann]] when \( m,p \to \infty \)
+  !!
+  !! TODO: incorporate `beta != 0` case
+
+  real(qp), intent(in) :: x
+  !! [[gila_friedmann:x]]
+  real(qp), intent(in) :: y
+  !! [[gila_friedmann:y]]
+  type(gila_conditions), intent(in), optional :: user_conditions
+  !! [[gila_friedmann:user_conditions]]
+  real(qp) :: gila_friedmann_limit
+  !! Function output
+
+  type(gila_conditions) :: cond
+  !! Conditions used by function
+
+  if ( present(user_conditions) ) then
+    cond = user_conditions
+  end if
+
+  if ( cond%l >= 1.0_qp ) then
+    error stop "l>1 not implemented"
+  end if
+
+  select case(cond%cosmos)
+    case("early")
+      select case( y >= -log(cond%l) )
+        case(.true.)
+          gila_friedmann_limit = 0.0_qp
+        case(.false.)
+          gila_friedmann_limit = -(0.5_qp) * exp( -3.0_qp*x - 2.0_qp*y ) * cond%a0**(-3) &
+                            & * ( 3.0_qp * cond%omega_m + 4.0_qp * cond%omega_r /cond%a0 / exp(x) )
+      end select
+    case default
+      error stop "Cosmos selection not implemented"
+  end select
+
+end function gila_friedmann_limit
+
 function gila_solution(x, y0, n, user_conditions)
 
   !! Returns the RK4 solution to the [[gila:gila_friedmann]] differential equation, as
@@ -229,5 +314,61 @@ function gila_solution(x, y0, n, user_conditions)
   end do
 
 end function gila_solution
+
+function gila_solution_limit(x, y0, n, user_conditions)
+
+  !! Returns the RK4 solution to the [[gila:gila_friedmann_limit]] differential equation, as
+  !! well as up to \( \epsilon_n \).
+  !!
+  !! For ´y = gila_solution_limit(x, y0, user_conditions)´,
+  !!
+  !! - ´y(i,1)´ is \( y(x_i) \)
+  !! - ´y(i,j)´ is \( \epsilon_j \)
+
+  ! BUG: this is copy-pasted from gila_soultion. Surely a better solution exists...
+
+  real(qp), intent(in) :: x(:)
+  real(qp), intent(in) :: y0
+  type(gila_conditions), intent(in), optional :: user_conditions
+  integer, intent(in) :: n
+  !! If `n == 0`, only finds the solution curve
+
+  real(qp), dimension(size(x, 1), n+1 ) :: gila_solution_limit
+
+  type(gila_conditions) :: cond
+  real(qp) :: k1, k2, k3, k4
+  real(qp) :: h
+  integer :: i, j
+
+  if (present(user_conditions)) then
+    cond = user_conditions
+  end if
+
+  gila_solution_limit(1, 1) = y0
+  gila_solution_limit(1, 2) = gila_friedmann(x(1), y0, cond)
+
+  do i = 2, size(x, 1)
+    h = x(i) - x(i-1)
+
+    k1 = gila_friedmann(x(i-1), gila_solution_limit(i-1, 1), cond)
+    k2 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k1/2.0_qp, cond)
+    k3 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k2/2.0_qp, cond)
+    k4 = gila_friedmann(x(i-1) + h, gila_solution_limit(i-1, 1) + h*k3, cond)
+
+    gila_solution_limit(i, 1) = gila_solution_limit(i-1, 1) &
+                        & + h * ( k1 + 2.0_qp * k2 + 2.0_qp * k3 + k4 ) / 6.0_qp
+    if (n >= 1) then
+      gila_solution_limit(i, 2) = k1
+    end if
+  end do
+
+  do i = 2, n
+    gila_solution_limit(:,i+1) = fd_c5curve(gila_solution_limit(:,2), x(2)-x(1), i-1)
+    do j = 1, size(x,1)
+      gila_solution_limit(j,i+1) = gila_solution_limit(j,i+1) / gila_solution_limit(j,i)
+    end do
+  end do
+
+end function gila_solution_limit
 
 end module gila

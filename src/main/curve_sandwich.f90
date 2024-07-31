@@ -1,6 +1,7 @@
 program curve_sandwich
-  !! For specified [[gila_conditions:m]], [[gila_conditions:p]] combinations calculates
-  !! \( y \) and \( \epsilon_{1 \to 4} \) slow-roll parameters
+  !! For specified [[gila_conditions:m]], [[gila_conditions:p]], [[gila_conditions:p]]
+  !! combinations calculates \( y \) and \( \epsilon_{1 \to 4} \) slow-roll parameters.
+  !! Also limit curves.
   use iso_fortran_env,  &
     only: sp => real32, &
           dp => real64, &
@@ -41,7 +42,7 @@ program curve_sandwich
 
   integer :: x_grid
   integer :: out_id
-  integer :: mp_id, l_id
+  integer :: mp_id, l_id, lim_id
 ! ------------------------------------------------------------------------------------ !
 
 call safe_open("mp.dat", mp_id, file_dir=data_dir)
@@ -111,6 +112,29 @@ do k = 1, 3
   close(out_id)
 
   end do
+
+end do
+
+! limit curves ----------------------------------------------------------------------------------- !
+
+do k = 1, 3
+
+  conditions%cosmos="early"
+  conditions%l=lt(k)
+
+  write(filename, '(a5, es7.1e2)') 'lim_l', conditions%l
+
+  call safe_open(trim(filename)//".dat", lim_id, file_dir=data_dir)
+
+    y = gila_solution_limit(x, yi, 4, conditions)
+
+    call save_gila_limconditions(conditions, lim_id)
+    call save_gila_limconditions(conditions, stdout)
+    call save_integral_conditions(x, yi, lim_id)
+
+    call matrix_to_file(y, lim_id)
+
+  close(lim_id)
 
 end do
 
