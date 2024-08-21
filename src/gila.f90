@@ -290,7 +290,9 @@ function gila_solution(x, y0, n, user_conditions)
   end if
 
   gila_solution(1, 1) = y0
-  gila_solution(1, 2) = gila_friedmann(x(1), y0, cond)
+  if (n >= 1) then
+    gila_solution(1, 2) = gila_friedmann(x(1), y0, cond)
+  end if
 
   do i = 2, size(x, 1)
     h = x(i) - x(i-1)
