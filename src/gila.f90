@@ -15,13 +15,15 @@ public gila_friedmann, gila_friedmann_limit, gila_solution, gila_solution_limit
 
 type :: gila_conditions
   !! Derived type for specifying [[gila:gila_friedmann]] parameters
-  character(5):: cosmos = "gila"
+  character(5) :: cosmos = "gila"
   !! For selecting [[gila:gila_friedmann]] variation. Possible values are
   !!
   !! - `"gila"` (default) for the standard evaluation
   !! - `"early"` for computing \( \beta = 0 \) efficiently
   !! - `"late"` for computing \( \lambda = 0 \) efficiently
   !! - `"gr"` for computing \( \lambda = \beta = 0 \) (general relativity) efficiently
+  logical :: dark = .false.
+  !! For specifying \( \Lambda \) equal (`.false.`) or unequal (`.true.`) to `0`.
   real(qp) :: lambda = 1.0_qp
   !! Early universe coefficient
   real(qp) :: beta = 1.0_qp
@@ -38,18 +40,21 @@ type :: gila_conditions
   !! TODO specify
   integer :: s = 1
   !! TODO specify
-  real(qp) :: a0 = 1.0_qp
-  !! Initial scale factor
-  real(qp) :: omega_m = 0.999916_qp
+  real(qp) :: a0bar = 1.0_qp
+  !! Initial \( \bar{a} = \frac{a}{a0} \) value
+  real(qp) :: H0bar = 1.0_qp
+  !! Initial \( \bar{H} = \frac{H}{H0} \) value
+  real(qp) :: Omega_M = 0.999916_qp
   !! \( \Omega_m \) initial matter density
-  real(qp) :: omega_r = 8.4e-5_qp
+  real(qp) :: Omega_R = 8.4e-5_qp
   !! \( \Omega_r \) initial radiation density
-  real(qp) :: omega_de = 0.0_qp
+  real(qp) :: Omega_dark = 0.0_qp
   !! \( \Omega_{\Lambda} \) initial dark energy density
 end type
 
 type(gila_conditions), parameter :: gila_grdefault &
   & = gila_conditions(cosmos="gr", &
+                      & dark=.true.
                       & lambda = 0.0_qp, beta = 0.0_qp,         &
                       & l = 0.0_qp, l_tilde = 0.0_qp,           &
                       & m = 0, p = 0, r = 0, s = 0,             &
@@ -69,48 +74,37 @@ subroutine save_gila_genconditions(conditions, file_id)
   character(len=2) :: c = "# "
   !! Comment marker
 
-  write(file_id, *) c//"- Cosmos: "//trim(conditions%cosmos)
-  select case(conditions%cosmos)
-    case("gr")
-      write(file_id, *) c//"a0: ", conditions%a0
-      write(file_id, *) c//"Omega_m: ", conditions%omega_m
-      write(file_id, *) c//"Omega_r: ", conditions%omega_r
-      write(file_id, *) c//"Omega_Lambda: ", conditions%omega_de
-    case("early")
-      write(file_id, *) c//"lambda: ", conditions%lambda
-      write(file_id, *) c//"l: ", conditions%l
-      write(file_id, *) c//"m: ", conditions%m
-      write(file_id, *) c//"p: ", conditions%p
-      write(file_id, *) c//"a0: ", conditions%a0
-      write(file_id, *) c//"Omega_m: ", conditions%omega_m
-      write(file_id, *) c//"Omega_r: ", conditions%omega_r
-    case("late")
-      write(file_id, *) c//"beta: ", conditions%beta
-      write(file_id, *) c//"l_tilde: ", conditions%l_tilde
-      write(file_id, *) c//"r: ", conditions%r
-      write(file_id, *) c//"s: ", conditions%s
-      write(file_id, *) c//"a0: ", conditions%a0
-      write(file_id, *) c//"Omega_m: ", conditions%omega_m
-      write(file_id, *) c//"Omega_r: ", conditions%omega_r
-    case default
-      write(file_id, *) c//"lambda: ", conditions%lambda
-      write(file_id, *) c//"beta: ", conditions%beta
-      write(file_id, *) c//"l: ", conditions%l
-      write(file_id, *) c//"l_tilde: ", conditions%l_tilde
-      write(file_id, *) c//"m: ", conditions%m
-      write(file_id, *) c//"p: ", conditions%p
-      write(file_id, *) c//"r: ", conditions%r
-      write(file_id, *) c//"s: ", conditions%s
-      write(file_id, *) c//"a0: ", conditions%a0
-      write(file_id, *) c//"Omega_m: ", conditions%omega_m
-      write(file_id, *) c//"Omega_r: ", conditions%omega_r
-  end select
+  write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
+  write(file_id, *) c//"dark: ", conditions%dark
+  write(file_id, *) c//"a0bar = ", conditions%a0bar
+  write(file_id, *) c//"H0bar = ", conditions%H0bar
+  write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
+  write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
+  if ( conditions%dark == .true. ) then
+    write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
+  end if
+  if ( (trim(conditions%cosmos) == "gila") .or. (trim(conditions%cosmos) == "early") ) then
+    write(file_id, *) c//"λ = ", conditions%lambda
+    write(file_id, *) c//"l = ", conditions%l
+    write(file_id, *) c//"m = ", conditions%m
+    write(file_id, *) c//"p = ", conditions%p
+  end if
+  if ( (trim(conditions%cosmos) == "gila") .or. (trim(conditions%cosmos) == "late") ) then
+    write(file_id, *) c//"β = ", conditions%lambda
+    write(file_id, *) c//"l tilde = ", conditions%l_tilde
+    write(file_id, *) c//"r = ", conditions%r
+    write(file_id, *) c//"s = ", conditions%s
+  end if
+
 
 end subroutine save_gila_genconditions
 
 subroutine save_gila_limconditions(conditions, file_id)
 
-  !! Saves relevant [[gila_conditions]] parameters to a file
+  !! [[save_gila_genconditions]] for the \( m,p \to \infty \) case.
+  !! @warining
+  !! \( r,s \to \infty \) not yet implemented in code
+  !! @endwarning
 
   type(gila_conditions), intent(in) :: conditions
   integer, intent(in) :: file_id
@@ -118,105 +112,126 @@ subroutine save_gila_limconditions(conditions, file_id)
   character(len=2) :: c = "# "
   !! Comment marker
 
-  write(file_id, *) c//"- Cosmos: "//trim(conditions%cosmos)
-  select case(conditions%cosmos)
-    case("early")
-      write(file_id, *) c//"lambda: ", conditions%lambda
-      write(file_id, *) c//"l: ", conditions%l
-      write(file_id, *) c//"m: -> oo"
-      write(file_id, *) c//"p: -> oo"
-      write(file_id, *) c//"a0: ", conditions%a0
-      write(file_id, *) c//"Omega_m: ", conditions%omega_m
-      write(file_id, *) c//"Omega_r: ", conditions%omega_r
-    case("late")
-      write(file_id, *) c//"beta: ", conditions%beta
-      write(file_id, *) c//"l_tilde: ", conditions%l_tilde
-      write(file_id, *) c//"r: -> oo"
-      write(file_id, *) c//"s: -> oo"
-      write(file_id, *) c//"a0: ", conditions%a0
-      write(file_id, *) c//"Omega_m: ", conditions%omega_m
-      write(file_id, *) c//"Omega_r: ", conditions%omega_r
-    case default
-      write(file_id, *) c//"lambda: ", conditions%lambda
-      write(file_id, *) c//"beta: ", conditions%beta
-      write(file_id, *) c//"l: ", conditions%l
-      write(file_id, *) c//"l_tilde: ", conditions%l_tilde
-      write(file_id, *) c//"m: -> oo"
-      write(file_id, *) c//"p: -> oo"
-      write(file_id, *) c//"r: -> oo"
-      write(file_id, *) c//"s: -> oo"
-      write(file_id, *) c//"a0: ", conditions%a0
-      write(file_id, *) c//"Omega_m: ", conditions%omega_m
-      write(file_id, *) c//"Omega_r: ", conditions%omega_r
-  end select
+  write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
+  write(file_id, *) c//"dark: ", conditions%dark
+  write(file_id, *) c//"a0bar = ", conditions%a0bar
+  write(file_id, *) c//"H0bar = ", conditions%H0bar
+  write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
+  write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
+  if ( conditions%dark == .true. ) then
+    write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
+  end if
+  if (trim(conditions%cosmos) == "early") then
+    write(file_id, *) c//"λ = ", conditions%lambda
+    write(file_id, *) c//"l = ", conditions%l
+    write(file_id, *) c//"m -> oo"
+    write(file_id, *) c//"p -> oo"
+  else
+    error stop "r,s limits not implemented"
+!     write(file_id, *) c//"β = ", conditions%lambda
+!     write(file_id, *) c//"l tilde = ", conditions%l_tilde
+!     write(file_id, *) c//"r -> oo"
+!     write(file_id, *) c//"s -> oo"
+  end if
 
 end subroutine save_gila_limconditions
 
+function aux_num(lambda, l, m, p)
+
+  !! Auxiliary function for use in [[gila_friedmann]].
+  !! Calculates \( \lambda l^{2m-2} \exp{ \lambda l^{2p} } \) and
+  !! \( - \beta \tilde{l}^{2r-2} \exp{ - \beta \tilde{l}^{2s} } \).
+
+  real(qp), intent(in) :: lambda
+  real(qp), intent(in) :: l
+  integer, intent(in) :: m
+  integer, intent(in) :: p
+
+  real(qp) :: aux_num
+  ! output
+
+  aux_num = lambda * l**(2*m-2) * exp(lambda * l**(2p))
+
+end function
+
+function aux_denom(lambda, l, m, p, x)
+
+  !! Denominator equivalent of [[aux_num]]
+  !! for \( \lambda (xl)^{2m-2} ( m + \lambda p [xl]^{2p} ) \exp{ \lambda [xl]^{2p} } \)
+  !! corresponding with \( -\beta \) etc.
+
+  real(qp), intent(in) :: lambda
+  real(qp), intent(in) :: l
+  real(qp), intent(in) :: x
+  integer, intent(in) :: m
+  integer, intent(in) :: p
+
+  real(qp) :: aux_denom
+  ! output
+
+  aux_denom = lambda * (x*l)**(2*m-2) * ( m + lambda * p * (l*x)**(2*p) ) &
+            & * exp( lambda * (l*x)**(2p) )
+
+end function aux_denom
+
 function gila_friedmann(x, y, user_conditions)
 
-  !! Finds the value \( y'(x) \) of the GILA Friedmann equations.
-  !! Reduces to GR for \( \lambda = \beta = 0 \)
+  !! Finds the value of \( \frac{d \bar{H}}{d \bar{a}} \) of the GILA Friedmann equations.
 
   real(qp), intent(in) :: x
-  !! \( x = \ln{\left( \frac{a}{a_0} \right)} \).
+  !! \( x = \frac{a}{a_0} \).
   real(qp), intent(in) :: y
-  !! \( y = \ln{\left( \frac{H}{H_0} \right)} \).
+  !! \( y = \frac{H}{H_0} \).
   type(gila_conditions), intent(in), optional :: user_conditions
   !! User conditions for integration
   real(qp) :: gila_friedmann
-  !! Function output
+  ! Function output
 
   type(gila_conditions) :: cond
-  !! Densities used by function
+  !! ODE parameters
+
+  !- aux. values
+  real(qp) :: aux_coeff
+  !! Auxiliary for \( - \frac{1}{2 \bar{a} \bar{H}} \)
+  real(qp) :: aux_densities
+  !! Auxiliary for densities factor
+  real(qp) :: aux_param
+  !! Auxiliary for parameter fraction
 
   if ( present(user_conditions) ) then
     cond = user_conditions
   end if
 
-  select case(cond%cosmos)
-    case("gr")
-      gila_friedmann = -(0.5_qp) * ( 3.0_qp + cond%omega_r / exp(2.0_qp*y + 4.0_qp*x) &
-      & - 3.0_qp * cond%omega_de )
-    case("early")
-      gila_friedmann = -(0.5_qp) * exp( -3.0_qp*x - 2.0_qp*y ) * cond%a0**(-3) &
-      & * ( 3.0_qp * cond%omega_m + 4.0_qp * cond%omega_r / cond%a0 / exp(x) )             &
-      & * ( 1.0_qp + cond%lambda * cond%l**(2 * cond%m - 2)                 &
-      &     * exp( cond%lambda * cond%l**(2 * cond%p) ) )                   &
-      & / ( 1.0_qp + cond%lambda * cond%l**(2 * cond%m - 2) * exp( (2 * cond%m - 2) * y ) &
-      &       * exp( cond%lambda * cond%l**(2 * cond%p) * exp(2 * cond%p * y) )   &
-      &       * ( cond%m + cond%lambda * cond%p * cond%l**(2 * cond%p)            &
-      &       * exp( 2 * cond%p * y ) ) )
-    case("late")
-      gila_friedmann = -(0.5_qp) * exp( -3._qp*x - 2.0_qp*y ) * cond%a0**(-3) &
-      & * ( 3.0_qp * cond%omega_m + 4.0_qp * cond%omega_r / cond%a0 / exp(x) )             &
-      & * ( 1.0_qp - cond%beta   * cond%l_tilde**(2 * cond%r - 2)           &
-      &     * exp( -cond%beta  * cond%l_tilde**(2 * cond%s) ) )             &
-      & / ( 1.0_qp - cond%beta * cond%l_tilde**(2 * cond%r - 2) &
-      &       * exp( (2 * cond%r - 2) * y ) &
-      &       * exp( - cond%beta * cond%l_tilde**(2 * cond%s) &
-      &       * exp(2 * cond%s * y) ) &
-      &       * ( cond%r - cond%beta * cond%s * cond%l_tilde**(2 * cond%s) &
-      &       * exp( 2 * cond%s * y ) ) )
-    case("gila")
-      gila_friedmann = -(0.5_qp) * exp( -3._qp*x - 2.0_qp*y ) * cond%a0**(-3) &
-      & * ( 3.0_qp * cond%omega_m + 4.0_qp * cond%omega_r /cond%a0 / exp(x) )             &
-      & * ( 1.0_qp + cond%lambda * cond%l**(2 * cond%m - 2)                 &
-      &     * exp( cond%lambda * cond%l**(2 * cond%p) )                     &
-      &            - cond%beta   * cond%l_tilde**(2 * cond%r - 2)           &
-      &     * exp( -cond%beta  * cond%l_tilde**(2 * cond%s) ) )             &
-      & / ( 1.0_qp + cond%lambda * cond%l**(2 * cond%m - 2) * exp( (2 * cond%m - 2) * y ) &
-      &       * exp( cond%lambda * cond%l**(2 * cond%p) * exp(2 * cond%p * y) )   &
-      &       * ( cond%m + cond%lambda * cond%p * cond%l**(2 * cond%p)            &
-      &       * exp( 2 * cond%p * y ) ) &
-      &            - cond%beta * cond%l_tilde**(2 * cond%r - 2) &
-      &       * exp( (2 * cond%r - 2) * y ) &
-      &       * exp( - cond%beta * cond%l_tilde**(2 * cond%s) &
-      &       * exp(2 * cond%s * y) ) &
-      &       * ( cond%r - cond%beta * cond%s * cond%l_tilde**(2 * cond%s) &
-      &       * exp( 2 * cond%s * y ) ) )
+  aux_coeff = - 0.5_qp / ( x * y )
+
+  select case(cond%dark)
+  case(.true.)
+    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4) - 3.0_qp*cond%Omega_dark
+  case(.false.)
+    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4)
+  case default
+    error stop "Invalid 'dark' value"
+  end select
+
+  select case(trim(cond%cosmos))
+  case("gr")
+    aux_param = 1.0_qp
+  case("early")
+    aux_param = ( 1.0_qp + aux_num(cond%lambda, cond%l, cond%m, cond%p) ) &
+              & / ( 1.0_qp + aux_denom(cond%lambda, cond%l, cond%m, cond%p, x) )
+  case("late")
+    aux_param = ( 1.0_qp + aux_num(-cond%beta, cond%l_tilde, cond%r, cond%s) ) &
+              & / ( 1.0_qp + aux_denom(-cond%beta, cond%l_tilde, cond%r, cond%s, x) )
+  case("gila")
+    aux_param = ( 1.0_qp + aux_num(cond%lambda, cond%l,       cond%m, cond%p) &
+                         + aux_num(-cond%beta,  cond%l_tilde, cond%r, cond%s) ) &
+              & / ( 1.0_qp + aux_denom(cond%lambda, cond%l,       cond%m, cond%p, x) &
+                         & + aux_denom(-cond%beta,  cond%l_tilde, cond%r, cond%s, x) )
     case default
       error stop "Invalid cosmos selection"
   end select
+
+  gila_friedmann = aux_coeff * aux_densities * aux_param
 
 end function gila_friedmann
 
@@ -233,30 +248,47 @@ function gila_friedmann_limit(x, y, user_conditions)
   type(gila_conditions), intent(in), optional :: user_conditions
   !! [[gila_friedmann:user_conditions]]
   real(qp) :: gila_friedmann_limit
-  !! Function output
+  ! Function output
 
   type(gila_conditions) :: cond
   !! Conditions used by function
+
+  !- aux. values
+  real(qp) :: aux_coeff
+  !! Auxiliary for \( - \frac{1}{2 \bar{a} \bar{H}} \)
+  real(qp) :: aux_densities
+  !! Auxiliary for densities factor
 
   if ( present(user_conditions) ) then
     cond = user_conditions
   end if
 
+  aux_coeff = - 0.5_qp / ( x * y )
+
+  select case(cond%dark)
+  case(.true.)
+    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4) - 3.0_qp*cond%Omega_dark
+  case(.false.)
+    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4)
+  case default
+    error stop "Invalid 'dark' value"
+  end select
+
   if ( cond%l >= 1.0_qp ) then
-    error stop "l>1 not implemented"
+    error stop "l >= 1 not implemented"
   end if
 
-  select case(cond%cosmos)
-    case("early")
-      select case( y >= -log(cond%l) )
-        case(.true.)
-          gila_friedmann_limit = 0.0_qp
-        case(.false.)
-          gila_friedmann_limit = -(0.5_qp) * exp( -3.0_qp*x - 2.0_qp*y ) * cond%a0**(-3) &
-                            & * ( 3.0_qp * cond%omega_m + 4.0_qp * cond%omega_r /cond%a0 / exp(x) )
-      end select
-    case default
-      error stop "Cosmos selection not implemented"
+  select case(trim(cond%cosmos))
+  case("early")
+    if ( y >= 1.0_qp/l ) then
+      gila_friedmann_limit = 0.0_qp
+    else if ( (0 < y) .and. (y < 1.0_qp/l) )
+      gila_friedmann_limit = aux_coeff * aux_densities
+    else
+      error stop "Condition not implemented"
+    end if
+  case default
+    error stop "Cosmos selection not implemented"
   end select
 
 end function gila_friedmann_limit
@@ -264,7 +296,7 @@ end function gila_friedmann_limit
 function gila_solution(x, y0, n, user_conditions)
 
   !! Returns the RK4 solution to the [[gila:gila_friedmann]] differential equation, as
-  !! well as up to \( \epsilon_n \).
+  !! well as up to \( \epsilon_n \). `x_i` MUST BE EQUALLY SPACED.
   !!
   !! For ´y = gila_solution(x, y0, user_conditions)´,
   !!

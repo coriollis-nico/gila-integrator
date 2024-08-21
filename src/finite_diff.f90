@@ -59,7 +59,6 @@ function fd_c5curve(y, h, n)
 
   fd_c5curve(1:2) = ieee_value(fd_c5curve(1), ieee_quiet_nan)
   fd_c5curve(size(y)-1:size(y)) = ieee_value(fd_c5curve(1), ieee_quiet_nan)
-
   fd_c5curve(3:size(y)-2) = [(center5_diff(y(i-2:i+2), h, n), i = 3, size(y)-2)]
 
 end function fd_c5curve
