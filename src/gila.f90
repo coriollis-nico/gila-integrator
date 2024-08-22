@@ -227,6 +227,7 @@ function gila_friedmann(x, y, user_conditions)
                          + aux_num(-cond%beta,  cond%l_tilde, cond%r, cond%s) ) &
               & / ( 1.0_qp + aux_denom(cond%lambda, cond%l,       cond%m, cond%p, x) &
                          & + aux_denom(-cond%beta,  cond%l_tilde, cond%r, cond%s, x) )
+                          !! NOTE the - sign before cond%beta
     case default
       error stop "Invalid cosmos selection"
   end select
