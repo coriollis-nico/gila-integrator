@@ -33,7 +33,7 @@ plt.xscale("log")
 plt.yscale("log")
 
 plt.xlabel(r"$ \bar{a}_I $")
-plt.ylabel(r"$ l^{-1} $")
+plt.ylabel(r"$ L H_0 $")
 
-plt.plot( a_bar, 1./l(a_bar, Omega_M0, Omega_R0, Omega_D0))
+plt.plot( a_bar, l(a_bar, Omega_M0, Omega_R0, Omega_D0))
 plt.show()
