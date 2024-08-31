@@ -9,13 +9,13 @@ program gr_integration
   implicit none
 
 ! integration conditions
-real(qp), parameter :: xi = 0.0_qp
+real(qp), parameter :: e_i = 0.0_qp
 !! Initial [[gila_friedmann:x]] value
-real(qp), parameter :: xf = -50.0_qp
+real(qp), parameter :: e_f = -100.0_qp
 !! Final [[gila_friedmann:y]] value
-real(qp), parameter :: yi = 0.0_qp
+real(qp), parameter :: yi = 1.0_qp
 !! Initial [[gila_friedmann:y]] value
-integer, parameter :: n = 500
+integer, parameter :: n = 1000
 !! Number of integration steps
 type(gila_conditions), parameter :: gr_conditions = gila_grdefault
 !! Specify GR conditions
@@ -29,23 +29,21 @@ integer                 :: io_gr
 integer :: i
 !! Iterator
 
-real(qp), dimension(n), parameter :: x = [( i * (xf - xi)/n, i = 0, n-1 )]
+real(qp), dimension(n), parameter :: x = [( exp(e_i) * exp(e_f * i/n), i = 0, n-1 )]
 !! \( x \) values array
-real(qp), dimension(n, 1) :: y
-!! - `y(1,:)` stores the solution
-!! - `y(2,:)` stores the first derivative ( = slow-roll 1)
-!! - `y(3,:)` stores slow-roll 2
+real(qp), dimension(n) :: y
+!! solution
 
 ! ------------------------------------------------------------------------------------ !
 
-y = gila_solution(x, yi, 0, gr_conditions)
+y = gila_solution(x, yi, gr_conditions)
 
 call safe_open(data_file, io_gr, data_dir)
   call save_gila_genconditions(gr_conditions, io_gr)
   call save_integral_conditions(x, yi, io_gr)
   write(io_gr, *) "# x  y"
   do i = 1, n
-    write(io_gr, *) x(i), y(i,:)
+    write(io_gr, *) x(i), y(i)
   end do
 close(io_gr)
 

@@ -53,13 +53,13 @@ type :: gila_conditions
 end type
 
 type(gila_conditions), parameter :: gila_grdefault &
-  & = gila_conditions(cosmos="gr", &
-                      & dark=.true.
+  & = gila_conditions(cosmos="gr",  &
+                      & dark=.true.,&
                       & lambda = 0.0_qp, beta = 0.0_qp,         &
                       & l = 0.0_qp, l_tilde = 0.0_qp,           &
                       & m = 0, p = 0, r = 0, s = 0,             &
-                      & omega_m = 0.31_qp, omega_r = 8.4e-5_qp, &
-                      & omega_de = 0.69_qp )
+                      & Omega_M = 0.31_qp, Omega_R = 8.4e-5_qp, &
+                      & Omega_dark = 0.69_qp )
   !! Default parameters for GR integration, defined por convenience
 
 contains
@@ -80,7 +80,7 @@ subroutine save_gila_genconditions(conditions, file_id)
   write(file_id, *) c//"H0bar = ", conditions%H0bar
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
-  if ( conditions%dark == .true. ) then
+  if ( conditions%dark .eqv. .true. ) then
     write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
   end if
   if ( (trim(conditions%cosmos) == "gila") .or. (trim(conditions%cosmos) == "early") ) then
@@ -102,7 +102,7 @@ end subroutine save_gila_genconditions
 subroutine save_gila_limconditions(conditions, file_id)
 
   !! [[save_gila_genconditions]] for the \( m,p \to \infty \) case.
-  !! @warining
+  !! @warning
   !! \( r,s \to \infty \) not yet implemented in code
   !! @endwarning
 
@@ -118,7 +118,7 @@ subroutine save_gila_limconditions(conditions, file_id)
   write(file_id, *) c//"H0bar = ", conditions%H0bar
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
-  if ( conditions%dark == .true. ) then
+  if ( conditions%dark .eqv. .true. ) then
     write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
   end if
   if (trim(conditions%cosmos) == "early") then
@@ -150,7 +150,7 @@ function aux_num(lambda, l, m, p)
   real(qp) :: aux_num
   ! output
 
-  aux_num = lambda * l**(2*m-2) * exp(lambda * l**(2p))
+  aux_num = lambda * l**(2*m-2) * exp(lambda * l**(2*p))
 
 end function
 
@@ -170,7 +170,7 @@ function aux_denom(lambda, l, m, p, x)
   ! output
 
   aux_denom = lambda * (x*l)**(2*m-2) * ( m + lambda * p * (l*x)**(2*p) ) &
-            & * exp( lambda * (l*x)**(2p) )
+            & * exp( lambda * (l*x)**(2*p) )
 
 end function aux_denom
 
@@ -209,8 +209,6 @@ function gila_friedmann(x, y, user_conditions)
     aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4) - 3.0_qp*cond%Omega_dark
   case(.false.)
     aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4)
-  case default
-    error stop "Invalid 'dark' value"
   end select
 
   select case(trim(cond%cosmos))
@@ -271,8 +269,6 @@ function gila_friedmann_limit(x, y, user_conditions)
     aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4) - 3.0_qp*cond%Omega_dark
   case(.false.)
     aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4)
-  case default
-    error stop "Invalid 'dark' value"
   end select
 
   if ( cond%l >= 1.0_qp ) then
@@ -281,9 +277,9 @@ function gila_friedmann_limit(x, y, user_conditions)
 
   select case(trim(cond%cosmos))
   case("early")
-    if ( y >= 1.0_qp/l ) then
+    if ( y >= 1.0_qp/cond%l ) then
       gila_friedmann_limit = 0.0_qp
-    else if ( (0 < y) .and. (y < 1.0_qp/l) )
+    else if ( (0 < y) .and. (y < 1.0_qp/cond%l) ) then
       gila_friedmann_limit = aux_coeff * aux_densities
     else
       error stop "Condition not implemented"
@@ -294,24 +290,19 @@ function gila_friedmann_limit(x, y, user_conditions)
 
 end function gila_friedmann_limit
 
-function gila_solution(x, y0, n, user_conditions)
+function gila_solution(x, y0, user_conditions)
 
-  !! Returns the RK4 solution to the [[gila:gila_friedmann]] differential equation, as
-  !! well as up to \( \epsilon_n \). `x_i` MUST BE EQUALLY SPACED.
-  !!
-  !! For ´y = gila_solution(x, y0, user_conditions)´,
-  !!
-  !! - ´y(i,1)´ is \( y(x_i) \)
-  !! - ´y(i,j)´ is \( \epsilon_j \)
-  !! TODO: Consider changing to 7 point deravative to reduce error
+  !! Returns the RK4 solution to the [[gila_friedmann]] differential equation.
+
+  ! TODO: Consider changing to 7 point deravative to reduce error
 
   real(qp), intent(in) :: x(:)
+  !! [[gila_friedmann:x]] range.
   real(qp), intent(in) :: y0
+  !! initial [[gila_friedmann:y]] value, corresponding to `x(1)`
   type(gila_conditions), intent(in), optional :: user_conditions
-  integer, intent(in) :: n
-  !! If `n == 0`, only finds the solution curve
 
-  real(qp), dimension(size(x, 1), n+1 ) :: gila_solution
+  real(qp), dimension(size(x, 1)) :: gila_solution
 
   type(gila_conditions) :: cond
   real(qp) :: k1, k2, k3, k4
@@ -322,31 +313,18 @@ function gila_solution(x, y0, n, user_conditions)
     cond = user_conditions
   end if
 
-  gila_solution(1, 1) = y0
-  if (n >= 1) then
-    gila_solution(1, 2) = gila_friedmann(x(1), y0, cond)
-  end if
+  gila_solution(1) = y0
 
   do i = 2, size(x, 1)
     h = x(i) - x(i-1)
 
-    k1 = gila_friedmann(x(i-1), gila_solution(i-1, 1), cond)
-    k2 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution(i-1, 1) + h*k1/2.0_qp, cond)
-    k3 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution(i-1, 1) + h*k2/2.0_qp, cond)
-    k4 = gila_friedmann(x(i-1) + h, gila_solution(i-1, 1) + h*k3, cond)
+    k1 = gila_friedmann(x(i-1), gila_solution(i-1), cond)
+    k2 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution(i-1) + h*k1/2.0_qp, cond)
+    k3 = gila_friedmann(x(i-1) + h/2.0_qp, gila_solution(i-1) + h*k2/2.0_qp, cond)
+    k4 = gila_friedmann(x(i-1) + h, gila_solution(i-1) + h*k3, cond)
 
-    gila_solution(i, 1) = gila_solution(i-1, 1) &
+    gila_solution(i) = gila_solution(i-1) &
                         & + h * ( k1 + 2.0_qp * k2 + 2.0_qp * k3 + k4 ) / 6.0_qp
-    if (n >= 1) then
-      gila_solution(i, 2) = -k1
-    end if
-  end do
-
-  do i = 2, n
-    gila_solution(:,i+1) = fd_c5curve(gila_solution(:,i), x(2)-x(1), 1)
-    do j = 1, size(x,1)
-      gila_solution(j,i+1) = gila_solution(j,i+1) / gila_solution(j,i)
-    end do
   end do
 
 end function gila_solution
