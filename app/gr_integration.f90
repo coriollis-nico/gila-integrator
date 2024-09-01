@@ -11,11 +11,11 @@ program gr_integration
 ! integration conditions
 real(qp), parameter :: x_i = 0.0_qp
 !! Initial [[gila_friedmann:x]] value
-real(qp), parameter :: x_f = -100.0_qp
+real(qp), parameter :: x_f = -50.0_qp
 !! Final [[gila_friedmann:y]] value
 real(qp), parameter :: yi = 1.0_qp
 !! Initial [[gila_friedmann:y]] value
-integer, parameter :: n = 1000
+integer, parameter :: n = 500
 !! Number of integration steps
 type(gila_conditions), parameter :: gr_conditions = gila_grdefault
 !! Specify GR conditions
