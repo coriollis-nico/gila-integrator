@@ -40,7 +40,7 @@ type :: gila_conditions
   !! TODO specify
   integer :: s = 1
   !! TODO specify
-  real(qp) :: a0bar = 1.0_qp
+  real(qp) :: a0tilde = 0.0_qp
   !! Initial \( \bar{a} = \frac{a}{a0} \) value
   real(qp) :: H0bar = 1.0_qp
   !! Initial \( \bar{H} = \frac{H}{H0} \) value
@@ -76,7 +76,7 @@ subroutine save_gila_genconditions(conditions, file_id)
 
   write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
   write(file_id, *) c//"dark: ", conditions%dark
-  write(file_id, *) c//"a0bar = ", conditions%a0bar
+  write(file_id, *) c//"a0tilde = ", conditions%a0tilde
   write(file_id, *) c//"H0bar = ", conditions%H0bar
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
@@ -114,7 +114,7 @@ subroutine save_gila_limconditions(conditions, file_id)
 
   write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
   write(file_id, *) c//"dark: ", conditions%dark
-  write(file_id, *) c//"a0bar = ", conditions%a0bar
+  write(file_id, *) c//"a0tilde = ", conditions%a0tilde
   write(file_id, *) c//"H0bar = ", conditions%H0bar
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
@@ -202,13 +202,14 @@ function gila_friedmann(x, y, user_conditions)
     cond = user_conditions
   end if
 
-  aux_coeff = - 0.5_qp / ( x * y )
+  aux_coeff = - 0.5_qp / ( y )
 
   select case(cond%dark)
   case(.true.)
-    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4) - 3.0_qp*cond%Omega_dark
+    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x)) &
+                  & - 3.0_qp*cond%Omega_dark
   case(.false.)
-    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4)
+    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
   end select
 
   select case(trim(cond%cosmos))
@@ -266,9 +267,10 @@ function gila_friedmann_limit(x, y, user_conditions)
 
   select case(cond%dark)
   case(.true.)
-    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4) - 3.0_qp*cond%Omega_dark
+    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x)) &
+                  & - 3.0_qp*cond%Omega_dark
   case(.false.)
-    aux_densities = 3.0_qp*cond%Omega_M/(x**3) + 4.0_qp*cond%Omega_R/(x**4)
+    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
   end select
 
   if ( cond%l >= 1.0_qp ) then

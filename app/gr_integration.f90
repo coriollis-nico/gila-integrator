@@ -9,9 +9,9 @@ program gr_integration
   implicit none
 
 ! integration conditions
-real(qp), parameter :: e_i = 0.0_qp
+real(qp), parameter :: x_i = 0.0_qp
 !! Initial [[gila_friedmann:x]] value
-real(qp), parameter :: e_f = -100.0_qp
+real(qp), parameter :: x_f = -100.0_qp
 !! Final [[gila_friedmann:y]] value
 real(qp), parameter :: yi = 1.0_qp
 !! Initial [[gila_friedmann:y]] value
@@ -29,15 +29,17 @@ integer                 :: io_gr
 integer :: i
 !! Iterator
 
-real(qp), dimension(n), parameter :: x = [( exp(e_i) * exp(e_f * i/n), i = 0, n-1 )]
+real(qp), dimension(n), parameter :: x = [( x_i + i*(x_f - x_i)/(n), i = 0, n-1 )]
 !! \( x \) values array
 real(qp), dimension(n) :: y
 !! solution
 
 ! ------------------------------------------------------------------------------------ !
 
+print *, "Calculating solution..."
 y = gila_solution(x, yi, gr_conditions)
 
+print *, "Saving data"
 call safe_open(data_file, io_gr, data_dir)
   call save_gila_genconditions(gr_conditions, io_gr)
   call save_integral_conditions(x, yi, io_gr)
