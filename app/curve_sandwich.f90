@@ -24,18 +24,20 @@ program curve_sandwich
   !! Initial [[gila_friedmann:x]] value
   real(qp), parameter :: xf = -100.0_qp
   !! Final [[gila_friedmann:y]] value
-  real(qp), parameter :: yi = 0.0_qp
+  real(qp), parameter :: yi = 1.0_qp
   !! Initial [[gila_friedmann:y]] value
   integer, parameter :: n = 15000
   !! Number of integration steps
 
   real(qp), dimension(n), parameter :: x = [( i * (xf - xi)/n, i = 0, n-1 )]
   !! \( x \) values array
-  real(qp), dimension(n, 5) :: y
-  !! - `y(1,:)` stores the solution
-  !! - `y(j,:)` stores the j-1th slowroll param.
+  real(qp), dimension(n) :: y
+  !! Solution array
 
   type(gila_conditions) :: conditions
+  real(qp), parameter :: matter_density = 0.31_qp
+  real(qp), parameter :: rad_density = 8.4e-5_qp
+  real(qp), parameter :: dark_density = 0.69_qp
 
   character(len=*), parameter :: data_dir = "data/sims/curve_sandwich"
   character(len=14) :: filename
@@ -81,10 +83,15 @@ close(x_grid)
 ! ---
 
 conditions%cosmos="early"
+conditions%dark = .true.
 conditions%beta=0.0_qp
 conditions%l_tilde=0.0_qp
 conditions%r=0
 conditions%s=0
+conditions%Omega_M = matter_density
+conditions%Omega_R = rad_density
+conditions%Omega_dark = dark_density
+
 
 do k = 1, 3
 
@@ -99,9 +106,9 @@ do k = 1, 3
                                                 'p', conditions%p, &
                                                 'l', conditions%l
 
-  call safe_open(filename//".dat", out_id, file_dir=data_dir)
+  call safe_open(trim(filename)//".dat", out_id, file_dir=data_dir)
 
-    y = gila_solution(x, yi, 4, conditions)
+    y = gila_solution(x, yi, conditions)
 
     call save_gila_genconditions(conditions, out_id)
     call save_gila_genconditions(conditions, stdout)
@@ -126,7 +133,7 @@ do k = 1, 3
 
   call safe_open(trim(filename)//".dat", lim_id, file_dir=data_dir)
 
-    y = gila_solution_limit(x, yi, 4, conditions)
+    y = gila_solution_limit(x, yi, conditions)
 
     call save_gila_limconditions(conditions, lim_id)
     call save_gila_limconditions(conditions, stdout)
