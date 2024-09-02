@@ -154,23 +154,23 @@ function aux_num(lambda, l, m, p)
 
 end function
 
-function aux_denom(lambda, l, m, p, x)
+function aux_denom(lambda, l, m, p, y)
 
   !! Denominator equivalent of [[aux_num]]
-  !! for \( \lambda (xl)^{2m-2} ( m + \lambda p [xl]^{2p} ) \exp{ \lambda [xl]^{2p} } \)
+  !! for \( \lambda (yl)^{2m-2} ( m + \lambda p [yl]^{2p} ) \exp{ \lambda [yl]^{2p} } \)
   !! corresponding with \( -\beta \) etc.
 
   real(qp), intent(in) :: lambda
   real(qp), intent(in) :: l
-  real(qp), intent(in) :: x
+  real(qp), intent(in) :: y
   integer, intent(in) :: m
   integer, intent(in) :: p
 
   real(qp) :: aux_denom
   ! output
 
-  aux_denom = lambda * (x*l)**(2*m-2) * ( m + lambda * p * (l*x)**(2*p) ) &
-            & * exp( lambda * (l*x)**(2*p) )
+  aux_denom = lambda * (y*l)**(2*m-2) * ( m + lambda * p * (l*y)**(2*p) ) &
+            & * exp( lambda * (l*y)**(2*p) )
 
 end function aux_denom
 
@@ -217,15 +217,15 @@ function gila_friedmann(x, y, user_conditions)
     aux_param = 1.0_qp
   case("early")
     aux_param = ( 1.0_qp + aux_num(cond%lambda, cond%l, cond%m, cond%p) ) &
-              & / ( 1.0_qp + aux_denom(cond%lambda, cond%l, cond%m, cond%p, x) )
+              & / ( 1.0_qp + aux_denom(cond%lambda, cond%l, cond%m, cond%p, y) )
   case("late")
     aux_param = ( 1.0_qp + aux_num(-cond%beta, cond%l_tilde, cond%r, cond%s) ) &
-              & / ( 1.0_qp + aux_denom(-cond%beta, cond%l_tilde, cond%r, cond%s, x) )
+              & / ( 1.0_qp + aux_denom(-cond%beta, cond%l_tilde, cond%r, cond%s, y) )
   case("gila")
     aux_param = ( 1.0_qp + aux_num(cond%lambda, cond%l,       cond%m, cond%p) &
                          + aux_num(-cond%beta,  cond%l_tilde, cond%r, cond%s) ) &
-              & / ( 1.0_qp + aux_denom(cond%lambda, cond%l,       cond%m, cond%p, x) &
-                         & + aux_denom(-cond%beta,  cond%l_tilde, cond%r, cond%s, x) )
+              & / ( 1.0_qp + aux_denom(cond%lambda, cond%l,       cond%m, cond%p, y) &
+                         & + aux_denom(-cond%beta,  cond%l_tilde, cond%r, cond%s, y) )
                           !! NOTE the - sign before cond%beta
     case default
       error stop "Invalid cosmos selection"
@@ -263,7 +263,7 @@ function gila_friedmann_limit(x, y, user_conditions)
     cond = user_conditions
   end if
 
-  aux_coeff = - 0.5_qp / ( x * y )
+  aux_coeff = - 0.5_qp / ( y )
 
   select case(cond%dark)
   case(.true.)
