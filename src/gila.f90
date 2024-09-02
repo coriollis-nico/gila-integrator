@@ -331,25 +331,19 @@ function gila_solution(x, y0, user_conditions)
 
 end function gila_solution
 
-function gila_solution_limit(x, y0, n, user_conditions)
+function gila_solution_limit(x, y0, user_conditions)
 
-  !! Returns the RK4 solution to the [[gila:gila_friedmann_limit]] differential equation, as
-  !! well as up to \( \epsilon_n \).
-  !!
-  !! For ´y = gila_solution_limit(x, y0, user_conditions)´,
-  !!
-  !! - ´y(i,1)´ is \( y(x_i) \)
-  !! - ´y(i,j)´ is \( \epsilon_j \)
+  !! Returns the RK4 solution to the [[gila:gila_friedmann_limit]] differential equation.
 
   ! BUG: this is copy-pasted from gila_soultion. Surely a better solution exists...
 
   real(qp), intent(in) :: x(:)
+  !! [[gila_friedmann:x]] range.
   real(qp), intent(in) :: y0
+  !! initial [[gila_friedmann:y]] value, corresponding to `x(1)`
   type(gila_conditions), intent(in), optional :: user_conditions
-  integer, intent(in) :: n
-  !! If `n == 0`, only finds the solution curve
 
-  real(qp), dimension(size(x, 1), n+1 ) :: gila_solution_limit
+  real(qp), dimension(size(x, 1)) :: gila_solution_limit
 
   type(gila_conditions) :: cond
   real(qp) :: k1, k2, k3, k4
@@ -360,29 +354,18 @@ function gila_solution_limit(x, y0, n, user_conditions)
     cond = user_conditions
   end if
 
-  gila_solution_limit(1, 1) = y0
-  gila_solution_limit(1, 2) = gila_friedmann_limit(x(1), y0, cond)
+  gila_solution_limit(1) = y0
 
   do i = 2, size(x, 1)
     h = x(i) - x(i-1)
 
-    k1 = gila_friedmann_limit(x(i-1), gila_solution_limit(i-1, 1), cond)
-    k2 = gila_friedmann_limit(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k1/2.0_qp, cond)
-    k3 = gila_friedmann_limit(x(i-1) + h/2.0_qp, gila_solution_limit(i-1, 1) + h*k2/2.0_qp, cond)
-    k4 = gila_friedmann_limit(x(i-1) + h, gila_solution_limit(i-1, 1) + h*k3, cond)
+    k1 = gila_friedmann_limit(x(i-1), gila_solution_limit(i-1), cond)
+    k2 = gila_friedmann_limit(x(i-1) + h/2.0_qp, gila_solution_limit(i-1) + h*k1/2.0_qp, cond)
+    k3 = gila_friedmann_limit(x(i-1) + h/2.0_qp, gila_solution_limit(i-1) + h*k2/2.0_qp, cond)
+    k4 = gila_friedmann_limit(x(i-1) + h, gila_solution_limit(i-1) + h*k3, cond)
 
-    gila_solution_limit(i, 1) = gila_solution_limit(i-1, 1) &
+    gila_solution_limit(i) = gila_solution_limit(i-1) &
                         & + h * ( k1 + 2.0_qp * k2 + 2.0_qp * k3 + k4 ) / 6.0_qp
-    if (n >= 1) then
-      gila_solution_limit(i, 2) = -k1
-    end if
-  end do
-
-  do i = 2, n
-    gila_solution_limit(:,i+1) = fd_c5curve(gila_solution_limit(:,i), x(2)-x(1), 1)
-    do j = 1, size(x,1)
-      gila_solution_limit(j,i+1) = gila_solution_limit(j,i+1) / gila_solution_limit(j,i)
-    end do
   end do
 
 end function gila_solution_limit
