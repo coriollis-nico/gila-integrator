@@ -13,11 +13,25 @@ public save_integral_conditions
 
 interface matrix_to_file
   !! For writing 2d matrices to files
+  module procedure :: realrow_to_file
   module procedure :: realmatrix_to_file
   module procedure :: intmatrix_to_file
 end interface matrix_to_file
 
 contains
+
+subroutine realrow_to_file(matrix, file_id)
+
+  real(qp), intent(in), dimension(:) :: matrix
+  integer, intent(in) :: file_id
+
+  integer :: j
+
+  do j = 1, size(matrix, 1)
+    write(file_id, *) matrix(j)
+  end do
+
+end subroutine realrow_to_file
 
 subroutine realmatrix_to_file(matrix, file_id)
 
