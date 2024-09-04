@@ -15,10 +15,6 @@ fig_dir = "plots/solution_plots"
 data_dir = "data/sims/curve_sandwich"
 makedirs(fig_dir, exist_ok=True)
 
-
-print("Reading `gr.dat`")
-gr_integration = np.loadtxt("data/sims/gr/gr.dat", comments='#')
-
 print("Reading sandwich_curves")
 x = np.loadtxt(data_dir+"/x_grid.dat", comments='#')
 
@@ -34,15 +30,8 @@ m10p10l17 = np.loadtxt(data_dir+"/m10p10l1.0E-17.dat", comments='#')
 m10p10l22 = np.loadtxt(data_dir+"/m10p10l1.0E-22.dat", comments='#')
 m10p10l27 = np.loadtxt(data_dir+"/m10p10l1.0E-27.dat", comments='#')
 
-l17 = np.loadtxt(data_dir+"/lim_l1.0E-17.dat", comments='#')
-l22 = np.loadtxt(data_dir+"/lim_l1.0E-22.dat", comments='#')
-l27 = np.loadtxt(data_dir+"/lim_l1.0E-27.dat", comments='#')
-
-mp_pairs = np.loadtxt(data_dir+"/mp.dat", comments="#", dtype=int)
-
-l_value = np.loadtxt(data_dir+"/l.dat", comments="#")
-
 # Plotting
+print("Plotting...")
 
 fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
                         figsize=[10., 3.5], dpi=400)
@@ -69,7 +58,7 @@ axs[0].set_ylabel(r"$ \frac{H}{H_0} $")
 for ax in axs:
     ax.set_xscale("log")
     ax.set_xlim(np.exp(x[-1]), np.exp(x[0]))
-    ax.legend(loc="lower left")
+    ax.legend(loc="lower left", frameon=False)
 
 plt.savefig(fig_dir+"/test.png")
 
