@@ -40,10 +40,6 @@ type :: gila_conditions
   !! TODO specify
   integer :: s = 1
   !! TODO specify
-  real(qp) :: a0tilde = 0.0_qp
-  !! Initial \( \bar{a} = \frac{a}{a0} \) value
-  real(qp) :: H0bar = 1.0_qp
-  !! Initial \( \bar{H} = \frac{H}{H0} \) value
   real(qp) :: Omega_M = 0.999916_qp
   !! \( \Omega_m \) initial matter density
   real(qp) :: Omega_R = 8.4e-5_qp
@@ -76,8 +72,6 @@ subroutine save_gila_genconditions(conditions, file_id)
 
   write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
   write(file_id, *) c//"dark: ", conditions%dark
-  write(file_id, *) c//"a0tilde = ", conditions%a0tilde
-  write(file_id, *) c//"H0bar = ", conditions%H0bar
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
   if ( conditions%dark .eqv. .true. ) then
@@ -114,8 +108,6 @@ subroutine save_gila_limconditions(conditions, file_id)
 
   write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
   write(file_id, *) c//"dark: ", conditions%dark
-  write(file_id, *) c//"a0tilde = ", conditions%a0tilde
-  write(file_id, *) c//"H0bar = ", conditions%H0bar
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
   if ( conditions%dark .eqv. .true. ) then
@@ -369,5 +361,49 @@ function gila_solution_limit(x, y0, user_conditions)
   end do
 
 end function gila_solution_limit
+
+function slowroll0(a_tilde, Hbar, l)
+
+  !! Returns a \( (N, \epsilon_0) \) two-column array from a [[gila_solution]] curve.
+  !! Finds the `a_tilde` for which \( \bar{H} = l^{-1} \) to use as inflation exit point.
+
+  real(qp), intent(in) :: a_tilde(:)
+  !! \( \ln{\frac{a}{a_0}} \) equally spaced array.
+  real(qp), intent(in) :: Hbar(:)
+  !! \( \frac{H}{H_0}} \) solution array.
+  real(qp), intent(in) :: l
+  !! Energy scale
+
+  real(qp) :: a_tilde_i
+  !! `a_tilde` value for inflation exit
+  integer :: i_index
+  !! `a_tilde_i` index
+  real(qp) :: Hbar_i
+  !! `Hbar` value for `a_tilde_i`
+
+  integer :: i
+  ! iterator
+
+  real(qp), dimension(size(a_tilde, 1), 2) :: slowroll0
+  ! Output
+
+  if (size(a_tilde, 1) /= size(Hbar, 1)) then
+    error stop "Arrays not of equal length"
+  end if
+
+  ! Finding a_tilde_i and Hbar_i
+  do i = 1, size(a_tilde, 1)
+    if ( abs(Hbar(i+1) - Hbar(i)) <= 1.e-6_qp ) then
+      i_index = i
+      a_tilde_i = a_tilde(i)
+      exit
+    end if
+  end do
+  Hbar_i = Hbar(i_index)
+
+  slowroll0(:,1) = [( a_tilde(i) - a_tilde_i, i = 1, size(a_tilde,1) )]
+  slowroll0(:,2) = [( Hbar_i/Hbar(i), i = 1, size(a_tilde,1) )]
+
+end function slowroll0
 
 end module gila
