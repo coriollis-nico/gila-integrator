@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-Plots solutions
+Plots limit curves & finds point where dy/dx = 0
 """
 
 # Modules
@@ -15,7 +15,6 @@ fig_dir = "plots/limit_plots"
 data_dir = "data/sims/curve_sandwich"
 makedirs(fig_dir, exist_ok=True)
 
-
 print("Reading gr.dat")
 gr_integration = np.loadtxt("data/sims/gr/gr.dat", comments='#')
 
@@ -25,6 +24,27 @@ x = np.loadtxt(data_dir+"/x_grid.dat", comments='#')
 l17 = np.loadtxt(data_dir+"/lim_l1.0E-17.dat", comments='#')
 l22 = np.loadtxt(data_dir+"/lim_l1.0E-22.dat", comments='#')
 l27 = np.loadtxt(data_dir+"/lim_l1.0E-27.dat", comments='#')
+
+# Finds x value where dy/dx = 0
+found_17 = False
+found_22 = False
+found_27 = False
+for i in range(len(x[:-1])):
+    if not found_17 and l17[i+1] == l17[i]:
+        print("l17 transition point: a/a0 = {} in x[{}] and H/H0 = {}"
+              .format(np.exp(x[i]), i, l17[i]))
+        x17 = x[i]
+        found_17 = True
+    if not found_22 and l22[i+1] == l22[i]:
+        print("l22 transition point: a/a0 = {} in x[{}] and H/H0 = {}"
+              .format(np.exp(x[i]), i, l22[i]))
+        x22 = x[i]
+        found_22 = True
+    if not found_27 and l27[i+1] == l27[i]:
+        print("l27 transition point: a/a0 = {} in x[{}] and H/H0 = {}"
+              .format(np.exp(x[i]), i, l27[i]))
+        x27 = x[i]
+        found_27 = True
 
 # Plotting
 print("Plotting...")
