@@ -8,7 +8,7 @@ Plots solutions
 from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('seaborn-v0_8-colorblind')
+plt.style.use('grayscale')
 
 # Data import
 fig_dir = "plots/solution_plots"
@@ -38,23 +38,41 @@ l17 = np.loadtxt(data_dir+"/lim_l1.0E-17.dat", comments='#')
 l22 = np.loadtxt(data_dir+"/lim_l1.0E-22.dat", comments='#')
 l27 = np.loadtxt(data_dir+"/lim_l1.0E-27.dat", comments='#')
 
-sandwich_curves = [m03p01l17, m08p02l17, m10p10l17,
-                   m03p01l22, m08p02l22, m10p10l22,
-                   m03p01l27, m08p02l27, m10p10l27]
-limit_curves = [l17, l22, l27]
-
 mp_pairs = np.loadtxt(data_dir+"/mp.dat", comments="#", dtype=int)
 
 l_value = np.loadtxt(data_dir+"/l.dat", comments="#")
 
 # Plotting
 
-plt.figure()
+fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
+                        figsize=[10., 3.5], dpi=400)
+
+
+axs[0].set_title(r"$l = 1 \times 10^{-17}$")
+axs[0].plot(np.exp(x), m03p01l17, label=r"$m=3, p=1$")
+axs[0].plot(np.exp(x), m08p02l17, label=r"$m=8, p=2$")
+axs[0].plot(np.exp(x), m10p10l17, label=r"$m=10, p=10$")
+
+axs[1].set_title(r"$l = 1 \times 10^{-22}$")
+axs[1].plot(np.exp(x), m03p01l22, label=r"$m=3, p=1$")
+axs[1].plot(np.exp(x), m08p02l22, label=r"$m=8, p=2$")
+axs[1].plot(np.exp(x), m10p10l22, label=r"$m=10, p=10$")
+
+axs[2].set_title(r"$l = 1 \times 10^{-27}$")
+axs[2].plot(np.exp(x), m03p01l27, label=r"$m=3, p=1$")
+axs[2].plot(np.exp(x), m08p02l27, label=r"$m=8, p=2$")
+axs[2].plot(np.exp(x), m10p10l27, label=r"$m=10, p=10$")
+
 plt.yscale("log")
-plt.xscale("log")
-plt.xlabel(r"$ \frac{a}{a_0} $")
-plt.ylabel(r"$ \frac{H}{H_0} $")
-plt.plot(np.exp(x), sandwich_curves[0])
-plt.show()
+axs[1].set_xlabel(r"$\frac{a}{a_0}$")
+axs[0].set_ylabel(r"$ \frac{H}{H_0} $")
+for ax in axs:
+    ax.set_xscale("log")
+    ax.set_xlim(np.exp(x[-1]), np.exp(x[0]))
+    ax.legend(loc="lower left")
+
+plt.savefig(fig_dir+"/test.png")
+
+plt.close()
 
 exit()
