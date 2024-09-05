@@ -1,6 +1,5 @@
 ---
 project: Hubble+
-favicon: src/doc/logo/favicon.png
 license: mit
 author: Nicolás Celedón-Hernández
 author_pic: https://avatars.githubusercontent.com/u/85836316
@@ -13,5 +12,4 @@ print_creation_date: true
 creation_date: %Y-%m-%d
 ---
 
-# \[ H^2 + \cdots \]
-
+# \[ G^{(n)} \]
