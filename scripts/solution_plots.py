@@ -60,7 +60,7 @@ for ax in axs:
     ax.set_xlim(np.exp(x[-1]), np.exp(x[0]))
     ax.legend(loc="lower left", frameon=False)
 
-plt.savefig(fig_dir+"/test.png")
+plt.savefig(fig_dir+"/solutions.png")
 
 plt.close()
 
