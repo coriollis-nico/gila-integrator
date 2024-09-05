@@ -28,7 +28,7 @@ program curve_sandwich
   !! Final [[gila_friedmann:y]] value
   real(qp), parameter :: yi = 1.0_qp
   !! Initial [[gila_friedmann:y]] value
-  integer, parameter :: n = 15000
+  integer, parameter :: n = 20000
   !! Number of integration steps
 
   real(qp), dimension(n), parameter :: x = [( i * (xf - xi)/n, i = 0, n-1 )]
