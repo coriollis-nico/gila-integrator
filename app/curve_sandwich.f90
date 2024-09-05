@@ -13,7 +13,7 @@ program curve_sandwich
   use lib_io
   implicit none
 
-  integer :: i, k
+  integer :: i, k, j
 
   integer, dimension(3), parameter  :: mt = [ 3,         8,         10 ]
   !! [[gila_conditions:m]]
@@ -35,7 +35,7 @@ program curve_sandwich
   !! \( x \) values array
   real(qp), dimension(n) :: y
   !! Solution array
-  real(qp), dimension(n, 2) :: eps0
+  real(qp), dimension(n, 5) :: slowroll_data
   !! \( \epsilon_0 \) array
 
   type(gila_conditions) :: conditions
@@ -130,9 +130,13 @@ do k = 1, 3
 
   call safe_open(trim(filename)//".dat", sr, file_dir=data_dir)
 
-    eps0 = slowroll0(x, y, conditions%l)
+    slowroll_data(:,1:2) = slowroll0(x, y, conditions%l)
+    do j = 3, 5
+      slowroll_data(:,j) = slowroll(slowroll_data(:,1), slowroll_data(:,j-1))
+    end do
 
-    call matrix_to_file(eps0, sr)
+
+    call matrix_to_file(slowroll_data, sr)
 
   close(sr)
 

@@ -12,7 +12,7 @@ private
 public gila_conditions, gila_grdefault
 public save_gila_genconditions, save_gila_limconditions
 public gila_friedmann, gila_friedmann_limit, gila_solution, gila_solution_limit
-public slowroll0
+public slowroll0, slowroll
 
 type :: gila_conditions
   !! Derived type for specifying [[gila:gila_friedmann]] parameters
@@ -408,5 +408,31 @@ function slowroll0(x, y, l)
   end do
 
 end function slowroll0
+
+function slowroll(x, y)
+
+  !! Given nth slow-roll data, finds \( \epsilon_{n+1} \). Assumes `\( x = \ln{a}{a_0} \)
+  !! is equally spaced.
+
+  real(qp), intent(in) :: x(:)
+  !! `x` output from [[slowroll0]]
+  real(qp), intent(in) :: y(:)
+  !! \( \epsilon_n \)
+
+  real(qp), dimension(size(x, 1)) :: aux_array
+
+  integer :: i
+
+  real(qp), dimension(size(x, 1)) :: slowroll
+
+  if (size(x, 1) /= size(y, 1)) then
+    error stop "Arrays not of equal length"
+  end if
+
+  aux_array = [( log( abs( x(i) ) ), i = 1, size(x, 1) )]
+
+  slowroll = fd_c5curve(y, x(2) - x(1), 1)
+
+end function slowroll
 
 end module gila
