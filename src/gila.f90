@@ -12,6 +12,7 @@ private
 public gila_conditions, gila_grdefault
 public save_gila_genconditions, save_gila_limconditions
 public gila_friedmann, gila_friedmann_limit, gila_solution, gila_solution_limit
+public slowroll0
 
 type :: gila_conditions
   !! Derived type for specifying [[gila:gila_friedmann]] parameters
@@ -362,47 +363,49 @@ function gila_solution_limit(x, y0, user_conditions)
 
 end function gila_solution_limit
 
-function slowroll0(a_tilde, Hbar, l)
+function slowroll0(x, y, l)
 
   !! Returns a \( (N, \epsilon_0) \) two-column array from a [[gila_solution]] curve.
-  !! Finds the `a_tilde` for which \( \bar{H} = l^{-1} \) to use as inflation exit point.
+  !! Finds the `x` for which \( \bar{H} = l^{-1} \) to use as inflation exit point.
 
-  real(qp), intent(in) :: a_tilde(:)
+  real(qp), intent(in) :: x(:)
   !! \( \ln{\frac{a}{a_0}} \) equally spaced array.
-  real(qp), intent(in) :: Hbar(:)
+  real(qp), intent(in) :: y(:)
   !! \( \frac{H}{H_0}} \) solution array.
   real(qp), intent(in) :: l
   !! Energy scale
 
-  real(qp) :: a_tilde_i
+  real(qp) :: xi
   !! `a_tilde` value for inflation exit
   integer :: i_index
   !! `a_tilde_i` index
-  real(qp) :: Hbar_i
+  real(qp) :: yi
   !! `Hbar` value for `a_tilde_i`
 
   integer :: i
   ! iterator
 
-  real(qp), dimension(size(a_tilde, 1), 2) :: slowroll0
+  real(qp), dimension(size(x, 1), 2) :: slowroll0
   ! Output
 
-  if (size(a_tilde, 1) /= size(Hbar, 1)) then
+  if (size(x, 1) /= size(y, 1)) then
     error stop "Arrays not of equal length"
   end if
 
   ! Finding a_tilde_i and Hbar_i
-  do i = 1, size(a_tilde, 1)
-    if ( abs(Hbar(i+1) - Hbar(i)) <= 1.e-6_qp ) then
+  do i = 1, size(x, 1)
+    if ( y(i) >= 1._qp/l ) then
       i_index = i
-      a_tilde_i = a_tilde(i)
+      xi = x(i_index)
+      yi = x(i_index)
       exit
     end if
   end do
-  Hbar_i = Hbar(i_index)
 
-  slowroll0(:,1) = [( a_tilde(i) - a_tilde_i, i = 1, size(a_tilde,1) )]
-  slowroll0(:,2) = [( Hbar_i/Hbar(i), i = 1, size(a_tilde,1) )]
+  do i = 1, size(x,1)
+    slowroll0(i,1) = x(i) - xi
+    slowroll0(i,2) = yi/y(i)
+  end do
 
 end function slowroll0
 

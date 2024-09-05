@@ -2,6 +2,8 @@ program curve_sandwich
   !! For specified [[gila_conditions:m]], [[gila_conditions:p]], [[gila_conditions:p]]
   !! combinations calculates \( y \) and \( \epsilon_{1 \to 4} \) slow-roll parameters.
   !! Also limit curves.
+  !!
+  !! Also calculates slow-roll curves for each solution
   use iso_fortran_env,  &
     only: sp => real32, &
           dp => real64, &
@@ -33,6 +35,8 @@ program curve_sandwich
   !! \( x \) values array
   real(qp), dimension(n) :: y
   !! Solution array
+  real(qp), dimension(n, 2) :: eps0
+  !! \( \epsilon_0 \) array
 
   type(gila_conditions) :: conditions
   real(qp), parameter :: matter_density = 0.31_qp
@@ -40,11 +44,12 @@ program curve_sandwich
   real(qp), parameter :: dark_density = 0.69_qp
 
   character(len=*), parameter :: data_dir = "data/sims/curve_sandwich"
-  character(len=14) :: filename
+  character(len=32) :: filename
 
   integer :: x_grid
   integer :: out_id
   integer :: mp_id, l_id, lim_id
+  integer :: sr
 ! ------------------------------------------------------------------------------------ !
 
 call safe_open("mp.dat", mp_id, file_dir=data_dir)
@@ -117,6 +122,19 @@ do k = 1, 3
     call matrix_to_file(y, out_id)
 
   close(out_id)
+
+  !v - slowroll
+  write(filename, '(a5, 2(a1, i2.2), a1, es7.1e2)') 'slow-', 'm', conditions%m, &
+                                                'p', conditions%p, &
+                                                'l', conditions%l
+
+  call safe_open(trim(filename)//".dat", sr, file_dir=data_dir)
+
+    eps0 = slowroll0(x, y, conditions%l)
+
+    call matrix_to_file(eps0, sr)
+
+  close(sr)
 
   end do
 
