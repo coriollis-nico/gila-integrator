@@ -135,7 +135,7 @@ do k = 1, 3
       slowroll_data(:,j) = slowroll(slowroll_data(:,1), slowroll_data(:,j-1))
     end do
 
-
+    write(sr, *) "# N   ϵ0   ϵ1   ϵ2   ϵ3"
     call matrix_to_file(slowroll_data, sr)
 
   close(sr)
