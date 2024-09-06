@@ -38,19 +38,28 @@ fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
 
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
-axs[0].plot(np.exp(x), m03p01l17, label=r"$m=3, p=1$")
-axs[0].plot(np.exp(x), m08p02l17, label=r"$m=8, p=2$")
-axs[0].plot(np.exp(x), m10p10l17, label=r"$m=10, p=10$")
+axs[0].plot(np.exp(x), m03p01l17, label=r"$m=3, p=1$",
+            color="k", linestyle="solid")
+axs[0].plot(np.exp(x), m08p02l17, label=r"$m=8, p=2$",
+            color="k", linestyle="dashed")
+axs[0].plot(np.exp(x), m10p10l17, label=r"$m=10, p=10$",
+            color="k", linestyle="dotted")
 
 axs[1].set_title(r"$l = 1 \times 10^{-22}$")
-axs[1].plot(np.exp(x), m03p01l22, label=r"$m=3, p=1$")
-axs[1].plot(np.exp(x), m08p02l22, label=r"$m=8, p=2$")
-axs[1].plot(np.exp(x), m10p10l22, label=r"$m=10, p=10$")
+axs[1].plot(np.exp(x), m03p01l22, label=r"$m=3, p=1$",
+            color="k", linestyle="solid")
+axs[1].plot(np.exp(x), m08p02l22, label=r"$m=8, p=2$",
+            color="k", linestyle="dashed")
+axs[1].plot(np.exp(x), m10p10l22, label=r"$m=10, p=10$",
+            color="k", linestyle="dotted")
 
 axs[2].set_title(r"$l = 1 \times 10^{-27}$")
-axs[2].plot(np.exp(x), m03p01l27, label=r"$m=3, p=1$")
-axs[2].plot(np.exp(x), m08p02l27, label=r"$m=8, p=2$")
-axs[2].plot(np.exp(x), m10p10l27, label=r"$m=10, p=10$")
+axs[2].plot(np.exp(x), m03p01l27, label=r"$m=3, p=1$",
+            color="k", linestyle="solid")
+axs[2].plot(np.exp(x), m08p02l27, label=r"$m=8, p=2$",
+            color="k", linestyle="dashed")
+axs[2].plot(np.exp(x), m10p10l27, label=r"$m=10, p=10$",
+            color="k", linestyle="dotted")
 
 plt.yscale("log")
 axs[1].set_xlabel(r"$\frac{a}{a_0}$")
