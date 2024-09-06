@@ -55,11 +55,16 @@ plt.xscale("log")
 plt.yscale("log")
 
 plt.xlim(np.exp(x[-1]), np.exp(0))
+plt.ylim(top=1.e33)
 
-plt.plot(np.exp(x), l17, label=r"$ l = 1 \times 10^{-17} $")
-plt.plot(np.exp(x), l22, label=r"$ l = 1 \times 10^{-22} $")
-plt.plot(np.exp(x), l27, label=r"$ l = 1 \times 10^{-27} $")
-plt.plot(np.exp(gr_integration[:, 0]), gr_integration[:, 1], "--", label="RG")
+plt.plot(np.exp(x), l17, label=r"$ l = 1 \times 10^{-17} $",
+         linestyle="dotted", color="k")
+plt.plot(np.exp(x), l22, label=r"$ l = 1 \times 10^{-22} $",
+         linestyle="dashed", color="k")
+plt.plot(np.exp(x), l27, label=r"$ l = 1 \times 10^{-27} $",
+         linestyle="dashdot", color="k")
+plt.plot(np.exp(gr_integration[:, 0]), gr_integration[:, 1],
+         linestyle="solid", label="RG", color="k")
 
 plt.xlabel(r"$ \frac{a}{a_0} $")
 plt.ylabel(r"$ \frac{H}{H_0} $")
