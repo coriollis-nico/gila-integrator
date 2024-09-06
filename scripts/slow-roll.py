@@ -43,27 +43,27 @@ fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 2],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[0].plot(sr_m08p02l17[l17_index, 0], sr_m08p02l17[l17_index, 2],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[0].plot(sr_m10p10l17[l17_index, 0], sr_m10p10l17[l17_index, 2],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[1].set_title(r"$l = 1 \times 10^{-22}$")
 axs[1].plot(sr_m03p01l22[l22_index, 0], sr_m03p01l22[l22_index, 2],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[1].plot(sr_m08p02l22[l22_index, 0], sr_m08p02l22[l22_index, 2],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[1].plot(sr_m10p10l22[l22_index, 0], sr_m10p10l22[l22_index, 2],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[2].set_title(r"$l = 1 \times 10^{-27}$")
 axs[2].plot(sr_m03p01l27[l27_index, 0], sr_m03p01l27[l27_index, 2],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[2].plot(sr_m08p02l27[l27_index, 0], sr_m08p02l27[l27_index, 2],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[2].plot(sr_m10p10l27[l27_index, 0], sr_m10p10l27[l27_index, 2],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[1].set_xlabel(r"$N$")
 axs[0].set_ylabel(r"$ \epsilon_1 $")
@@ -82,27 +82,27 @@ fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 3],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[0].plot(sr_m08p02l17[l17_index, 0], sr_m08p02l17[l17_index, 3],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[0].plot(sr_m10p10l17[l17_index, 0], sr_m10p10l17[l17_index, 3],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[1].set_title(r"$l = 1 \times 10^{-22}$")
 axs[1].plot(sr_m03p01l22[l22_index, 0], sr_m03p01l22[l22_index, 3],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[1].plot(sr_m08p02l22[l22_index, 0], sr_m08p02l22[l22_index, 3],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[1].plot(sr_m10p10l22[l22_index, 0], sr_m10p10l22[l22_index, 3],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[2].set_title(r"$l = 1 \times 10^{-27}$")
 axs[2].plot(sr_m03p01l27[l27_index, 0], sr_m03p01l27[l27_index, 3],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[2].plot(sr_m08p02l27[l27_index, 0], sr_m08p02l27[l27_index, 3],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[2].plot(sr_m10p10l27[l27_index, 0], sr_m10p10l27[l27_index, 3],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[1].set_xlabel(r"$N$")
 axs[0].set_ylabel(r"$ \epsilon_2 $")
@@ -121,27 +121,27 @@ fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 4],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[0].plot(sr_m08p02l17[l17_index, 0], sr_m08p02l17[l17_index, 4],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[0].plot(sr_m10p10l17[l17_index, 0], sr_m10p10l17[l17_index, 4],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[1].set_title(r"$l = 1 \times 10^{-22}$")
 axs[1].plot(sr_m03p01l22[l22_index, 0], sr_m03p01l22[l22_index, 4],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[1].plot(sr_m08p02l22[l22_index, 0], sr_m08p02l22[l22_index, 4],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[1].plot(sr_m10p10l22[l22_index, 0], sr_m10p10l22[l22_index, 4],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[2].set_title(r"$l = 1 \times 10^{-27}$")
 axs[2].plot(sr_m03p01l27[l27_index, 0], sr_m03p01l27[l27_index, 4],
-            label=r"$ m=3, p=1 $")
+            label=r"$ m=3, p=1 $", color="k", linestyle="dotted")
 axs[2].plot(sr_m08p02l27[l27_index, 0], sr_m08p02l27[l27_index, 4],
-            label=r"$ m=8, p=2 $")
+            label=r"$ m=8, p=2 $", color="k", linestyle="dashed")
 axs[2].plot(sr_m10p10l27[l27_index, 0], sr_m10p10l27[l27_index, 4],
-            label=r"$ m=10, p=10 $")
+            label=r"$ m=10, p=10 $", color="k", linestyle="dashdot")
 
 axs[1].set_xlabel(r"$N$")
 axs[0].set_ylabel(r"$ \epsilon_2 $")
