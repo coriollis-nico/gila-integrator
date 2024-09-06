@@ -429,9 +429,9 @@ function slowroll(x, y)
     error stop "Arrays not of equal length"
   end if
 
-  aux_array = [( log( abs( x(i) ) ), i = 1, size(x, 1) )]
+  aux_array = [( log( abs( y(i) ) ), i = 1, size(x, 1) )]
 
-  slowroll = fd_c5curve(y, x(2) - x(1), 1)
+  slowroll = fd_c5curve(aux_array, x(2) - x(1), 1)
 
 end function slowroll
 
