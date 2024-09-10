@@ -10,12 +10,12 @@ Friedmann equation implementation and RK4 integration for GILA (exponential) and
 
 ### Requirements
 
-- Fortran 2008 compiler (e.g. `gfortran`)
-- `python` (for plotting - version shouldn't be too important)
-    - `matplotlib`
-    - `numpy`
+- Fortran 2008 compiler (e.g. `gfortran`) (tested on `gcc 14.2.1 20240805`)
+- `python` (for plotting - version shouldn't be too important) (tested on `3.12.5`)
+    - `matplotlib` (tested on `3.9.2`)
+    - `numpy` (tested on `2.0.1`)
 - The [Fortran Package Manager ('fpm')](https://fpm.fortran-lang.org/) for compiling
-(tested on v0.10.1, so usage is likely to change with further releases)
+(tested on `v0.10.1`, so usage is likely to change with further releases)
 - [`ford`](https://github.com/Fortran-FOSS-Programmers/ford) (optional - doc creation)
 
 ### Compilation & execution
