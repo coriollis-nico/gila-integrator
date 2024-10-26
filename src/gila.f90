@@ -199,8 +199,7 @@ function gila_friedmann(x, y, user_conditions)
 
   select case(cond%dark)
   case(.true.)
-    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x)) &
-                  & - 3.0_qp*cond%Omega_dark
+    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
   case(.false.)
     aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
   end select
@@ -260,8 +259,7 @@ function gila_friedmann_limit(x, y, user_conditions)
 
   select case(cond%dark)
   case(.true.)
-    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x)) &
-                  & - 3.0_qp*cond%Omega_dark
+    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
   case(.false.)
     aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
   end select
