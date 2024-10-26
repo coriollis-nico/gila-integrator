@@ -197,12 +197,7 @@ function gila_friedmann(x, y, user_conditions)
 
   aux_coeff = - 0.5_qp / ( y )
 
-  select case(cond%dark)
-  case(.true.)
-    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
-  case(.false.)
-    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
-  end select
+  aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
 
   select case(trim(cond%cosmos))
   case("gr")
@@ -257,12 +252,7 @@ function gila_friedmann_limit(x, y, user_conditions)
 
   aux_coeff = - 0.5_qp / ( y )
 
-  select case(cond%dark)
-  case(.true.)
-    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
-  case(.false.)
-    aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
-  end select
+  aux_densities = 3.0_qp*cond%Omega_M/(exp(3.0_qp * x)) + 4.0_qp*cond%Omega_R/(exp(4.0_qp * x))
 
   if ( cond%l >= 1.0_qp ) then
     error stop "l >= 1 not implemented"
