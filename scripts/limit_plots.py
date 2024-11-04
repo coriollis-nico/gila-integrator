@@ -33,16 +33,19 @@ for i in range(len(x[:-1])):
     if not found_17 and l17[i+1] == l17[i]:
         print("l17 transition point: a/a0 = {} in x[{}] and H/H0 = {}"
               .format(np.exp(x[i]), i, l17[i]))
+        print("ln(a/a0) = {}".format(x[i]))
         x17 = x[i]
         found_17 = True
     if not found_22 and l22[i+1] == l22[i]:
         print("l22 transition point: a/a0 = {} in x[{}] and H/H0 = {}"
               .format(np.exp(x[i]), i, l22[i]))
+        print("ln(a/a0) = {}".format(x[i]))
         x22 = x[i]
         found_22 = True
     if not found_27 and l27[i+1] == l27[i]:
         print("l27 transition point: a/a0 = {} in x[{}] and H/H0 = {}"
               .format(np.exp(x[i]), i, l27[i]))
+        print("ln(a/a0) = {}".format(x[i]))
         x27 = x[i]
         found_27 = True
 
