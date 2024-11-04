@@ -88,7 +88,6 @@ close(x_grid)
 ! ---
 
 conditions%cosmos="early"
-conditions%dark = .true.
 conditions%beta=0.0_qp
 conditions%l_tilde=0.0_qp
 conditions%r=0

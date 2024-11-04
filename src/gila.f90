@@ -23,8 +23,6 @@ type :: gila_conditions
   !! - `"early"` for computing \( \beta = 0 \) efficiently
   !! - `"late"` for computing \( \lambda = 0 \) efficiently
   !! - `"gr"` for computing \( \lambda = \beta = 0 \) (general relativity) efficiently
-  logical :: dark = .false.
-  !! For specifying \( \Lambda \) equal (`.false.`) or unequal (`.true.`) to `0`.
   real(qp) :: lambda = 1.0_qp
   !! Early universe coefficient
   real(qp) :: beta = 1.0_qp
@@ -72,12 +70,9 @@ subroutine save_gila_genconditions(conditions, file_id)
   !! Comment marker
 
   write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
-  write(file_id, *) c//"dark: ", conditions%dark
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
-  if ( conditions%dark .eqv. .true. ) then
-    write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
-  end if
+  write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
   if ( (trim(conditions%cosmos) == "gila") .or. (trim(conditions%cosmos) == "early") ) then
     write(file_id, *) c//"λ = ", conditions%lambda
     write(file_id, *) c//"l = ", conditions%l
@@ -108,12 +103,9 @@ subroutine save_gila_limconditions(conditions, file_id)
   !! Comment marker
 
   write(file_id, *) c//"* Cosmos: "//trim(conditions%cosmos)
-  write(file_id, *) c//"dark: ", conditions%dark
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
-  if ( conditions%dark .eqv. .true. ) then
-    write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
-  end if
+  write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
   if (trim(conditions%cosmos) == "early") then
     write(file_id, *) c//"λ = ", conditions%lambda
     write(file_id, *) c//"l = ", conditions%l
