@@ -20,20 +20,20 @@ program no_matter
   !! [[gila_conditions:p]]
 
   real(qp), parameter :: xi = 0.0_qp
-  !! Initial [[gila_friedmann:x]] value
+  !! Initial \( \bar{a}_{(i)}} \) value
   real(qp), parameter :: xf = -60.0_qp
-  !! Final [[gila_friedmann:y]] value
+  !! Final \( \bar{a}_{(i)}} \) value
   real(qp), parameter :: yi = 1.0_qp
-  !! Initial [[gila_friedmann:y]] value
-  integer, parameter :: n = 15000
+  !! Initial \( \bar{H}_{(i)} \) value
+  integer, parameter :: n = 20000
   !! Number of integration steps
 
   real(qp), dimension(n), parameter :: x = [( i * (xf - xi)/n, i = 0, n-1 )]
-  !! \( x \) values array
+  !! ´x´ values array
   real(qp), dimension(n) :: y
   !! Solution array
   real(qp), dimension(n, 5) :: slowroll_data
-  !! \( \epsilon_0 \) array
+  !! \( \epsilon_n \) array
 
   type(gila_conditions) :: conditions
   real(qp), parameter :: matter_density = 0.0_qp
