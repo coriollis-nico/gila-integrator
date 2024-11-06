@@ -72,9 +72,9 @@ axs[1].set_xlabel(r"$N$")
 axs[0].set_ylabel(r"$ \epsilon_1 $")
 for ax in axs:
     # ax.set_xlim(lim_low, lim_up)
-    # ax.set_ylim(0)
+    ax.set_ylim(-0.1)
     ax.legend(loc="best", fontsize=8)
-    ax.fill_between([lim_low, lim_up], 0.0097, -0.1, alpha=0.5)
+    ax.fill_between([lim_low, lim_up], 0.0097, -0.1, alpha=0.16)
 
 plt.savefig(fig_dir+"/e1.png")
 
@@ -113,7 +113,7 @@ for ax in axs:
     # ax.set_xlim(lim_low, lim_up)
     # ax.set_ylim(0.016, 0.0215)
     ax.legend(loc="best", fontsize=8)
-    ax.fill_between([lim_low, lim_up], 0.032+0.009, 0.032-0.008, alpha=0.5)
+    ax.fill_between([lim_low, lim_up], 0.032+0.009, 0.032-0.008, alpha=0.1)
 
 plt.savefig(fig_dir+"/e2.png")
 
@@ -152,7 +152,7 @@ for ax in axs:
     # ax.set_xlim(lim_low, lim_up)
     # ax.set_ylim(0.0165, 0.0215)
     ax.legend(loc="best", fontsize=8)
-    ax.fill_between([lim_low, lim_up], 0.19+0.55, 0.19-0.53, alpha=0.5)
+    ax.fill_between([lim_low, lim_up], 0.19+0.55, 0.19-0.53, alpha=0.16)
 
 plt.savefig(fig_dir+"/e3.png")
 

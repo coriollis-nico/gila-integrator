@@ -71,7 +71,7 @@ for ax in axs:
     ax.set_xlim(-60, -50)
     ax.set_ylim(0)
     ax.legend(loc="best", fontsize=8)
-    ax.fill_between([-60, -50], 0.0097, -0.01, alpha=0.08)
+    ax.fill_between([-60, -50], 0.0097, -0.01, alpha=0.16)
 
 plt.savefig(fig_dir+"/e1.png")
 
@@ -110,7 +110,7 @@ for ax in axs:
     ax.set_xlim(-60, -50)
     ax.set_ylim(0.016, 0.0215)
     ax.legend(loc="best", fontsize=8)
-    ax.fill_between([-60, -50], 0.032+0.009, 0.032-0.008, alpha=0.05)
+    ax.fill_between([-60, -50], 0.032+0.009, 0.032-0.008, alpha=0.1)
 
 plt.savefig(fig_dir+"/e2.png")
 
@@ -149,7 +149,7 @@ for ax in axs:
     ax.set_xlim(-60, -50)
     ax.set_ylim(0.0165, 0.0215)
     ax.legend(loc="best", fontsize=8)
-    ax.fill_between([-60, -50], 0.19+0.55, 0.19-0.53, alpha=0.08)
+    ax.fill_between([-60, -50], 0.19+0.55, 0.19-0.53, alpha=0.16)
 
 plt.savefig(fig_dir+"/e3.png")
 
