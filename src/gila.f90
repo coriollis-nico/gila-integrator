@@ -19,10 +19,11 @@ type :: gila_conditions
   character(5) :: cosmos = "gila"
   !! For selecting [[gila:gila_friedmann]] variation. Possible values are
   !!
-  !! - `"gila"` (default) for the standard evaluation
-  !! - `"early"` for computing \( \beta = 0 \) efficiently
-  !! - `"late"` for computing \( \lambda = 0 \) efficiently
-  !! - `"gr"` for computing \( \lambda = \beta = 0 \) (general relativity) efficiently
+  !! - `gila"` (default) for the standard evaluation
+  !! - `early` for computing \( \beta = 0 \) efficiently
+  !! - `late` for computing \( \lambda = 0 \) efficiently
+  !! - `gr` for computing \( \lambda = \beta = 0 \) (general relativity) efficiently
+  !! - 'einf' for computing \( l = 1 \) in 'early' cosmos efficiently
   real(qp) :: lambda = 1.0_qp
   !! Early universe coefficient
   real(qp) :: beta = 1.0_qp
@@ -49,7 +50,6 @@ end type
 
 type(gila_conditions), parameter :: gila_grdefault &
   & = gila_conditions(cosmos="gr",  &
-                      & dark=.true.,&
                       & lambda = 0.0_qp, beta = 0.0_qp,         &
                       & l = 0.0_qp, l_tilde = 0.0_qp,           &
                       & m = 0, p = 0, r = 0, s = 0,             &
@@ -73,6 +73,12 @@ subroutine save_gila_genconditions(conditions, file_id)
   write(file_id, *) c//"Ω_M0 = ", conditions%Omega_M
   write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
   write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
+  if (trim(conditions%cosmos) == "einf") then
+    write(file_id, *) c//"λ = ", conditions%lambda
+    write(file_id, *) c//"l = 1"
+    write(file_id, *) c//"m = ", conditions%m
+    write(file_id, *) c//"p = ", conditions%p
+  end if
   if ( (trim(conditions%cosmos) == "gila") .or. (trim(conditions%cosmos) == "early") ) then
     write(file_id, *) c//"λ = ", conditions%lambda
     write(file_id, *) c//"l = ", conditions%l
@@ -163,6 +169,10 @@ function gila_friedmann(x, y, user_conditions)
 
   !! Finds the value of \( \frac{d \bar{H}}{d \bar{a}} \) of the GILA Friedmann equations.
 
+  !! For 'einf', finds the value of \( \frac{d \bar{H}_{(i)}}{d \bar{a}_{(i)}} \) of the
+  !! GILA Friedmann equations, with \( \bar{H}_{(i)} \eqv \frac{H}{H_i} \) and
+  !! \( \bar{a}_{(i)}} \eqv \ln{\frac{a}{a_i}} \)
+
   real(qp), intent(in) :: x
   !! \( x = \frac{a}{a_0} \).
   real(qp), intent(in) :: y
@@ -206,8 +216,13 @@ function gila_friedmann(x, y, user_conditions)
               & / ( 1.0_qp + aux_denom(cond%lambda, cond%l,       cond%m, cond%p, y) &
                          & + aux_denom(-cond%beta,  cond%l_tilde, cond%r, cond%s, y) )
                           !! NOTE the - sign before cond%beta
-    case default
-      error stop "Invalid cosmos selection"
+  case("einf")
+    aux_param = (1.0_qp + cond%lambda * exp(cond%lambda)) &
+      & / (1.0_qp + cond%lambda * (y**(2*cond%m - 2)) &
+          & * ( cond%m + cond%lambda * cond%p *2 *  (y**(cond%p)) ) &
+          & * exp(cond%lambda * (y**(2*cond%p))) )
+  case default
+    error stop "Invalid cosmos selection"
   end select
 
   gila_friedmann = aux_coeff * aux_densities * aux_param
@@ -391,7 +406,7 @@ end function slowroll0
 
 function slowroll(x, y)
 
-  !! Given nth slow-roll data, finds \( \epsilon_{n+1} \). Assumes `\( x = \ln{a}{a_0} \)
+  !! Given nth slow-roll data, finds \( \epsilon_{n+1} \). Assumes `\( x = \ln{a}{a_i} \)
   !! is equally spaced.
 
   real(qp), intent(in) :: x(:)
