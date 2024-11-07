@@ -219,7 +219,7 @@ function gila_friedmann(x, y, user_conditions)
   case("einf")
     aux_param = (1.0_qp + cond%lambda * exp(cond%lambda)) &
       & / (1.0_qp + cond%lambda * (y**(2*cond%m - 2)) &
-          & * ( cond%m + cond%lambda * cond%p *2 *  (y**(cond%p)) ) &
+          & * ( cond%m + cond%lambda * cond%p *  (y**(2*cond%p)) ) &
           & * exp(cond%lambda * (y**(2*cond%p))) )
   case default
     error stop "Invalid cosmos selection"
