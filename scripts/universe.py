@@ -2,10 +2,14 @@
 
 "Finds the value of t_0 (age of the universe) and makes a plot of a(t)"
 
+from os import makedirs
 import numpy as np
 import scipy.integrate as scint
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
+
+fig_dir = "plots/intro"
+makedirs(fig_dir, exist_ok=True)
 
 # Constants
 # Hubble constant / s^(-1})
@@ -72,4 +76,5 @@ plt.figure(layout="constrained")
 plt.plot(t_bar, a_bar)
 plt.xlabel(r"$ \frac{t}{t_0} $")
 plt.ylabel(r"$ \frac{a}{a_0} $")
-plt.show()
+plt.savefig(fig_dir+"/scale.png", dpi=400)
+plt.close()
