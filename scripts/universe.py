@@ -7,6 +7,7 @@ import numpy as np
 import scipy.integrate as scint
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
+plt.rcParams['text.usetex'] = True
 
 fig_dir = "plots/intro"
 makedirs(fig_dir, exist_ok=True)
@@ -18,10 +19,8 @@ H0 = 2.195e-18
 O_m0 = 0.3153
 O_L = 0.6847
 O_r0 = 9.02e-5
-O_k_abs = 0.005
-# (sign) of curvature
-k = -1
-O_k0 = k * O_k_abs
+O_k0_abs = 0.005
+k_sign = np.array([-1, 0, 1])
 # Integration parameters
 t_bar_i = 1
 t_bar_f = 0
@@ -35,8 +34,8 @@ def euler_step(derivative, dt, t, x):
     return derivative(t, x) * dt
 
 
-def density_bracket(a_bar):
-    densities = O_r0/(a_bar**2) + O_m0/a_bar + O_k0 + (O_L * a_bar**2)
+def density_bracket(a_bar, k):
+    densities = O_r0/(a_bar**2) + O_m0/a_bar + k * O_k0_abs + (O_L * a_bar**2)
     return np.sqrt(densities)
 
 
@@ -44,37 +43,58 @@ def seconds_to_years(t):
     return t / (1e7 * np.pi)
 
 
-tH0_integral = scint.quad(lambda a_bar: 1/density_bracket(a_bar), 0, 1)
-tH0 = tH0_integral[0]
-
+tH0 = np.array(
+  [scint.quad(
+    lambda a_bar: 1/density_bracket(a_bar, k), 0, 1)[0] for k in k_sign]
+  )
 t0 = tH0 / H0
 
 print("Age of the universe:")
-print(f"{seconds_to_years(t0):.3e}", "yr")
-print(f"{t0:.3e}", "s")
+for j in range(len(k_sign)):
+    print(k_sign[j], "->", f"{t0[j]:.3e}", "s =",
+          f"{seconds_to_years(t0[j]):.3e}", "yr")
 
 
-def abar_derivative(t_bar, a_bar):
-    return tH0 * density_bracket(a_bar)
+def abar_derivative(t, a, i):
+    return tH0[i] * density_bracket(a, k_sign[i])
 
-
-a_bar = np.zeros(n)
-a_bar[0] = a_bar_i
 
 t_bar = np.zeros(n)
 t_bar[0] = t_bar_i
 
-a_bar_dot = np.zeros(n)
-a_bar_dot[0] = abar_derivative(t_bar_i, a_bar_i)
+a_bar = np.zeros((n, len(k_sign)))
+a_bar[0, :] = a_bar_i
+
+a_bar_dot = np.zeros((n, len(k_sign)))
+for l_ in range(len(k_sign)):
+    a_bar_dot[0, l_] = abar_derivative(t_bar_i, a_bar_i, l_)
 
 for j in range(n-1):
     t_bar[j+1] = t_bar[j] + dt
-    a_bar[j+1] = a_bar[j] + euler_step(abar_derivative, dt, t_bar[j], a_bar[j])
-    a_bar_dot[j+1] = abar_derivative(t_bar[j+1], a_bar[j+1])
+    for l_ in range(len(k_sign)):
+        a_bar[j+1, l_] = a_bar[j, l_] + euler_step(
+          (lambda t, a: abar_derivative(t, a, k_sign[l_])),
+          dt, t_bar[j], a_bar[j, l_]
+          )
+        a_bar_dot[j+1, l_] = abar_derivative(t_bar[j+1], a_bar[j+1, l_], l_)
 
 plt.figure(layout="constrained")
-plt.plot(t_bar, a_bar)
+for l_ in range(len(k_sign)):
+    plt.plot(t_bar, a_bar[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
+plt.xlabel(r"$ \bar{t} $")
+plt.ylabel(r"$ \bar{a} $")
+plt.legend(loc="lower right")
+plt.savefig(fig_dir+"/scale.png", dpi=250)
+plt.close()
+
+plt.figure(layout="constrained")
+for l_ in range(len(k_sign)):
+    plt.plot(t_bar,
+             (a_bar[:, l_] - a_bar[:, 1])/a_bar[:, 1],
+             label=r"$ k = {} $".format(k_sign[l_]))
 plt.xlabel(r"$ \frac{t}{t_0} $")
-plt.ylabel(r"$ \frac{a}{a_0} $")
-plt.savefig(fig_dir+"/scale.png", dpi=400)
+plt.ylabel(r"$ \frac{\Delta{\bar{a}}}{\bar{a}_{k=0}} $")
+plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
+plt.legend(loc="lower right")
+plt.savefig(fig_dir+"/scale_diff.png", dpi=250)
 plt.close()
