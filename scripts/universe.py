@@ -25,7 +25,7 @@ k_sign = np.array([-1, 0, 1])
 t_bar_i = 1
 t_bar_f = 0
 a_bar_i = 1
-n = 10000
+n = 50000
 dt = (t_bar_f - t_bar_i)/n
 
 
@@ -65,9 +65,9 @@ t_bar[0] = t_bar_i
 a_bar = np.zeros((n, len(k_sign)))
 a_bar[0, :] = a_bar_i
 
-a_bar_dot = np.zeros((n, len(k_sign)))
+d_abar_d_tbar = np.zeros((n, len(k_sign)))
 for l_ in range(len(k_sign)):
-    a_bar_dot[0, l_] = abar_derivative(t_bar_i, a_bar_i, l_)
+    d_abar_d_tbar[0, l_] = abar_derivative(t_bar_i, a_bar_i, l_)
 
 for j in range(n-1):
     t_bar[j+1] = t_bar[j] + dt
@@ -76,7 +76,8 @@ for j in range(n-1):
           (lambda t, a: abar_derivative(t, a, k_sign[l_])),
           dt, t_bar[j], a_bar[j, l_]
           )
-        a_bar_dot[j+1, l_] = abar_derivative(t_bar[j+1], a_bar[j+1, l_], l_)
+        d_abar_d_tbar[j+1, l_] = abar_derivative(t_bar[j+1], a_bar[j+1, l_],
+                                                 l_)
 
 # a(t)
 plt.figure(layout="constrained")
@@ -93,11 +94,13 @@ plt.close()
 plt.figure(layout="constrained")
 plt.xlim(0, 1)
 for l_ in range(len(k_sign)):
-    plt.plot(t_bar, 1/a_bar_dot[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
+    plt.plot(
+        t_bar, 1/d_abar_d_tbar[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
 plt.xlabel(r"$ \bar{t} $")
-plt.ylabel(r"$ {\dot{\bar{a}}}^{-1} $")
+plt.ylabel(
+    r"$ \left( \frac{\mathrm{d} \bar{a}}{\mathrm{d} \bar{t}} \right)^{-1} $")
 plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir+"/scale_dot_inverse.png", dpi=250)
+plt.savefig(fig_dir+"/scale_deriv_inverse.png", dpi=250)
 plt.close()
 
 # Δa
@@ -112,4 +115,27 @@ plt.ylabel(r"$ \frac{\Delta{\bar{a}}}{\bar{a}_{k=0}} $")
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
 plt.legend(loc="best", frameon=False)
 plt.savefig(fig_dir+"/scale_diff.png", dpi=250)
+plt.close()
+
+# Ω_k
+O_k = np.zeros((n, len(k_sign)))
+for l_ in range(len(k_sign)):
+    O_k[:, l_] = k_sign[l_] * O_k0_abs * (tH0[l_]/d_abar_d_tbar[:, l_])**2
+
+print("Last values of Ω_k:")
+print("t =", f"{t_bar[-1]:.3e}")
+for l_ in [0, 2]:
+    print(k_sign[l_], "->", f"{O_k[-1, l_]:.3e}")
+
+plt.figure(layout="constrained")
+plt.xlim(0, 1)
+for l_ in [0, 2]:
+    plt.plot(t_bar,
+             O_k[:, l_],
+             label=r"$ k = {} $".format(k_sign[l_]))
+plt.xlabel(r"$ \bar{t} $")
+plt.ylabel(r"$ \Omega_{k} $")
+plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
+plt.legend(loc="best", frameon=False)
+plt.savefig(fig_dir+"/O_k.png", dpi=250)
 plt.close()
