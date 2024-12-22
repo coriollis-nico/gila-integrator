@@ -8,6 +8,7 @@ import scipy.integrate as scint
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
 plt.rcParams['text.usetex'] = True
+plt.rcParams['figure.figsize'] = [6.4, 2.4]
 
 fig_dir = "plots/intro"
 makedirs(fig_dir, exist_ok=True)
