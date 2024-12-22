@@ -9,6 +9,7 @@ from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
+plt.rcParams['text.usetex'] = True
 
 # Data import
 fig_dir = "plots/nomatter_plots"
@@ -24,7 +25,7 @@ sr_m10p10 = np.loadtxt(data_dir+"/slow-m10p10.dat", comments='#')
 print("Plotting...")
 
 # ϵ_1
-plt.figure(layout="constrained", dpi=400)
+plt.figure(layout="constrained", dpi=250)
 
 plt.plot(sr_m03p01[:, 0], sr_m03p01[:, 2],
          label=r"$ m=3, p=1 $", color="k", linestyle="solid")
@@ -45,7 +46,7 @@ plt.close()
 
 # ϵ_2
 
-plt.figure(layout="constrained", dpi=400)
+plt.figure(layout="constrained", dpi=250)
 
 plt.plot(sr_m03p01[:, 0], sr_m03p01[:, 3],
          label=r"$ m=3, p=1 $", color="k", linestyle="solid")
@@ -64,7 +65,7 @@ plt.savefig(fig_dir+"/e2.png")
 plt.close()
 
 # ϵ_3
-plt.figure(layout="constrained", dpi=400)
+plt.figure(layout="constrained", dpi=250)
 
 plt.plot(sr_m03p01[:, 0], sr_m03p01[:, 4],
          label=r"$ m=3, p=1 $", color="k", linestyle="solid")

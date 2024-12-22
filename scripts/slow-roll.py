@@ -9,6 +9,7 @@ from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
+plt.rcParams['text.usetex'] = True
 
 # Data import
 fig_dir = "plots/slowroll_plots"
@@ -39,7 +40,7 @@ l27_index = [i for i in range(len(sr_m03p01l27[:, 0]))
 print("Plotting...")
 
 fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=400)
+                        figsize=[10., 3.5], dpi=250)
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 2],
@@ -78,7 +79,7 @@ plt.savefig(fig_dir+"/e1.png")
 plt.close()
 
 fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=400)
+                        figsize=[10., 3.5], dpi=250)
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 3],
@@ -117,7 +118,7 @@ plt.savefig(fig_dir+"/e2.png")
 plt.close()
 
 fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=400)
+                        figsize=[10., 3.5], dpi=250)
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 4],

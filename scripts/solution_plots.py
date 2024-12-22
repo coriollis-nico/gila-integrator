@@ -9,6 +9,7 @@ from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
+plt.rcParams['text.usetex'] = True
 
 # Data import
 fig_dir = "plots/solution_plots"
@@ -34,7 +35,7 @@ m10p10l27 = np.loadtxt(data_dir+"/m10p10l1.0E-27.dat", comments='#')
 print("Plotting...")
 
 fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=400)
+                        figsize=[10., 3.5], dpi=250)
 
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")

@@ -78,23 +78,38 @@ for j in range(n-1):
           )
         a_bar_dot[j+1, l_] = abar_derivative(t_bar[j+1], a_bar[j+1, l_], l_)
 
+# a(t)
 plt.figure(layout="constrained")
+plt.xlim(0, 1)
 for l_ in range(len(k_sign)):
     plt.plot(t_bar, a_bar[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
 plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \bar{a} $")
-plt.legend(loc="lower right")
+plt.legend(loc="best", frameon=False)
 plt.savefig(fig_dir+"/scale.png", dpi=250)
 plt.close()
 
+# 1/a_dot
 plt.figure(layout="constrained")
+plt.xlim(0, 1)
 for l_ in range(len(k_sign)):
+    plt.plot(t_bar, 1/a_bar_dot[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
+plt.xlabel(r"$ \bar{t} $")
+plt.ylabel(r"$ {\dot{\bar{a}}}^{-1} $")
+plt.legend(loc="best", frameon=False)
+plt.savefig(fig_dir+"/scale_dot_inverse.png", dpi=250)
+plt.close()
+
+# Δa
+plt.figure(layout="constrained")
+plt.xlim(0, 1)
+for l_ in [0, 2]:
     plt.plot(t_bar,
              (a_bar[:, l_] - a_bar[:, 1])/a_bar[:, 1],
              label=r"$ k = {} $".format(k_sign[l_]))
-plt.xlabel(r"$ \frac{t}{t_0} $")
+plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \frac{\Delta{\bar{a}}}{\bar{a}_{k=0}} $")
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-plt.legend(loc="lower right")
+plt.legend(loc="best", frameon=False)
 plt.savefig(fig_dir+"/scale_diff.png", dpi=250)
 plt.close()

@@ -9,6 +9,7 @@ from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
+plt.rcParams['text.usetex'] = True
 
 # Data import
 fig_dir = "plots/limit_plots"
@@ -52,7 +53,7 @@ for i in range(len(x[:-1])):
 # Plotting
 print("Plotting...")
 
-plt.figure(dpi=400, layout="constrained")
+plt.figure(dpi=250, layout="constrained")
 
 plt.xscale("log")
 plt.yscale("log")

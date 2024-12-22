@@ -9,6 +9,7 @@ from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
+plt.rcParams['text.usetex'] = True
 
 # Data import
 fig_dir = "plots/nomatter_plots"
@@ -25,7 +26,7 @@ m10p10 = np.loadtxt(data_dir+"/m10p10.dat", comments='#')
 # Plotting
 print("Plotting...")
 
-plt.figure(layout="constrained", dpi=400)
+plt.figure(layout="constrained", dpi=250)
 
 plt.plot(np.exp(x), m03p01, label=r"$m=3, p=1$", color="k",
          linestyle="solid")
