@@ -88,7 +88,7 @@ for l_ in range(len(k_sign)):
 plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \bar{a} $")
 plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir+"/scale.png", dpi=250)
+plt.savefig(fig_dir+"/scale.pdf")
 plt.close()
 
 # 1/a_dot
@@ -101,7 +101,7 @@ plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(
     r"$ \left( \frac{\mathrm{d} \bar{a}}{\mathrm{d} \bar{t}} \right)^{-1} $")
 plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir+"/scale_deriv_inverse.png", dpi=250)
+plt.savefig(fig_dir+"/scale_deriv_inverse.pdf")
 plt.close()
 
 # Δa
@@ -115,7 +115,7 @@ plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \frac{\Delta{\bar{a}}}{\bar{a}_{k=0}} $")
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
 plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir+"/scale_diff.png", dpi=250)
+plt.savefig(fig_dir+"/scale_diff.pdf")
 plt.close()
 
 # Ω_k
@@ -138,5 +138,5 @@ plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \Omega_{k} $")
 plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
 plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir+"/O_k.png", dpi=250)
+plt.savefig(fig_dir+"/O_k.pdf")
 plt.close()
