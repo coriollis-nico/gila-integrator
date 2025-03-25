@@ -42,8 +42,7 @@ l27_index = [i for i in range(len(sr_m03p01l27[:, 0]))
 # Plotting
 print("Plotting...")
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=250)
+fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 2],
@@ -77,12 +76,11 @@ for ax in axs:
     ax.legend(loc="best", fontsize=8)
     ax.fill_between([lim_low, lim_up], 0.0097, -0.1, alpha=0.16)
 
-plt.savefig(fig_dir+"/e1.png")
+plt.savefig(fig_dir+"/e1.pdf")
 
 plt.close()
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=250)
+fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 3],
@@ -116,12 +114,11 @@ for ax in axs:
     ax.legend(loc="best", fontsize=8)
     ax.fill_between([lim_low, lim_up], 0.032+0.009, 0.032-0.008, alpha=0.1)
 
-plt.savefig(fig_dir+"/e2.png")
+plt.savefig(fig_dir+"/e2.pdf")
 
 plt.close()
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=250)
+fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 4],
@@ -155,6 +152,6 @@ for ax in axs:
     ax.legend(loc="best", fontsize=8)
     ax.fill_between([lim_low, lim_up], 0.19+0.55, 0.19-0.53, alpha=0.16)
 
-plt.savefig(fig_dir+"/e3.png")
+plt.savefig(fig_dir+"/e3.pdf")
 
 plt.close()

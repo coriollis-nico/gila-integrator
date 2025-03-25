@@ -34,8 +34,7 @@ m10p10l27 = np.loadtxt(data_dir+"/m10p10l1.0E-27.dat", comments='#')
 # Plotting
 print("Plotting...")
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained",
-                        figsize=[10., 3.5], dpi=250)
+fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
 
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
@@ -70,7 +69,7 @@ for ax in axs:
     ax.set_xlim(np.exp(x[-1]), np.exp(x[0]))
     ax.legend(loc="lower left", frameon=False)
 
-plt.savefig(fig_dir+"/solutions.png")
+plt.savefig(fig_dir+"/solutions.pdf")
 
 plt.close()
 

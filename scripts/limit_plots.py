@@ -53,7 +53,7 @@ for i in range(len(x[:-1])):
 # Plotting
 print("Plotting...")
 
-plt.figure(dpi=250, layout="constrained")
+plt.figure(layout="constrained")
 
 plt.xscale("log")
 plt.yscale("log")
@@ -75,7 +75,7 @@ plt.ylabel(r"$ \frac{H}{H_0} $")
 
 plt.legend(loc="lower left", frameon=False)
 
-plt.savefig(fig_dir+"/limits.png")
+plt.savefig(fig_dir+"/limits.pdf")
 
 plt.close()
 
