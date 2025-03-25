@@ -147,7 +147,7 @@ end function
 
 function aux_denom(lambda, l, m, p, y)
 
-  !! Denominator equivalent of [[aux_num]]
+  !! Denominator equivalent of aux_num
   !! for \( \lambda (yl)^{2m-2} ( m + \lambda p [yl]^{2p} ) \exp{ \lambda [yl]^{2p} } \)
   !! corresponding with \( -\beta \) etc.
 
