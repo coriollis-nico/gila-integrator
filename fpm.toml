@@ -1,9 +1,9 @@
 name = "gila-integrator"
-version = "0.5.2"
+version = "0.6.1"
 license = "MIT"
 author = "Nicolás Celedón-Hernández"
 maintainer = "nicolas.celedonh@ciencias.unam.mx"
-copyright = "Copyright 2024, Nicolás Celedón-Hernández"
+copyright = "Copyright 2025, Nicolás Celedón-Hernández"
 [build]
 auto-executables = true
 auto-tests = true
