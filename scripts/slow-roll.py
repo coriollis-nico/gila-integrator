@@ -10,11 +10,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
 plt.rcParams['text.usetex'] = True
+plt.rcParams['figure.figsize'] = [6.4, 2.4]
 
 # Data import
 fig_dir = "plots/slowroll_plots"
 data_dir = "data/sims/curve_sandwich"
 makedirs(fig_dir, exist_ok=True)
+
+# Planck data
+e1_max = 0.0097
+e2 = 0.032
+e2_min = e2 - 0.008
+e2_max = e2 + 0.009
+e3 = 0.19
+e3_min = e3 - 0.53
+e3_max = e3 + 0.55
 
 
 sr_m03p01l17 = np.loadtxt(data_dir+"/slow-m03p01l1.0E-17.dat", comments='#')
@@ -65,13 +75,13 @@ axs[2].plot(sr_m08p02l27[l27_index, 0], sr_m08p02l27[l27_index, 2],
 axs[2].plot(sr_m10p10l27[l27_index, 0], sr_m10p10l27[l27_index, 2],
             label=r"$ m=10, p=10 $", color="k", linestyle="dotted")
 
-axs[1].set_xlabel(r"$N$")
+# axs[1].set_xlabel(r"$N$")
 axs[0].set_ylabel(r"$ \epsilon_1 $")
 for ax in axs:
     ax.set_xlim(-60, -50)
-    ax.set_ylim(0)
-    ax.legend(loc="best", fontsize=8)
-    ax.fill_between([-60, -50], 0.0097, -0.01, alpha=0.16)
+    ax.set_ylim(bottom=0)
+    # ax.legend(loc="best", fontsize=8)
+    ax.fill_between([-60, -50], e1_max, 0, alpha=0.14)
 
 plt.savefig(fig_dir+"/e1.pdf")
 
@@ -79,7 +89,7 @@ plt.close()
 
 fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
 
-axs[0].set_title(r"$l = 1 \times 10^{-17}$")
+# axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 3],
             label=r"$ m=3, p=1 $", color="k", linestyle="solid")
 axs[0].plot(sr_m08p02l17[l17_index, 0], sr_m08p02l17[l17_index, 3],
@@ -87,7 +97,7 @@ axs[0].plot(sr_m08p02l17[l17_index, 0], sr_m08p02l17[l17_index, 3],
 axs[0].plot(sr_m10p10l17[l17_index, 0], sr_m10p10l17[l17_index, 3],
             label=r"$ m=10, p=10 $", color="k", linestyle="dotted")
 
-axs[1].set_title(r"$l = 1 \times 10^{-22}$")
+# axs[1].set_title(r"$l = 1 \times 10^{-22}$")
 axs[1].plot(sr_m03p01l22[l22_index, 0], sr_m03p01l22[l22_index, 3],
             label=r"$ m=3, p=1 $", color="k", linestyle="solid")
 axs[1].plot(sr_m08p02l22[l22_index, 0], sr_m08p02l22[l22_index, 3],
@@ -95,7 +105,7 @@ axs[1].plot(sr_m08p02l22[l22_index, 0], sr_m08p02l22[l22_index, 3],
 axs[1].plot(sr_m10p10l22[l22_index, 0], sr_m10p10l22[l22_index, 3],
             label=r"$ m=10, p=10 $", color="k", linestyle="dotted")
 
-axs[2].set_title(r"$l = 1 \times 10^{-27}$")
+# axs[2].set_title(r"$l = 1 \times 10^{-27}$")
 axs[2].plot(sr_m03p01l27[l27_index, 0], sr_m03p01l27[l27_index, 3],
             label=r"$ m=3, p=1 $", color="k", linestyle="solid")
 axs[2].plot(sr_m08p02l27[l27_index, 0], sr_m08p02l27[l27_index, 3],
@@ -103,13 +113,13 @@ axs[2].plot(sr_m08p02l27[l27_index, 0], sr_m08p02l27[l27_index, 3],
 axs[2].plot(sr_m10p10l27[l27_index, 0], sr_m10p10l27[l27_index, 3],
             label=r"$ m=10, p=10 $", color="k", linestyle="dotted")
 
-axs[1].set_xlabel(r"$N$")
+# axs[1].set_xlabel(r"$N$")
 axs[0].set_ylabel(r"$ \epsilon_2 $")
 for ax in axs:
+    ax.hlines(e2, xmin=-60, xmax=-50, alpha=0.4)
     ax.set_xlim(-60, -50)
-    ax.set_ylim(0.016, 0.0215)
-    ax.legend(loc="best", fontsize=8)
-    ax.fill_between([-60, -50], 0.032+0.009, 0.032-0.008, alpha=0.1)
+    # ax.legend(loc="best", fontsize=8)
+    ax.fill_between([-60, -50], e2_min, e2_max, alpha=0.1)
 
 plt.savefig(fig_dir+"/e2.pdf")
 
@@ -117,7 +127,7 @@ plt.close()
 
 fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
 
-axs[0].set_title(r"$l = 1 \times 10^{-17}$")
+# axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(sr_m03p01l17[l17_index, 0], sr_m03p01l17[l17_index, 4],
             label=r"$ m=3, p=1 $", color="k", linestyle="solid")
 axs[0].plot(sr_m08p02l17[l17_index, 0], sr_m08p02l17[l17_index, 4],
@@ -125,7 +135,7 @@ axs[0].plot(sr_m08p02l17[l17_index, 0], sr_m08p02l17[l17_index, 4],
 axs[0].plot(sr_m10p10l17[l17_index, 0], sr_m10p10l17[l17_index, 4],
             label=r"$ m=10, p=10 $", color="k", linestyle="dotted")
 
-axs[1].set_title(r"$l = 1 \times 10^{-22}$")
+# axs[1].set_title(r"$l = 1 \times 10^{-22}$")
 axs[1].plot(sr_m03p01l22[l22_index, 0], sr_m03p01l22[l22_index, 4],
             label=r"$ m=3, p=1 $", color="k", linestyle="solid")
 axs[1].plot(sr_m08p02l22[l22_index, 0], sr_m08p02l22[l22_index, 4],
@@ -133,7 +143,7 @@ axs[1].plot(sr_m08p02l22[l22_index, 0], sr_m08p02l22[l22_index, 4],
 axs[1].plot(sr_m10p10l22[l22_index, 0], sr_m10p10l22[l22_index, 4],
             label=r"$ m=10, p=10 $", color="k", linestyle="dotted")
 
-axs[2].set_title(r"$l = 1 \times 10^{-27}$")
+# axs[2].set_title(r"$l = 1 \times 10^{-27}$")
 axs[2].plot(sr_m03p01l27[l27_index, 0], sr_m03p01l27[l27_index, 4],
             label=r"$ m=3, p=1 $", color="k", linestyle="solid")
 axs[2].plot(sr_m08p02l27[l27_index, 0], sr_m08p02l27[l27_index, 4],
@@ -142,12 +152,12 @@ axs[2].plot(sr_m10p10l27[l27_index, 0], sr_m10p10l27[l27_index, 4],
             label=r"$ m=10, p=10 $", color="k", linestyle="dotted")
 
 axs[1].set_xlabel(r"$N$")
-axs[0].set_ylabel(r"$ \epsilon_2 $")
+axs[0].set_ylabel(r"$ \epsilon_3 $")
 for ax in axs:
+    ax.hlines(e3, xmin=-60, xmax=-50, alpha=0.4)
     ax.set_xlim(-60, -50)
-    ax.set_ylim(0.0165, 0.0215)
-    ax.legend(loc="best", fontsize=8)
-    ax.fill_between([-60, -50], 0.19+0.55, 0.19-0.53, alpha=0.16)
+    # ax.legend(loc="best", fontsize=8)
+    ax.fill_between([-60, -50], e3_min, e3_max, alpha=0.14)
 
 plt.savefig(fig_dir+"/e3.pdf")
 
