@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
 plt.rcParams['text.usetex'] = True
+plt.rcParams['figure.figsize'] = [6.4, 3]
 
 # Data import
 fig_dir = "plots/solution_plots"
@@ -64,13 +65,12 @@ axs[2].plot(np.exp(x), m10p10l27, label=r"$m=10, p=10$",
 plt.yscale("log")
 axs[1].set_xlabel(r"$\frac{a}{a_0}$")
 axs[0].set_ylabel(r"$ \frac{H}{H_0} $")
+axs[0].legend(loc="lower left", frameon=False)
 for ax in axs:
     ax.set_xscale("log")
     ax.set_xlim(np.exp(x[-1]), np.exp(x[0]))
-    ax.legend(loc="lower left", frameon=False)
 
 plt.savefig(fig_dir+"/solutions.pdf")
-
 plt.close()
 
 exit()
