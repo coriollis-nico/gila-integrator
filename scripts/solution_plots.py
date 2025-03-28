@@ -68,7 +68,7 @@ axs[0].set_ylabel(r"$ \frac{H}{H_0} $")
 axs[0].legend(loc="lower left", frameon=False)
 for ax in axs:
     ax.set_xscale("log")
-    ax.set_xlim(np.exp(x[-1]), np.exp(x[0]))
+    ax.set_xlim(np.exp(-70), np.exp(x[0]))
 
 plt.savefig(fig_dir+"/solutions.pdf")
 plt.close()

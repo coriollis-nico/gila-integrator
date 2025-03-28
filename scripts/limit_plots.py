@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
 plt.rcParams['text.usetex'] = True
-plt.rcParams['figure.figsize'] = [6.4, 2.4]
+plt.rcParams['figure.figsize'] = [6.4, 3.2]
 
 # Data import
 fig_dir = "plots/limit_plots"
@@ -59,7 +59,7 @@ plt.figure(layout="constrained")
 plt.xscale("log")
 plt.yscale("log")
 
-plt.xlim(np.exp(x[-1]), np.exp(0))
+plt.xlim(np.exp(-70), 1)
 plt.ylim(top=1.e33)
 
 plt.plot(np.exp(x), l17, label=r"$ l = 1 \times 10^{-17} $",
