@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 plt.style.use('grayscale')
 plt.rcParams['text.usetex'] = True
 plt.rcParams['figure.figsize'] = [6.4, 3]
-
 # Data import
 fig_dir = "plots/solution_plots"
 data_dir = "data/sims/curve_sandwich"
@@ -32,6 +31,10 @@ m10p10l17 = np.loadtxt(data_dir+"/m10p10l1.0E-17.dat", comments='#')
 m10p10l22 = np.loadtxt(data_dir+"/m10p10l1.0E-22.dat", comments='#')
 m10p10l27 = np.loadtxt(data_dir+"/m10p10l1.0E-27.dat", comments='#')
 
+m99p99l17 = np.loadtxt(data_dir+"/m99p99l1.0E-17.dat", comments='#')
+m99p99l22 = np.loadtxt(data_dir+"/m99p99l1.0E-22.dat", comments='#')
+m99p99l27 = np.loadtxt(data_dir+"/m99p99l1.0E-27.dat", comments='#')
+
 # Plotting
 print("Plotting...")
 
@@ -45,6 +48,8 @@ axs[0].plot(np.exp(x), m08p02l17, label=r"$m=8, p=2$",
             color="k", linestyle="dashed")
 axs[0].plot(np.exp(x), m10p10l17, label=r"$m=10, p=10$",
             color="k", linestyle="dotted")
+axs[0].plot(np.exp(x), m99p99l17, label=r"$m=99, p=99$",
+            color="k", linestyle="dashdot")
 
 axs[1].set_title(r"$l = 1 \times 10^{-22}$")
 axs[1].plot(np.exp(x), m03p01l22, label=r"$m=3, p=1$",
@@ -53,6 +58,8 @@ axs[1].plot(np.exp(x), m08p02l22, label=r"$m=8, p=2$",
             color="k", linestyle="dashed")
 axs[1].plot(np.exp(x), m10p10l22, label=r"$m=10, p=10$",
             color="k", linestyle="dotted")
+axs[1].plot(np.exp(x), m99p99l22, label=r"$m=99, p=99$",
+            color="k", linestyle="dashdot")
 
 axs[2].set_title(r"$l = 1 \times 10^{-27}$")
 axs[2].plot(np.exp(x), m03p01l27, label=r"$m=3, p=1$",
@@ -61,6 +68,8 @@ axs[2].plot(np.exp(x), m08p02l27, label=r"$m=8, p=2$",
             color="k", linestyle="dashed")
 axs[2].plot(np.exp(x), m10p10l27, label=r"$m=10, p=10$",
             color="k", linestyle="dotted")
+axs[2].plot(np.exp(x), m99p99l27, label=r"$m=99, p=99$",
+            color="k", linestyle="dashdot")
 
 plt.yscale("log")
 axs[1].set_xlabel(r"$\frac{a}{a_0}$")

@@ -15,9 +15,9 @@ program curve_sandwich
 
   integer :: i, k, j
 
-  integer, dimension(3), parameter  :: mt = [ 3,         8,         10 ]
+  integer, dimension(4), parameter  :: mt = [ 3,         8,         10,       99 ]
   !! [[gila_conditions:m]]
-  integer, dimension(3), parameter  :: pt = [ 1,         2,         10 ]
+  integer, dimension(4), parameter  :: pt = [ 1,         2,         10,       99 ]
   !! [[gila_conditions:p]]
   real(qp), dimension(3), parameter :: lt = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
   !! [[gila_conditions:l]]
@@ -55,7 +55,7 @@ program curve_sandwich
 call safe_open("mp.dat", mp_id, file_dir=data_dir)
 
   call save_integral_conditions(x, yi, mp_id)
-  do i = 1, 3
+  do i = 1, 4
     write(mp_id, *) mt(i), pt(i)
   end do
 
@@ -101,7 +101,7 @@ do k = 1, 3
 
   conditions%l=lt(k)
 
-  do i = 1, 3
+  do i = 1, 4
 
   conditions%m=mt(i)
   conditions%p=pt(i)
