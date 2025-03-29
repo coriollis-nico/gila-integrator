@@ -93,9 +93,9 @@ axs[2].plot(sr_m99p99l27[l27_index, 0], sr_m99p99l27[l27_index, 2],
 axs[0].set_ylabel(r"$ \epsilon_1 $")
 axs[0].legend(loc="upper left", fontsize=8)
 for ax in axs:
-    ax.set_xlim(lim_low, lim_up)
+    ax.set_xlim(-0.005, lim_up)
     ax.set_ylim(bottom=0)
-    ax.fill_between([lim_low, lim_up], e1_max, -.1, alpha=0.14)
+    ax.fill_between([lim_low, lim_up], e1_max, -1, alpha=0.14)
 
 plt.savefig(fig_dir+"/e1.pdf")
 
