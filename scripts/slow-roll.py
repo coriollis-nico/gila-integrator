@@ -88,6 +88,7 @@ axs[2].plot(sr_m99p99l27[l27_index, 0], sr_m99p99l27[l27_index, 2],
 axs[1].set_xlabel(r"$N$")
 axs[0].legend(loc="lower left", fontsize=7)
 axs[0].set_ylabel(r"$ \epsilon_1 $")
+axs[0].ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 for ax in axs:
     ax.set_xlim(-60, -50)
     ax.set_ylim(bottom=-0.005)
@@ -132,6 +133,7 @@ axs[2].plot(sr_m99p99l27[l27_index, 0], sr_m99p99l27[l27_index, 3],
 axs[1].set_xlabel(r"$N$")
 axs[0].legend(loc="upper left", fontsize=7)
 axs[0].set_ylabel(r"$ \epsilon_2 $")
+axs[0].ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 for ax in axs:
     ax.hlines(e2, xmin=-60, xmax=-50, alpha=0.4)
     ax.set_xlim(-60, -50)
