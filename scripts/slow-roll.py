@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
 plt.rcParams['text.usetex'] = True
-plt.rcParams['figure.figsize'] = [6.4, 3]
+plt.rcParams['figure.figsize'] = [6.4, 2.5]
 
 # Data import
 fig_dir = "plots/slowroll_plots"
@@ -86,13 +86,13 @@ axs[2].plot(sr_m99p99l27[l27_index, 0], sr_m99p99l27[l27_index, 2],
             label=r"$ m=99, p=99 $", color="k", linestyle="dashdot")
 
 axs[1].set_xlabel(r"$N$")
-axs[0].legend(loc="lower left", fontsize=7)
+axs[0].legend(loc="upper left", fontsize=7)
 axs[0].set_ylabel(r"$ \epsilon_1 $")
-axs[0].ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 for ax in axs:
+    ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
     ax.set_xlim(-60, -50)
-    ax.set_ylim(bottom=-0.005)
-    ax.fill_between([-60, -50], e1_max, -1, alpha=0.14)
+    ax.set_ylim(bottom=0)
+    ax.fill_between([-60, -50], e1_max, 0, alpha=0.14)
 
 plt.savefig(fig_dir+"/e1.pdf")
 
@@ -133,13 +133,18 @@ axs[2].plot(sr_m99p99l27[l27_index, 0], sr_m99p99l27[l27_index, 3],
 axs[1].set_xlabel(r"$N$")
 axs[0].legend(loc="upper left", fontsize=7)
 axs[0].set_ylabel(r"$ \epsilon_2 $")
-axs[0].ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
 for ax in axs:
+    ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
     ax.hlines(e2, xmin=-60, xmax=-50, alpha=0.4)
     ax.set_xlim(-60, -50)
     ax.fill_between([-60, -50], e2_min, e2_max, alpha=0.1)
 
 plt.savefig(fig_dir+"/e2.pdf")
+
+for ax in axs:
+    ax.set_ylim(1.6e-2, 2.25e-2)
+
+plt.savefig(fig_dir+"/e2_zoom.pdf")
 
 plt.close()
 
@@ -184,5 +189,11 @@ for ax in axs:
     ax.fill_between([-60, -50], e3_min, e3_max, alpha=0.14)
 
 plt.savefig(fig_dir+"/e3.pdf")
+
+for ax in axs:
+    ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
+    ax.set_ylim(0.015, 0.0225)
+
+plt.savefig(fig_dir+"/e3_zoom.pdf")
 
 plt.close()
