@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('grayscale')
 plt.rcParams['text.usetex'] = True
-plt.rcParams['figure.figsize'] = [6.4, 2.5]
+plt.rcParams['figure.figsize'] = [6.4, 3]
 
 # Data import
 fig_dir = "plots/slowroll_plots"
