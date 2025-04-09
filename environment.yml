@@ -9,4 +9,3 @@ dependencies:
   - numpy=2.2
   - fpm=0.11
   - ford=7.0.10
-
