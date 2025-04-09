@@ -11,16 +11,28 @@ Friedmann equation implementation and RK4 integration for GILA (exponential) and
 ### Requirements
 
 - Fortran 2008 compiler (e.g. `gfortran`, tested on `14.2.1 20250207`)
-- `python`
-    - `pipenv` for environment management
+- `conda` for environment and dependency management
+    - 'python'
         - `matplotlib`
         - `numpy`
         - `scipy`
-- The [Fortran Package Manager ('fpm')](https://fpm.fortran-lang.org/) for compiling
-(tested on `v0.10.1`, so usage is likely to change with further releases)
-- [`ford`](https://github.com/Fortran-FOSS-Programmers/ford) (optional - doc creation)
+    - [Fortran Package Manager ('fpm')](https://fpm.fortran-lang.org/)
+    - [`ford`](https://github.com/Fortran-FOSS-Programmers/ford) (optional - doc creation)
 
 ### Compilation & execution
+
+Run
+
+    conda env create
+    conda activate
+
+to activate the environment and download all dependencies.
+
+Run
+
+    conda deactivate
+
+or close your terminal when finished to close it.
 
 #### Fortran source
 
@@ -34,4 +46,6 @@ compliance.
 
 #### Scripts
 
-Expect to be executed from project root directory
+If using `bash` or similar, you may use
+
+    for SCRIPT in $(ls scripts) ; do echo --$SCRIPT-- && python scripts/$SCRIPT ; done
