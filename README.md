@@ -49,3 +49,8 @@ compliance.
 If using `bash` or similar, you may use
 
     for SCRIPT in $(ls scripts) ; do echo --$SCRIPT-- && python scripts/$SCRIPT ; done
+
+#### Docs
+
+    ford doc.md
+
