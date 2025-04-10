@@ -64,9 +64,9 @@ close(mp_id)
 
 call safe_open("l.dat", l_id, file_dir=data_dir)
 
-  call save_integral_conditions(x, yi, mp_id)
+  call save_integral_conditions(x, yi, l_id)
   do i = 1, 3
-    write(mp_id, *) lt(i)
+    write(l_id, *) lt(i)
   end do
 
 close(l_id)
