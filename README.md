@@ -24,7 +24,7 @@ Friedmann equation implementation and RK4 integration for GILA (exponential) and
 Run
 
     conda env create
-    conda activate
+    conda activate gila-integrator
 
 to activate the environment and download all dependencies.
 
