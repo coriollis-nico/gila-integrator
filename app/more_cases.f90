@@ -1,9 +1,7 @@
 program more_cases
   !! For specified [[gila_conditions:m]], [[gila_conditions:p]], [[gila_conditions:p]]
   !! combinations calculates \( y \) and \( \epsilon_{1 \to 4} \) slow-roll parameters.
-  !! Also limit curves.
-  !!
-  !! Also calculates slow-roll curves for each solution
+  !! Finds if sr curves touch regions of interest.
   use iso_fortran_env,  &
     only: sp => real32, &
           dp => real64, &
