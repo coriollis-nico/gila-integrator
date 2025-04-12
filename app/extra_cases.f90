@@ -15,9 +15,9 @@ program extra_cases
 
   integer :: i, k, j, x_c, e_c
 
-  integer, dimension(3), parameter  :: mt = [ 87, 88, 89 ]
+  integer, dimension(3), parameter  :: mt = [ 94, 95, 96 ]
   !! [[gila_conditions:m]]
-  integer, dimension(3), parameter  :: pt = [ 5, 6, 7 ]
+  integer, dimension(3), parameter  :: pt = [ 3, 4, 5 ]
   !! [[gila_conditions:p]]
   real(qp), dimension(3), parameter :: lt = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
   !! [[gila_conditions:l]]
@@ -33,10 +33,12 @@ program extra_cases
 
   real(qp), dimension(n), parameter :: x = [( i * (xf - xi)/n, i = 0, n-1 )]
   !! \( x \) values array
-  real(qp), dimension(n) :: y
-  !! Solution array
-  real(qp), dimension(n, 5) :: slowroll_data
-  !! \( \epsilon_0 \) array
+  real(qp), dimension(n, size(mt), size(pt), size(lt)) :: y
+  !! Solutions array
+  real(qp), dimension(n, size(mt), size(pt), size(lt), 2) :: sr_n_0
+  !! \( N, \epsilon_0 \) array
+  real(qp), dimension(n, size(mt), size(pt), size(lt)) :: sr1, sr2, sr3
+  !! \( \epsilon \) array
 
   type(gila_conditions) :: conditions
   real(qp), parameter :: matter_density = 0.31_qp
@@ -46,46 +48,33 @@ program extra_cases
   character(len=*), parameter :: data_dir = "data/sims/extra_cases"
   character(len=32) :: filename
 
-  integer :: x_grid
-  integer :: out_id
-  integer :: mp_id, l_id, lim_id
-  integer :: sr
+  integer :: x_id
+  integer :: y_id
+  integer :: mpl_id
+  integer :: srn_id, sr0_id, sr1_id, sr2_id, sr3_id
 ! ------------------------------------------------------------------------------------ !
 
-call safe_open("mp.dat", mp_id, file_dir=data_dir)
+call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
 
-  call save_integral_conditions(x, yi, mp_id)
   do i = 1, size(mt)
   do j = 1, size(pt)
-    write(mp_id, *) mt(i), pt(j)
-  end do
-  end do
-
-close(mp_id)
-
-
-call safe_open("l.dat", l_id, file_dir=data_dir)
-
-  call save_integral_conditions(x, yi, l_id)
   do k = 1, size(lt)
-    write(l_id, *) lt(k)
+    write(mpl_id, *) mt(i), pt(j), lt(k)
+  end do
+  end do
   end do
 
-close(l_id)
+close(mpl_id)
 
 
 ! --- x
 
+call safe_open("x.dat", x_id, file_dir=data_dir)
 
-call safe_open("x_grid.dat", x_grid, file_dir=data_dir)
+  call matrix_to_file(x, x_id)
 
-  call save_integral_conditions(x, yi, x_grid)
+close(x_id)
 
-  do x_c = 1, size(x)
-    write(x_grid, *) x(x_c)
-  end do
-
-close(x_grid)
 
 ! ---
 
@@ -99,53 +88,80 @@ conditions%Omega_R = rad_density
 conditions%Omega_dark = dark_density
 
 
-do k = 1, 3
-
-  conditions%l=lt(k)
-
-  do i = 1, size(mt)
-  do j = 1, size(pt)
+do i = 1, size(mt)
 
   conditions%m=mt(i)
-  conditions%p=pt(i)
 
-  write(filename, '(2(a1, i2.2), a1, es7.1e2)') 'm', conditions%m, &
-                                                'p', conditions%p, &
-                                                'l', conditions%l
+  do j = 1, size(pt)
 
-  call safe_open(trim(filename)//".dat", out_id, file_dir=data_dir)
+    conditions%p=pt(j)
 
-    y = gila_solution(x, yi, conditions)
+    do k = 1, size(lt)
 
-    call save_gila_genconditions(conditions, out_id)
-    call save_gila_genconditions(conditions, stdout)
-    call save_integral_conditions(x, yi, out_id)
+      conditions%l=lt(k)
 
-    call matrix_to_file(y, out_id)
+      y(:, i, j, k) = gila_solution(x, yi, conditions)
 
-  close(out_id)
+      sr_n_0(:, i, j, k, :) = slowroll0(x, y(:, i, j, k), conditions%l)
+      sr1(:, i, j, k) = slowroll(sr_n_0(:, i, j, k, 1), sr_n_0(:, i, j, k, 2))
+      sr2(:, i, j, k) = slowroll(sr_n_0(:, i, j, k, 1), sr1(:, i, j, k))
+      sr3(:, i, j, k) = slowroll(sr_n_0(:, i, j, k, 1), sr2(:, i, j, k))
 
-  !v - slowroll
-  write(filename, '(a5, 2(a1, i2.2), a1, es7.1e2)') 'slow-', 'm', conditions%m, &
-                                                'p', conditions%p, &
-                                                'l', conditions%l
-
-  call safe_open(trim(filename)//".dat", sr, file_dir=data_dir)
-
-    slowroll_data(:,1:2) = slowroll0(x, y, conditions%l)
-    do e_c = 3, 5
-      slowroll_data(:,e_c) = slowroll(slowroll_data(:,1), slowroll_data(:,e_c-1))
     end do
 
-    write(sr, *) "# N   ϵ0   ϵ1   ϵ2   ϵ3"
-    call matrix_to_file(slowroll_data, sr)
-
-  close(sr)
-
-  end do
   end do
 
 end do
+
+call safe_open("y.dat", y_id, file_dir=data_dir)
+  do i = 1, size(mt)
+  do j = 1, size(pt)
+  do k = 1, size(lt)
+    write(y_id, *) y(:, i, j, k)
+  end do
+  end do
+  end do
+close(y_id)
+
+call safe_open("n.dat", srn_id, file_dir=data_dir)
+  do i = 1, size(mt)
+  do j = 1, size(pt)
+  do k = 1, size(lt)
+    write(srn_id, *) sr_n_0(:, i, j, k, 1)
+  end do
+  end do
+  end do
+close(srn_id)
+
+call safe_open("sr1.dat", sr1_id, file_dir=data_dir)
+  do i = 1, size(mt)
+  do j = 1, size(pt)
+  do k = 1, size(lt)
+    write(sr1_id, *) sr1(:, i, j, k)
+  end do
+  end do
+  end do
+close(sr1_id)
+
+call safe_open("sr2.dat", sr2_id, file_dir=data_dir)
+  do i = 1, size(mt)
+  do j = 1, size(pt)
+  do k = 1, size(lt)
+    write(sr2_id, *) sr2(:, i, j, k)
+  end do
+  end do
+  end do
+close(sr2_id)
+
+call safe_open("sr3.dat", sr3_id, file_dir=data_dir)
+  do i = 1, size(mt)
+  do j = 1, size(pt)
+  do k = 1, size(lt)
+    write(sr3_id, *) sr3(:, i, j, k)
+  end do
+  end do
+  end do
+close(sr3_id)
 
 
 end program extra_cases
