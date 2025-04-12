@@ -54,4 +54,8 @@ If using `bash` or similar, you may use
 #### Docs
 
     ford doc.md
+    
+## To be fixed
+
+-  Make parallelization possible
 
