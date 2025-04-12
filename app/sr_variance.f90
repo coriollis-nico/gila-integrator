@@ -11,9 +11,9 @@ program sr_variance
 
   integer :: i, k, j, l_c, n_c, e_c
 
-  integer, dimension(100), parameter  :: mt = [(i, i = 3, 102)]
+  integer, dimension(500), parameter  :: mt = [(i, i = 3, 502)]
   !! [[gila_conditions:m]]
-  integer, dimension(100), parameter  :: pt = [(j, j = 1, 100)]
+  integer, dimension(500), parameter  :: pt = [(j, j = 1, 500)]
   !! [[gila_conditions:p]]
   real(qp), dimension(3), parameter :: lt = [1.e-17_qp, 1.e-22_qp, 1.e-27_qp]
   !! [[gila_conditions:l]]
@@ -54,6 +54,8 @@ program sr_variance
   integer :: out_id
 
 ! ------------------------------------------------------------------------------------ !
+
+call safe_open("variance.dat", out_id, file_dir=data_dir)
 
 conditions%cosmos="early"
 conditions%beta=0.0_qp
@@ -108,13 +110,12 @@ do k = 1, size(lt)
 end do
 
 
-call safe_open("variance.dat", out_id, file_dir=data_dir)
-  write(out_id, '(a)') "# m    p    l    ϵ1_max - ϵ1    (σ2)^2    (σ3)^2"
+  write(out_id, '(a)') "m    p    l    Δϵ1    σ²2    σ²3"
   do i = 1, size(mt)
     do j = 1, size(pt)
       do k = 1, size(lt)
-        write(out_id, *) &
-          mt(i), pt(j), lt(k), sr1_diff_avg(i, j, k), sr_diff_avg(i, j, k, :)
+        write(out_id, *) mt(i), pt(j), lt(k), &
+          sr1_diff_avg(i, j, k), sr_diff_avg(i, j, k, 2), sr_diff_avg(i, j, k, 3)
       end do
     end do
   end do
