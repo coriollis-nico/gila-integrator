@@ -10,6 +10,7 @@ Friedmann equation implementation and RK4 integration for GILA (exponential) and
 
 ### Requirements
 
+- A Unix system (for the moment `src/gila.f90` uses the unix version of `mkdir`)
 - Fortran 2008 compiler (e.g. `gfortran`, tested on `14.2.1 20250207`)
 - `conda` for environment and dependency management
     - 'python'
