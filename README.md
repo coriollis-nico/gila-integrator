@@ -12,7 +12,8 @@ Friedmann equation implementation and RK4 integration for GILA (exponential) and
 
 - A Unix system (for the moment `src/gila.f90` uses the unix version of `mkdir`)
 - Fortran 2008 compiler (tested on `gfortran 14.2.1 20250207` and `ifx 2025.1.0 20250317` (conda))
-- `conda` for environment and dependency management
+- `conda` (`conda-forge`) for environment and dependency management (make sure
+  `channel_priority: strict` in `.condarc`)
     - 'python'
         - `matplotlib`
         - `numpy`
@@ -39,11 +40,11 @@ or close your terminal when finished to close it.
 
 To compile using `gcc`,
 
-    fpm run gr_integration --flag -std=f2008 --profile release
-    fpm run curve_sandwich --flag -std=f2008 --profile release
+    fpm run gr_integration --flag '-std=f2008' --profile release
+    fpm run curve_sandwich --flag '-std=f2008' --profile release
 
 For other compatible compilers, replace `-std=f2008` witht the apropiate flag for 2008 standard
-compliance.
+compliance (e.g. `-std08` for `ifx`).
 
 #### Scripts
 
@@ -58,4 +59,3 @@ If using `bash` or similar, you may use
 ## To be fixed
 
 -  Make parallelization possible
-
