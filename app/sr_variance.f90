@@ -73,8 +73,8 @@ do k = 1, size(lt)
     do j = 1, size(pt)
       conditions%p=pt(j)
 
-      print '(a, i2)', "m = ", mt(i)
-      print '(a, i2)', "p = ", pt(j)
+      print '(a, i3)', "m = ", mt(i)
+      print '(a, i3)', "p = ", pt(j)
       print '(a, es7.1e2)', "l =", lt(k)
       print '(a)', "-----------"
 
