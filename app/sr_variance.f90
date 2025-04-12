@@ -11,11 +11,11 @@ program sr_variance
 
   integer :: i, k, j, l_c, n_c, e_c
 
-  integer, dimension(2), parameter  :: mt = [25, 26]
+  integer, dimension(100), parameter  :: mt = [(i, i = 3, 102)]
   !! [[gila_conditions:m]]
-  integer, dimension(2), parameter  :: pt = [2, 3]
+  integer, dimension(100), parameter  :: pt = [(j, j = 1, 100)]
   !! [[gila_conditions:p]]
-  real(qp), dimension(2), parameter :: lt = [1.e-17_qp, 1.e-22_qp]
+  real(qp), dimension(3), parameter :: lt = [1.e-17_qp, 1.e-22_qp, 1.e-27_qp]
   !! [[gila_conditions:l]]
 
   real(qp), parameter :: xi = 0.0_qp
@@ -67,51 +67,48 @@ conditions%Omega_dark = dark_density
 sr_diff_avg(:,:,:,:) = 0
 
 do k = 1, size(lt)
-
   conditions%l=lt(k)
-
   do i = 1, size(mt)
-  do j = 1, size(pt)
-
     conditions%m=mt(i)
-    conditions%p=pt(j)
+    do j = 1, size(pt)
+      conditions%p=pt(j)
 
-    print '(a, i2)', "m = ", mt(i)
-    print '(a, i2)', "p = ", pt(j)
-    print '(a, es7.1e2)', "l =", lt(k)
-    print '(a)', "-----------"
+      print '(a, i2)', "m = ", mt(i)
+      print '(a, i2)', "p = ", pt(j)
+      print '(a, es7.1e2)', "l =", lt(k)
+      print '(a)', "-----------"
 
-    y = gila_solution(x, yi, conditions)
+      y = gila_solution(x, yi, conditions)
 
-    slowroll_data(:,1:2) = slowroll0(x, y, conditions%l)
-    do l_c = 3, 5
-      slowroll_data(:,l_c) = slowroll(slowroll_data(:,1), slowroll_data(:,l_c-1))
+      slowroll_data(:,1:2) = slowroll0(x, y, conditions%l)
+      do l_c = 3, 5
+        slowroll_data(:,l_c) = slowroll(slowroll_data(:,1), slowroll_data(:,l_c-1))
+      end do
+
+      avg_num01 = 0
+      avg_num02 = 0
+      avg_num03 = 0
+      avg_denom = 0
+      do n_c = 1, size(slowroll_data, 1)
+        if ((-60.0_qp <= slowroll_data(n_c, 1)) .and. (slowroll_data(n_c, 1) <= -50.0_qp)) then
+          avg_num01 = avg_num01 + (slowroll_data(n_c, 3) - e1_max)
+          avg_num02 = avg_num02 + (slowroll_data(n_c, 4) - e2)**2
+          avg_num03 = avg_num03 + (slowroll_data(n_c, 5) - e3)**2
+          avg_denom = avg_denom + 1
+        end if
+      end do
+
+      sr1_diff_avg(i, j, k) = avg_num01/avg_denom
+      sr_diff_avg(i, j, k, 2) = avg_num02/avg_denom
+      sr_diff_avg(i, j, k, 3) = avg_num03/avg_denom
+
     end do
-
-    avg_num01 = 0
-    avg_num02 = 0
-    avg_num03 = 0
-    avg_denom = 0
-    do n_c = 1, size(slowroll_data, 1)
-      if ((-60.0_qp <= slowroll_data(n_c, 1)) .and. (slowroll_data(n_c, 1) <= -50.0_qp)) then
-        avg_num01 = avg_num01 + (slowroll_data(n_c, 3) - e1_max)
-        avg_num02 = avg_num02 + (slowroll_data(n_c, 4) - e2)**2
-        avg_num03 = avg_num03 + (slowroll_data(n_c, 5) - e3)**2
-        avg_denom = avg_denom + 1
-      end if
-    end do
-    sr1_diff_avg(i, j, k) = avg_num01/avg_denom
-    sr_diff_avg(i, j, k, 2) = avg_num02/avg_denom
-    sr_diff_avg(i, j, k, 3) = avg_num03/avg_denom
-
   end do
-  end do
-
 end do
 
 
-call safe_open("mpl.dat", out_id, file_dir=data_dir)
-  write(out_id, '(a)') "# m    p    l    ϵ1_max - ϵ1    Δϵ2    Δϵ3"
+call safe_open("variance.dat", out_id, file_dir=data_dir)
+  write(out_id, '(a)') "# m    p    l    ϵ1_max - ϵ1    (σ2)^2    (σ3)^2"
   do i = 1, size(mt)
     do j = 1, size(pt)
       do k = 1, size(lt)
