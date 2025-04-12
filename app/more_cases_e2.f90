@@ -1,4 +1,4 @@
-program more_cases_e2
+program sr_variance
   !! TWP
   use iso_fortran_env,  &
     only: sp => real32, &
@@ -122,4 +122,4 @@ call safe_open("mpl.dat", out_id, file_dir=data_dir)
   end do
 close(out_id)
 
-end program more_cases_e2
+end program sr_variance
