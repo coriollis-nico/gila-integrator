@@ -76,7 +76,7 @@ do k = 1, size(lt)
 
       print '(a, i3)', "m = ", mt(i)
       print '(a, i3)', "p = ", pt(j)
-      print '(a, es7.1e2)', "l =", lt(k)
+      print '(a, es7.1e2)', "l = ", lt(k)
       print '(a)', "-----------"
 
       y = gila_solution(x, yi, conditions)
