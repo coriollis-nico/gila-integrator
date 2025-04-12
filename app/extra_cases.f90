@@ -1,4 +1,4 @@
-program extra_cases
+program find_solutions
   !! For specified [[gila_conditions:m]], [[gila_conditions:p]], [[gila_conditions:l]]
   !! combinations calculates \( y \) and \( \epsilon_{1 \to 4} \) slow-roll parameters.
   !!
@@ -163,4 +163,4 @@ call safe_open("sr3.dat", sr3_id, file_dir=data_dir)
 close(sr3_id)
 
 
-end program extra_cases
+end program find_solutions
