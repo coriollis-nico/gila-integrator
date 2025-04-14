@@ -297,7 +297,7 @@ function gila_solution(x, y0, user_conditions)
   type(gila_conditions) :: cond
   real(qp) :: k1, k2, k3, k4
   real(qp) :: h
-  integer :: i, j
+  integer :: i
 
   if (present(user_conditions)) then
     cond = user_conditions
@@ -336,7 +336,7 @@ function gila_solution_limit(x, y0, user_conditions)
   type(gila_conditions) :: cond
   real(qp) :: k1, k2, k3, k4
   real(qp) :: h
-  integer :: i, j
+  integer :: i
 
   if (present(user_conditions)) then
     cond = user_conditions
