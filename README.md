@@ -40,6 +40,7 @@ or close your terminal when finished to close it.
 
 To compile using `gcc`,
 
+    fpm run sr_invariance
     fpm run gr_integration --flag '-std=f2008' --profile release
     fpm run curve_sandwich --flag '-std=f2008' --profile release
 

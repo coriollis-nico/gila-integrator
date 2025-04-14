@@ -1,5 +1,6 @@
 program sr_variance
-  !! TWP
+  !! Finds the variance \( \sigma^2 \) of the \( \epsilon_i \) values wrt the PLANCK reported
+  !! values.
   use iso_fortran_env,  &
     only: sp => real32, &
           dp => real64, &
