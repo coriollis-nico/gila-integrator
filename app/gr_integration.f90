@@ -15,7 +15,7 @@ real(qp), parameter :: x_f = -50.0_qp
 !! Final [[gila_friedmann:y]] value
 real(qp), parameter :: yi = 1.0_qp
 !! Initial [[gila_friedmann:y]] value
-integer, parameter :: n = 500
+integer, parameter :: n = 10000
 !! Number of integration steps
 type(gila_conditions), parameter :: gr_conditions = gila_grdefault
 !! Specify GR conditions
