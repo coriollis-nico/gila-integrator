@@ -14,11 +14,11 @@ program find_solutions
 
    integer :: i, k, j, x_c, e_c
 
-   integer, dimension(3), parameter  :: mt = [ 94, 95, 96 ]
+   integer, dimension(3), parameter  :: mt = [ 60, 90, 102 ]
    !! [[gila_conditions:m]]
-   integer, dimension(3), parameter  :: pt = [ 3, 4, 5 ]
+   integer, dimension(3), parameter  :: pt = [ 2, 3, 4 ]
    !! [[gila_conditions:p]]
-   real(qp), dimension(3), parameter :: lt = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
+   real(qp), dimension(1), parameter :: lt = [ 1.e-17_qp ]
    !! [[gila_conditions:l]]
 
    real(qp), parameter :: xi = 0.0_qp
