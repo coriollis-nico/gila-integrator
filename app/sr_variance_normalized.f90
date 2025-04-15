@@ -14,7 +14,7 @@ program sr_variance_normalized
 
    integer, dimension(100), parameter  :: mt = [(i, i = 3, 102)]
    !! [[gila_conditions:m]]
-   integer, dimension(100), parameter  :: pt = [(j, j = 1, 100)]
+   integer, dimension(10), parameter  :: pt = [(j, j = 1, 10)]
    !! [[gila_conditions:p]]
    real(qp), dimension(3), parameter :: lt = [1.e-17_qp, 1.e-22_qp, 1.e-27_qp]
    !! [[gila_conditions:l]]

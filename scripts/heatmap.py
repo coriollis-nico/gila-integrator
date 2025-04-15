@@ -17,7 +17,7 @@ makedirs(fig_dir, exist_ok=True)
 m_min = 3
 m_max = 102
 p_min = 1
-p_max = 100
+p_max = 10
 
 data = pd.read_csv(data_dir + "/variance_normalized.dat", sep=r"\s+")
 
