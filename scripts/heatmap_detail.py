@@ -17,7 +17,7 @@ makedirs(fig_dir, exist_ok=True)
 m_min = 3
 m_max = 102
 p_min = 1
-p_max = 10
+p_max = 6
 
 data = pd.read_csv(data_dir + "/variance_normalized.dat", sep=r"\s+")
 
@@ -201,7 +201,7 @@ pc = axs[2, 2].matshow(
 fig.colorbar(pc, ax=axs[2, 2], label=r"$ \sigma_{n,3}^2 $", extend="max")
 
 
-fig.savefig(fig_dir + "/variance_normalized.pdf")
+fig.savefig(fig_dir + "/variance_normalized_detail.pdf")
 plt.close(fig)
 
 exit()
