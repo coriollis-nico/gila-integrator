@@ -11,7 +11,7 @@ plt.rcParams['figure.figsize'] = [6.4, 3]
 
 # Data import
 fig_dir = "plots/sorting"
-data_dir = "data/tab/more_cases"
+data_dir = "data/tab/sr_variance"
 makedirs(fig_dir, exist_ok=True)
 
 # Planck data
@@ -40,7 +40,7 @@ print(data_l22_mp_matrix)
 
 plt.figure(layout="constrained")
 
-plt.matshow(data_l22_mp_matrix, fignum=0,
+plt.matshow(data_l22_mp_pivot, fignum=0,
             vmax=0.009**2,
             extent=[data_l22_mp["m"].min(),
                     data_l22_mp["m"].max(),
@@ -50,18 +50,5 @@ plt.matshow(data_l22_mp_matrix, fignum=0,
 plt.colorbar()
 
 plt.show()
-
-# data_l22_mp.plot.scatter(x="m", y="p", c="σ²2",
-#                          marker="s", s=190,
-#                          cmap="grey",
-#                          vmax=9e-3,  # vmin=np.nanmin(data_l22_mp_matrix),
-#                          norm="log")
-#
-# plt.xlim(left=2.5, right=52.5)
-# plt.ylim(0.5, 50.5)
-#
-# plt.show()
-#
-# plt.close()
 
 exit()
