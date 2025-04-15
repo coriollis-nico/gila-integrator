@@ -19,10 +19,13 @@ data_dir = "data/sims/curve_sandwich"
 makedirs(fig_dir, exist_ok=True)
 
 # Planck data
+
 e1_max = 0.0097
+
 e2 = 0.032
 e2_min = e2 - 0.008
 e2_max = e2 + 0.009
+
 e3 = 0.19
 e3_min = e3 - 0.53
 e3_max = e3 + 0.55
