@@ -26,9 +26,9 @@ e3_max = e3 + 0.55
 m_min = 3
 m_max = 102
 p_min = 1
-p_max = 6
+p_max = 100
 
-data = pd.read_csv(data_dir + "/variance.dat", sep=r"\s+")
+data = pd.read_csv(data_dir + "/variance_normalized.dat", sep=r"\s+")
 
 data_l17 = data[(data["l"] >= 1e-18) & (data["p"] <= p_max)]
 data_l22 = data[(data["l"] < 1e-18) & (1e-26 < data["l"]) & (data["p"] <= p_max)]
@@ -72,7 +72,7 @@ axs[0, 0].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.0097**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -85,7 +85,7 @@ axs[0, 1].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.0097**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -98,7 +98,7 @@ pc = axs[0, 2].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.0097**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -114,7 +114,7 @@ axs[1, 0].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.009**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -127,7 +127,7 @@ axs[1, 1].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.009**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -140,7 +140,7 @@ pc = axs[1, 2].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.009**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -156,7 +156,7 @@ axs[2, 0].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.55**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -169,7 +169,7 @@ axs[2, 1].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.55**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,
@@ -182,7 +182,7 @@ pc = axs[2, 2].matshow(
     aspect="auto",
     interpolation="none",
     vmin=0,
-    vmax=0.55**2,
+    vmax=1,
     extent=[
         m_min - 1,
         m_max,

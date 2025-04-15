@@ -126,10 +126,9 @@ program sr_variance_normalized
       do j = 1, size(pt)
          do k = 1, size(lt)
             write(vn_id, *) mt(i), pt(j), lt(k), &
-               sr_diff_avg(i, j, k, 1)/(0.0097_qp**2) &
-               * sr_diff_avg(i, j, k, 2)/(0.008_qp**2) &
-               * sr_diff_avg(i, j, k, 3)/(0.53_qp**2) &
-               / 3.0_qp
+               sr_diff_avg(i, j, k, 1)/(0.0097_qp**2), &
+               sr_diff_avg(i, j, k, 2)/(0.008_qp**2) &
+               sr_diff_avg(i, j, k, 3)/(0.53_qp**2)
          end do
       end do
    end do
