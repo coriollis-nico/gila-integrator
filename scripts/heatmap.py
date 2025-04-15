@@ -203,7 +203,7 @@ pc = axs[2, 2].matshow(
 fig.colorbar(pc, ax=axs[2, 2], label=r"$ \sigma_3^2 $", extend="max")
 
 
-fig.savefig(fig_dir + "/variance.pdf")
+fig.savefig(fig_dir + "/variance_normalized.pdf")
 plt.close(fig)
 
 exit()
