@@ -21,9 +21,25 @@ p_max = 10
 
 data = pd.read_csv(data_dir + "/variance_normalized.dat", sep=r"\s+")
 
-data_l17 = data[(data["l"] >= 1e-18) & (data["p"] <= p_max)]
-data_l22 = data[(data["l"] < 1e-18) & (1e-26 < data["l"]) & (data["p"] <= p_max)]
-data_l27 = data[(1e-26 >= data["l"]) & (data["p"] <= p_max)]
+data_l17 = data[
+    (data["l"] >= 1e-18)
+    & (data["p"] <= p_max)
+    & (data["p"] >= p_min)
+    & (data["m"] >= m_min)
+]
+data_l22 = data[
+    (data["l"] < 1e-18)
+    & (1e-26 < data["l"])
+    & (data["p"] <= p_max)
+    & (data["p"] >= p_min)
+    & (data["m"] >= m_min)
+]
+data_l27 = data[
+    (1e-26 >= data["l"])
+    & (data["p"] <= p_max)
+    & (data["p"] >= p_min)
+    & (data["m"] >= m_min)
+]
 
 
 data_l17_e1_mp = data_l17.loc[:, ("m", "p", "de1")]
@@ -56,12 +72,14 @@ data_l27_e3_mp = data_l27.loc[:, ("m", "p", "de3")]
 data_l27_e3_mp_pivot = data_l27_e3_mp.pivot(index="p", columns="m", values="de3")
 
 
+print(data_l17_e1_mp_pivot)
+
 fig, axs = plt.subplots(3, 3, layout="constrained", sharey="col", sharex="row")
 
 axs[0, 0].matshow(
     data_l17_e1_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -73,8 +91,8 @@ axs[0, 0].matshow(
 )
 axs[0, 1].matshow(
     data_l22_e1_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -86,8 +104,8 @@ axs[0, 1].matshow(
 )
 pc = axs[0, 2].matshow(
     data_l27_e1_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -102,8 +120,8 @@ fig.colorbar(pc, ax=axs[0, 2], label=r"$ \sigma_1^2 $", extend="max")
 
 axs[1, 0].matshow(
     data_l17_e2_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -115,8 +133,8 @@ axs[1, 0].matshow(
 )
 axs[1, 1].matshow(
     data_l22_e2_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -128,8 +146,8 @@ axs[1, 1].matshow(
 )
 pc = axs[1, 2].matshow(
     data_l27_e2_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -144,8 +162,8 @@ fig.colorbar(pc, ax=axs[1, 2], label=r"$ \sigma_2^2 $", extend="max")
 
 axs[2, 0].matshow(
     data_l17_e3_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -157,8 +175,8 @@ axs[2, 0].matshow(
 )
 axs[2, 1].matshow(
     data_l22_e3_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
@@ -170,8 +188,8 @@ axs[2, 1].matshow(
 )
 pc = axs[2, 2].matshow(
     data_l27_e3_mp_pivot,
-    aspect="auto",
     interpolation="none",
+    aspect="auto",
     vmin=0,
     vmax=1,
     extent=[
