@@ -14,10 +14,10 @@ fig_dir = "plots/heatmap"
 data_dir = "data/tab/sr_variance_normalized"
 makedirs(fig_dir, exist_ok=True)
 
-m_min = 3
+m_min = 41
 m_max = 102
-p_min = 1
-p_max = 6
+p_min = 2
+p_max = 4
 
 data = pd.read_csv(data_dir + "/variance_normalized.dat", sep=r"\s+")
 
