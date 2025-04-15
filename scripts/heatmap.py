@@ -23,11 +23,16 @@ e3 = 0.19
 e3_min = e3 - 0.53
 e3_max = e3 + 0.55
 
+m_min = 3
+m_max = 102
+p_min = 1
+p_max = 6
+
 data = pd.read_csv(data_dir + "/variance.dat", sep=r"\s+")
 
-data_l17 = data[(data["l"] >= 1e-18)]
-data_l22 = data[(data["l"] < 1e-18) & (1e-26 < data["l"])]
-data_l27 = data[(1e-26 >= data["l"])]
+data_l17 = data[(data["l"] >= 1e-18) & (data["p"] <= p_max)]
+data_l22 = data[(data["l"] < 1e-18) & (1e-26 < data["l"]) & (data["p"] <= p_max)]
+data_l27 = data[(1e-26 >= data["l"]) & (data["p"] <= p_max)]
 
 
 data_l17_e1_mp = data_l17.loc[:, ("m", "p", "de1")]
@@ -64,117 +69,130 @@ fig, axs = plt.subplots(3, 3, layout="constrained", sharey="col", sharex="row")
 
 axs[0, 0].matshow(
     data_l17_e1_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.0097**2,
     extent=[
-        data_l17_e1_mp["m"].min(),
-        data_l17_e1_mp["m"].max(),
-        data_l17_e1_mp["p"].max(),
-        data_l17_e1_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
 axs[0, 1].matshow(
     data_l22_e1_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.0097**2,
     extent=[
-        data_l22_e1_mp["m"].min(),
-        data_l22_e1_mp["m"].max(),
-        data_l22_e1_mp["p"].max(),
-        data_l22_e1_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
-axs[0, 2].matshow(
+pc = axs[0, 2].matshow(
     data_l27_e1_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.0097**2,
     extent=[
-        data_l27_e1_mp["m"].min(),
-        data_l27_e1_mp["m"].max(),
-        data_l27_e1_mp["p"].max(),
-        data_l27_e1_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
 
+fig.colorbar(pc, ax=axs[0, 2], label=r"$ \sigma_1^2 $", extend="max")
+
 axs[1, 0].matshow(
     data_l17_e2_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.009**2,
     extent=[
-        data_l17_e2_mp["m"].min(),
-        data_l17_e2_mp["m"].max(),
-        data_l17_e2_mp["p"].max(),
-        data_l17_e2_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
 axs[1, 1].matshow(
     data_l22_e2_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.009**2,
     extent=[
-        data_l22_e2_mp["m"].min(),
-        data_l22_e2_mp["m"].max(),
-        data_l22_e2_mp["p"].max(),
-        data_l22_e2_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
-axs[1, 2].matshow(
+pc = axs[1, 2].matshow(
     data_l27_e2_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.009**2,
     extent=[
-        data_l27_e2_mp["m"].min(),
-        data_l27_e2_mp["m"].max(),
-        data_l27_e2_mp["p"].max(),
-        data_l27_e2_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
 
+fig.colorbar(pc, ax=axs[1, 2], label=r"$ \sigma_2^2 $", extend="max")
+
 axs[2, 0].matshow(
     data_l17_e3_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.55**2,
     extent=[
-        data_l17_e3_mp["m"].min(),
-        data_l17_e3_mp["m"].max(),
-        data_l17_e3_mp["p"].max(),
-        data_l17_e3_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
 axs[2, 1].matshow(
     data_l22_e3_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.55**2,
     extent=[
-        data_l22_e3_mp["m"].min(),
-        data_l22_e3_mp["m"].max(),
-        data_l22_e3_mp["p"].max(),
-        data_l22_e3_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
-axs[2, 2].matshow(
+pc = axs[2, 2].matshow(
     data_l27_e3_mp_pivot,
+    aspect="auto",
     interpolation="none",
     vmin=0,
     vmax=0.55**2,
     extent=[
-        data_l27_e3_mp["m"].min(),
-        data_l27_e3_mp["m"].max(),
-        data_l27_e3_mp["p"].max(),
-        data_l27_e3_mp["p"].min(),
+        m_min - 1,
+        m_max,
+        p_max,
+        p_min - 1,
     ],
 )
 
+fig.colorbar(pc, ax=axs[2, 2], label=r"$ \sigma_3^2 $", extend="max")
 
-# fig.colorbar(pc, label=r"$ \Delta \epsilon_1 $", extend="max", shrink=0.5)
 
 fig.savefig(fig_dir + "/variance.pdf")
 plt.close(fig)
