@@ -67,7 +67,6 @@ program sr_variance
    conditions%Omega_R = rad_density
    conditions%Omega_dark = dark_density
 
-   sr1_diff_avg(:, :, :) = 0
    sr_diff_avg(:,:,:,:) = 0
 
    do k = 1, size(lt)
@@ -115,7 +114,7 @@ program sr_variance
    do i = 1, size(mt)
       do j = 1, size(pt)
          do k = 1, size(lt)
-            write(out_id, *) mt(i), pt(j), lt(k), &
+            write(v_id, *) mt(i), pt(j), lt(k), &
                sr_diff_avg(i, j, k, 1), sr_diff_avg(i, j, k, 2), sr_diff_avg(i, j, k, 3)
          end do
       end do
@@ -126,7 +125,7 @@ program sr_variance
    do i = 1, size(mt)
       do j = 1, size(pt)
          do k = 1, size(lt)
-            write(out_id, *) mt(i), pt(j), lt(k), &
+            write(vn_id, *) mt(i), pt(j), lt(k), &
                sr_diff_avg(i, j, k, 1)/(0.0097_qp**2) &
                * sr_diff_avg(i, j, k, 2)/(0.008_qp**2) &
                * sr_diff_avg(i, j, k, 3)/(0.53_qp**2) &

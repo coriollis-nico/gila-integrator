@@ -66,7 +66,6 @@ program sr_variance
    conditions%Omega_R = rad_density
    conditions%Omega_dark = dark_density
 
-   sr1_diff_avg(:, :, :) = 0
    sr_diff_avg(:,:,:,:) = 0
 
    do k = 1, size(lt)
