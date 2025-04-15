@@ -40,14 +40,13 @@ program sr_variance
    real(qp), parameter :: rad_density = 8.4e-5_qp
    real(qp), parameter :: dark_density = 0.69_qp
 
-   real(qp), parameter :: e1_max = 0.0097_qp
+   real(qp), parameter :: e1 = 0, e1_max = 0.0097_qp
    real(qp), parameter :: e2 = 0.032_qp
    real(qp), parameter :: e2_min = e2 - 0.008_qp, e2_max = e2 + 0.009_qp
    real(qp), parameter :: e3 = 0.19_qp
    real(qp), parameter :: e3_min = e3 - 0.53_qp, e3_max = e3 + 0.55_qp
 
-   real(qp) :: sr1_diff_avg(size(mt), size(pt), size(lt))
-   real(qp) :: sr_diff_avg(size(mt), size(pt), size(lt), 2:3)
+   real(qp) :: sr_diff_avg(size(mt), size(pt), size(lt), 3)
 
    real(qp) :: avg_num01, avg_num02, avg_num03, avg_denom
 
@@ -95,14 +94,14 @@ program sr_variance
             avg_denom = 0
             do n_c = 1, size(slowroll_data, 1)
                if ((-60.0_qp <= slowroll_data(n_c, 1)) .and. (slowroll_data(n_c, 1) <= -50.0_qp)) then
-                  avg_num01 = avg_num01 + (slowroll_data(n_c, 3) - e1_max)
+                  avg_num01 = avg_num01 + (slowroll_data(n_c, 3) - e1)**2
                   avg_num02 = avg_num02 + (slowroll_data(n_c, 4) - e2)**2
                   avg_num03 = avg_num03 + (slowroll_data(n_c, 5) - e3)**2
                   avg_denom = avg_denom + 1
                end if
             end do
 
-            sr1_diff_avg(i, j, k) = avg_num01/avg_denom
+            sr_diff_avg(i, j, k, 1) = avg_num01/avg_denom
             sr_diff_avg(i, j, k, 2) = avg_num02/avg_denom
             sr_diff_avg(i, j, k, 3) = avg_num03/avg_denom
 
@@ -111,12 +110,12 @@ program sr_variance
    end do
 
 
-   write(out_id, '(a)') "m    p    l    Δϵ1    σ²2    σ²3"
+   write(out_id, '(a)') "m    p    l    de1    de2    de3"
    do i = 1, size(mt)
       do j = 1, size(pt)
          do k = 1, size(lt)
             write(out_id, *) mt(i), pt(j), lt(k), &
-               sr1_diff_avg(i, j, k), sr_diff_avg(i, j, k, 2), sr_diff_avg(i, j, k, 3)
+               sr_diff_avg(i, j, k, 1), sr_diff_avg(i, j, k, 2), sr_diff_avg(i, j, k, 3)
          end do
       end do
    end do
