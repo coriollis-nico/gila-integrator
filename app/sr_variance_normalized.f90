@@ -121,13 +121,13 @@ program sr_variance_normalized
    end do
    close(v_id)
 
-   write(vn_id, '(a)') "m    p    l    d"
+   write(vn_id, '(a)') "m    p    l    de1   de2   de3"
    do i = 1, size(mt)
       do j = 1, size(pt)
          do k = 1, size(lt)
             write(vn_id, *) mt(i), pt(j), lt(k), &
                sr_diff_avg(i, j, k, 1)/(0.0097_qp**2), &
-               sr_diff_avg(i, j, k, 2)/(0.008_qp**2) &
+               sr_diff_avg(i, j, k, 2)/(0.008_qp**2), &
                sr_diff_avg(i, j, k, 3)/(0.53_qp**2)
          end do
       end do
