@@ -11,7 +11,7 @@ plt.style.use("grayscale")
 
 # Data import
 fig_dir = "plots/heatmap"
-data_dir = "data/tab/sr_variance"
+data_dir = "data/tab/sr_variance_normalized"
 makedirs(fig_dir, exist_ok=True)
 
 # Planck data
@@ -30,34 +30,34 @@ data_l22 = data[(data["l"] < 1e-18) & (1e-26 < data["l"])]
 data_l27 = data[(1e-26 >= data["l"])]
 
 
-data_l17_e1_mp = data_l17.loc[:, ("m", "p", "Δϵ1")]
-data_l17_e1_mp_pivot = data_l17_e1_mp.pivot(index="p", columns="m", values="Δϵ1")
+data_l17_e1_mp = data_l17.loc[:, ("m", "p", "de1")]
+data_l17_e1_mp_pivot = data_l17_e1_mp.pivot(index="p", columns="m", values="de1")
 
-data_l27_e1_mp = data_l27.loc[:, ("m", "p", "Δϵ1")]
-data_l27_e1_mp_pivot = data_l27_e1_mp.pivot(index="p", columns="m", values="Δϵ1")
+data_l27_e1_mp = data_l27.loc[:, ("m", "p", "de1")]
+data_l27_e1_mp_pivot = data_l27_e1_mp.pivot(index="p", columns="m", values="de1")
 
-data_l22_e1_mp = data_l22.loc[:, ("m", "p", "Δϵ1")]
-data_l22_e1_mp_pivot = data_l22_e1_mp.pivot(index="p", columns="m", values="Δϵ1")
-
-
-data_l17_e2_mp = data_l17.loc[:, ("m", "p", "σ²2")]
-data_l17_e2_mp_pivot = data_l17_e2_mp.pivot(index="p", columns="m", values="σ²2")
-
-data_l22_e2_mp = data_l22.loc[:, ("m", "p", "σ²2")]
-data_l22_e2_mp_pivot = data_l22_e2_mp.pivot(index="p", columns="m", values="σ²2")
-
-data_l27_e2_mp = data_l27.loc[:, ("m", "p", "σ²2")]
-data_l27_e2_mp_pivot = data_l27_e2_mp.pivot(index="p", columns="m", values="σ²2")
+data_l22_e1_mp = data_l22.loc[:, ("m", "p", "de1")]
+data_l22_e1_mp_pivot = data_l22_e1_mp.pivot(index="p", columns="m", values="de1")
 
 
-data_l17_e3_mp = data_l17.loc[:, ("m", "p", "σ²3")]
-data_l17_e3_mp_pivot = data_l17_e3_mp.pivot(index="p", columns="m", values="σ²3")
+data_l17_e2_mp = data_l17.loc[:, ("m", "p", "de2")]
+data_l17_e2_mp_pivot = data_l17_e2_mp.pivot(index="p", columns="m", values="de2")
 
-data_l22_e3_mp = data_l22.loc[:, ("m", "p", "σ²3")]
-data_l22_e3_mp_pivot = data_l22_e3_mp.pivot(index="p", columns="m", values="σ²3")
+data_l22_e2_mp = data_l22.loc[:, ("m", "p", "de2")]
+data_l22_e2_mp_pivot = data_l22_e2_mp.pivot(index="p", columns="m", values="de2")
 
-data_l27_e3_mp = data_l27.loc[:, ("m", "p", "σ²3")]
-data_l27_e3_mp_pivot = data_l27_e3_mp.pivot(index="p", columns="m", values="σ²3")
+data_l27_e2_mp = data_l27.loc[:, ("m", "p", "de2")]
+data_l27_e2_mp_pivot = data_l27_e2_mp.pivot(index="p", columns="m", values="de2")
+
+
+data_l17_e3_mp = data_l17.loc[:, ("m", "p", "de3")]
+data_l17_e3_mp_pivot = data_l17_e3_mp.pivot(index="p", columns="m", values="de3")
+
+data_l22_e3_mp = data_l22.loc[:, ("m", "p", "de3")]
+data_l22_e3_mp_pivot = data_l22_e3_mp.pivot(index="p", columns="m", values="de3")
+
+data_l27_e3_mp = data_l27.loc[:, ("m", "p", "de3")]
+data_l27_e3_mp_pivot = data_l27_e3_mp.pivot(index="p", columns="m", values="de3")
 
 
 fig, axs = plt.subplots(3, 3, layout="constrained", sharey="col", sharex="row")
@@ -65,8 +65,8 @@ fig, axs = plt.subplots(3, 3, layout="constrained", sharey="col", sharex="row")
 axs[0, 0].matshow(
     data_l17_e1_mp_pivot,
     interpolation="none",
-    vmin=-e1_max,
-    vmax=0,
+    vmin=0,
+    vmax=0.0097**2,
     extent=[
         data_l17_e1_mp["m"].min(),
         data_l17_e1_mp["m"].max(),
@@ -77,8 +77,8 @@ axs[0, 0].matshow(
 axs[0, 1].matshow(
     data_l22_e1_mp_pivot,
     interpolation="none",
-    vmin=-e1_max,
-    vmax=0,
+    vmin=0,
+    vmax=0.0097**2,
     extent=[
         data_l22_e1_mp["m"].min(),
         data_l22_e1_mp["m"].max(),
@@ -89,8 +89,8 @@ axs[0, 1].matshow(
 axs[0, 2].matshow(
     data_l27_e1_mp_pivot,
     interpolation="none",
-    vmin=-e1_max,
-    vmax=0,
+    vmin=0,
+    vmax=0.0097**2,
     extent=[
         data_l27_e1_mp["m"].min(),
         data_l27_e1_mp["m"].max(),

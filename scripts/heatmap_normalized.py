@@ -51,7 +51,7 @@ fig, axs = plt.subplots(
 axs[0].matshow(
     data_l17_mp_pivot,
     interpolation="none",
-    vmin=0,
+    norm="log",
     vmax=1,
     extent=[m_min, m_max, p_max, p_min],
 )
@@ -60,7 +60,7 @@ axs[0].set_title(r"$ l = 10^{-17} $")
 axs[1].matshow(
     data_l22_mp_pivot,
     interpolation="none",
-    vmin=0,
+    norm="log",
     vmax=1,
     extent=[m_min, m_max, p_max, p_min],
 )
@@ -68,15 +68,15 @@ axs[1].set_title(r"$ l = 10^{-22} $")
 
 axs[2].matshow(
     data_l27_mp_pivot,
+    norm="log",
     interpolation="none",
-    vmin=0,
     vmax=1,
     extent=[m_min, m_max, p_max, p_min],
 )
 axs[2].set_title(r"$ l = 10^{-27} $")
 
 
-fig.colorbar(label=r"$ \sigma_1^2 \sigma_2^2 \sigma_3^2 $", extend="max")
+# fig.colorbar(label=r"$ \sigma_1^2 \sigma_2^2 \sigma_3^2 $", extend="max")
 
 fig.savefig(fig_dir + "/variance_normalized.pdf")
 plt.close(fig)
