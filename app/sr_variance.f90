@@ -51,7 +51,7 @@ program sr_variance
 
    real(qp) :: avg_num01, avg_num02, avg_num03, avg_denom
 
-   character(len=*), parameter :: data_dir = "data/tab/more_cases"
+   character(len=*), parameter :: data_dir = "data/tab/sr_variance"
    integer :: out_id
 
 ! ------------------------------------------------------------------------------------ !
