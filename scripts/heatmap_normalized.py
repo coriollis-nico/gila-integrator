@@ -49,7 +49,7 @@ p_min = data_l17_mp["p"].min()
 p_max = data_l17_mp["p"].max()
 
 
-fig, axs = plt.subplots(1, 3, layout="constrained", squeeze=True
+fig, axs = plt.subplots(1, 3, layout="constrained", squeeze=True,
                         sharey=True, sharex=True)
 
 axs[0].matshow(data_l17_mp_pivot, interpolation="none",
