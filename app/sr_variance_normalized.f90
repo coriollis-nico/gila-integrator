@@ -1,4 +1,4 @@
-program sr_variance
+program sr_variance_normalized
    !! Finds the variance \( \sigma^2 \) of the \( \epsilon_i \) values wrt the PLANCK reported
    !! values.
    use iso_fortran_env,  &
@@ -135,4 +135,4 @@ program sr_variance
    end do
    close(vn_id)
 
-end program sr_variance
+end program sr_variance_normalized
