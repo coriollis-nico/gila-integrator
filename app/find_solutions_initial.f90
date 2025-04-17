@@ -1,4 +1,4 @@
-program find_solutions
+program find_solutions_initial
    !! For specified [[gila_conditions:m]], [[gila_conditions:p]], [[gila_conditions:l]]
    !! combinations calculates \( y \) and \( \epsilon_{1 \to 4} \) slow-roll parameters.
    !!
@@ -14,9 +14,9 @@ program find_solutions
 
    integer :: i, k
 
-   integer, dimension(4), parameter  :: mt = [ 3, 8, 10, 99 ]
+   integer, dimension(3), parameter  :: mt = [ 3, 8, 10 ]
    !! [[gila_conditions:m]]
-   integer, dimension(4), parameter  :: pt = [ 1, 2, 10, 99 ]
+   integer, dimension(3), parameter  :: pt = [ 1, 2, 10 ]
    !! [[gila_conditions:p]]
    real(qp), dimension(3), parameter :: lt = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
    !! [[gila_conditions:l]]
@@ -54,7 +54,7 @@ program find_solutions
 
    call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
 
-   do i = 1, 4
+   do i = 1, 3
    do k = 1, 3
       write(mpl_id, *) mt(i), pt(i), lt(k)
    end do
@@ -84,7 +84,7 @@ program find_solutions
    conditions%Omega_dark = dark_density
 
 
-   do i = 1, 4
+   do i = 1, 3
 
          conditions%m=mt(i)
          conditions%p=pt(i)
@@ -145,4 +145,4 @@ program find_solutions
    close(sr3_id)
 
 
-end program find_solutions
+end program find_solutions_initial

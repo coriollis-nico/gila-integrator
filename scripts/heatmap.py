@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 plt.style.use("grayscale")
-# plt.rcParams['text.usetex'] = True
+plt.rcParams["text.usetex"] = True
 # plt.rcParams['figure.figsize'] = [6.4, 14.4]
 
 # Data import
@@ -200,6 +200,9 @@ pc = axs[2, 2].matshow(
 
 fig.colorbar(pc, ax=axs[2, 2], label=r"$ \sigma_{n,3}^2 $", extend="max")
 
+axs[0, 0].set_title(r"$ \log(l) = -17 $")
+axs[0, 1].set_title(r"$ \log(l) = -22 $")
+axs[0, 2].set_title(r"$ \log(l) = -27 $")
 
 fig.savefig(fig_dir + "/variance_normalized.pdf")
 plt.close(fig)
