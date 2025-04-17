@@ -1,4 +1,4 @@
-program find_solutions
+program find_solutions_initial
    !! For specified [[gila_conditions:m]], [[gila_conditions:p]], [[gila_conditions:l]]
    !! combinations calculates \( y \) and \( \epsilon_{1 \to 4} \) slow-roll parameters.
    !!
@@ -12,13 +12,13 @@ program find_solutions
    use lib_io
    implicit none
 
-   integer :: i, k, j
+   integer :: i, k
 
-   integer, dimension(3), parameter  :: mt = [ 60, 90, 102 ]
+   integer, dimension(3), parameter  :: mt = [ 85, 112, 112 ]
    !! [[gila_conditions:m]]
-   integer, dimension(3), parameter  :: pt = [ 2, 3, 4 ]
+   integer, dimension(3), parameter  :: pt = [ 3, 4, 5 ]
    !! [[gila_conditions:p]]
-   real(qp), dimension(1), parameter :: lt = [ 1.e-17_qp ]
+   real(qp), dimension(3), parameter :: lt = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
    !! [[gila_conditions:l]]
 
    real(qp), parameter :: xi = 0.0_qp
@@ -32,11 +32,11 @@ program find_solutions
 
    real(qp), dimension(n), parameter :: x = [( i * (xf - xi)/n, i = 0, n-1 )]
    !! \( x \) values array
-   real(qp), dimension(n, size(mt), size(pt), size(lt)) :: y
+   real(qp), dimension(n, 4, 3) :: y
    !! Solutions array
-   real(qp), dimension(n, size(mt), size(pt), size(lt), 2) :: sr_n_0
+   real(qp), dimension(n, 4, 3, 2) :: sr_n_0
    !! \( N, \epsilon_0 \) array
-   real(qp), dimension(n, size(mt), size(pt), size(lt)) :: sr1, sr2, sr3
+   real(qp), dimension(n, 4, 3) :: sr1, sr2, sr3
    !! \( \epsilon \) array
 
    type(gila_conditions) :: conditions
@@ -54,12 +54,10 @@ program find_solutions
 
    call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
 
-   do i = 1, size(mt)
-      do j = 1, size(pt)
-         do k = 1, size(lt)
-            write(mpl_id, *) mt(i), pt(j), lt(k)
-         end do
-      end do
+   do i = 1, 3
+   do k = 1, 3
+      write(mpl_id, *) mt(i), pt(i), lt(k)
+   end do
    end do
 
    close(mpl_id)
@@ -86,26 +84,21 @@ program find_solutions
    conditions%Omega_dark = dark_density
 
 
-   do i = 1, size(mt)
+   do i = 1, 3
 
-      conditions%m=mt(i)
+         conditions%m=mt(i)
+         conditions%p=pt(i)
 
-      do j = 1, size(pt)
-
-         conditions%p=pt(j)
-
-         do k = 1, size(lt)
+         do k = 1, 3
 
             conditions%l=lt(k)
 
-            y(:, i, j, k) = gila_solution(x, yi, conditions)
+            y(:, i, k) = gila_solution(x, yi, conditions)
 
-            sr_n_0(:, i, j, k, :) = slowroll0(x, y(:, i, j, k), conditions%l)
-            sr1(:, i, j, k) = slowroll(sr_n_0(:, i, j, k, 1), sr_n_0(:, i, j, k, 2))
-            sr2(:, i, j, k) = slowroll(sr_n_0(:, i, j, k, 1), sr1(:, i, j, k))
-            sr3(:, i, j, k) = slowroll(sr_n_0(:, i, j, k, 1), sr2(:, i, j, k))
-
-         end do
+            sr_n_0(:, i, k, :) = slowroll0(x, y(:, i, k), conditions%l)
+            sr1(:, i, k) = slowroll(sr_n_0(:, i, k, 1), sr_n_0(:, i, k, 2))
+            sr2(:, i, k) = slowroll(sr_n_0(:, i, k, 1), sr1(:, i, k))
+            sr3(:, i, k) = slowroll(sr_n_0(:, i, k, 1), sr2(:, i, k))
 
       end do
 
@@ -113,53 +106,43 @@ program find_solutions
 
    call safe_open("y.dat", y_id, file_dir=data_dir)
    do i = 1, size(mt)
-      do j = 1, size(pt)
          do k = 1, size(lt)
-            write(y_id, *) y(:, i, j, k)
+            write(y_id, *) y(:, i, k)
          end do
-      end do
    end do
    close(y_id)
 
    call safe_open("n.dat", srn_id, file_dir=data_dir)
    do i = 1, size(mt)
-      do j = 1, size(pt)
          do k = 1, size(lt)
-            write(srn_id, *) sr_n_0(:, i, j, k, 1)
+            write(srn_id, *) sr_n_0(:, i, k, 1)
          end do
-      end do
    end do
    close(srn_id)
 
    call safe_open("sr1.dat", sr1_id, file_dir=data_dir)
    do i = 1, size(mt)
-      do j = 1, size(pt)
          do k = 1, size(lt)
-            write(sr1_id, *) sr1(:, i, j, k)
+            write(sr1_id, *) sr1(:, i, k)
          end do
-      end do
    end do
    close(sr1_id)
 
    call safe_open("sr2.dat", sr2_id, file_dir=data_dir)
    do i = 1, size(mt)
-      do j = 1, size(pt)
          do k = 1, size(lt)
-            write(sr2_id, *) sr2(:, i, j, k)
+            write(sr2_id, *) sr2(:, i, k)
          end do
-      end do
    end do
    close(sr2_id)
 
    call safe_open("sr3.dat", sr3_id, file_dir=data_dir)
    do i = 1, size(mt)
-      do j = 1, size(pt)
          do k = 1, size(lt)
-            write(sr3_id, *) sr3(:, i, j, k)
+            write(sr3_id, *) sr3(:, i, k)
          end do
-      end do
    end do
    close(sr3_id)
 
 
-end program find_solutions
+end program find_solutions_initial
