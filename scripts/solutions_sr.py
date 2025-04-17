@@ -76,7 +76,7 @@ axs[2].set_ylabel(r"$ \epsilon_3 $")
 
 # axs[0].legend(loc="lower left", fontsize=8)
 
-plt.savefig(fig_dir+"/extra.pdf")
+plt.savefig(fig_dir + "/extra.pdf")
 
 plt.close()
 
