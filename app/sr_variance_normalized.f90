@@ -12,7 +12,7 @@ program sr_variance_normalized
 
    integer :: i, k, j, l_c, n_c, e_c
 
-   integer, dimension(100), parameter  :: mt = [(i, i = 3, 102)]
+   integer, dimension(110), parameter  :: mt = [(i, i = 3, 112)]
    !! [[gila_conditions:m]]
    integer, dimension(10), parameter  :: pt = [(j, j = 1, 10)]
    !! [[gila_conditions:p]]
@@ -45,6 +45,8 @@ program sr_variance_normalized
    real(qp), parameter :: e2_min = e2 - 0.008_qp, e2_max = e2 + 0.009_qp
    real(qp), parameter :: e3 = 0.19_qp
    real(qp), parameter :: e3_min = e3 - 0.53_qp, e3_max = e3 + 0.55_qp
+
+   real(qp), parameter :: n_min = -60.0_qp, n_max = -40.0_qp
 
    real(qp) :: sr_diff_avg(size(mt), size(pt), size(lt), 3)
 
@@ -93,7 +95,7 @@ program sr_variance_normalized
             avg_num03 = 0
             avg_denom = 0
             do n_c = 1, size(slowroll_data, 1)
-               if ((-60.0_qp <= slowroll_data(n_c, 1)) .and. (slowroll_data(n_c, 1) <= -50.0_qp)) then
+               if ((n_min <= slowroll_data(n_c, 1)) .and. (slowroll_data(n_c, 1) <= n_max)) then
                   avg_num01 = avg_num01 + (slowroll_data(n_c, 3) - e1)**2
                   avg_num02 = avg_num02 + (slowroll_data(n_c, 4) - e2)**2
                   avg_num03 = avg_num03 + (slowroll_data(n_c, 5) - e3)**2
