@@ -11,7 +11,7 @@ plt.rcParams["figure.figsize"] = [6.4, 2]
 
 # Data import
 fig_dir = "plots/slowroll_extra_plots"
-data_dir = "data/sims/extra_cases"
+data_dir = "data/sims/solutions"
 makedirs(fig_dir, exist_ok=True)
 
 # Planck data

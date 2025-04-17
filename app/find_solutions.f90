@@ -44,7 +44,7 @@ program find_solutions
    real(qp), parameter :: rad_density = 8.4e-5_qp
    real(qp), parameter :: dark_density = 0.69_qp
 
-   character(len=*), parameter :: data_dir = "data/sims/extra_cases"
+   character(len=*), parameter :: data_dir = "data/sims/solutions"
    character(len=32) :: filename
 
    integer :: x_id
