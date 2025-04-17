@@ -12,7 +12,7 @@ program find_solutions
    use lib_io
    implicit none
 
-   integer :: i, k, j, x_c, e_c
+   integer :: i, k, j
 
    integer, dimension(3), parameter  :: mt = [ 60, 90, 102 ]
    !! [[gila_conditions:m]]
@@ -45,12 +45,11 @@ program find_solutions
    real(qp), parameter :: dark_density = 0.69_qp
 
    character(len=*), parameter :: data_dir = "data/sims/solutions"
-   character(len=32) :: filename
 
    integer :: x_id
    integer :: y_id
    integer :: mpl_id
-   integer :: srn_id, sr0_id, sr1_id, sr2_id, sr3_id
+   integer :: srn_id, sr1_id, sr2_id, sr3_id
 ! ------------------------------------------------------------------------------------ !
 
    call safe_open("mpl.dat", mpl_id, file_dir=data_dir)

@@ -10,7 +10,7 @@ program sr_variance_normalized
    use lib_io
    implicit none
 
-   integer :: i, k, j, l_c, n_c, e_c
+   integer :: i, k, j, l_c, n_c
 
    integer, dimension(110), parameter  :: mt = [(i, i = 3, 112)]
    !! [[gila_conditions:m]]
@@ -42,9 +42,9 @@ program sr_variance_normalized
 
    real(qp), parameter :: e1 = 0, e1_max = 0.0097_qp
    real(qp), parameter :: e2 = 0.032_qp
-   real(qp), parameter :: e2_min = e2 - 0.008_qp, e2_max = e2 + 0.009_qp
+   real(qp), parameter :: e2_max = e2 + 0.009_qp
    real(qp), parameter :: e3 = 0.19_qp
-   real(qp), parameter :: e3_min = e3 - 0.53_qp, e3_max = e3 + 0.55_qp
+   real(qp), parameter :: e3_max = e3 + 0.55_qp
 
    real(qp), parameter :: n_min = -60.0_qp, n_max = -40.0_qp
 
@@ -128,9 +128,9 @@ program sr_variance_normalized
       do j = 1, size(pt)
          do k = 1, size(lt)
             write(vn_id, *) mt(i), pt(j), lt(k), &
-               sr_diff_avg(i, j, k, 1)/(0.0097_qp**2), &
-               sr_diff_avg(i, j, k, 2)/(0.008_qp**2), &
-               sr_diff_avg(i, j, k, 3)/(0.53_qp**2)
+               sr_diff_avg(i, j, k, 1)/((e1_max - e1)**2), &
+               sr_diff_avg(i, j, k, 2)/((e2_max - e2)**2), &
+               sr_diff_avg(i, j, k, 3)/((e3_max - e3)**2)
          end do
       end do
    end do
