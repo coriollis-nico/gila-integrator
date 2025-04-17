@@ -10,7 +10,7 @@ plt.rcParams["text.usetex"] = True
 plt.rcParams["figure.figsize"] = [6.4, 2]
 
 # Data import
-fig_dir = "plots/slowroll_extra_plots"
+fig_dir = "plots/solutions_sr"
 data_dir = "data/sims/solutions"
 makedirs(fig_dir, exist_ok=True)
 
