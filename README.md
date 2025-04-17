@@ -11,15 +11,15 @@ Friedmann equation implementation and RK4 integration for GILA (exponential) and
 ### Requirements
 
 - A Unix system (for the moment `src/gila.f90` uses the unix version of `mkdir`)
-- Fortran 2008 compiler (tested on `gfortran 14.2.1 20250207` and `ifx 2025.1.0 20250317` (conda))
+- 'GCC' (tested on `gfortran 14.2.1 20250207`)
+- [Fortran Package Manager ('fpm')](https://fpm.fortran-lang.org/)
 - `conda` (`conda-forge`) for environment and dependency management (make sure
   `channel_priority: strict` in `.condarc`)
     - 'python'
         - `matplotlib`
         - `numpy`
         - `scipy`
-    - [Fortran Package Manager ('fpm')](https://fpm.fortran-lang.org/)
-    - [`ford`](https://github.com/Fortran-FOSS-Programmers/ford) (optional - doc creation)
+        - [`ford`](https://github.com/Fortran-FOSS-Programmers/ford) (optional - doc creation)
 
 ### Compilation & execution
 
@@ -38,20 +38,27 @@ or close your terminal when finished to close it.
 
 #### Fortran source
 
-To compile using `gcc`,
+To compile using `gcc` and run,
 
-    fpm run sr_invariance
-    fpm run gr_integration --flag '-std=f2008' --profile release
-    fpm run curve_sandwich --flag '-std=f2008' --profile release
+    fpm run <app name> --profile release
 
-For other compatible compilers, replace `-std=f2008` witht the apropiate flag for 2008 standard
-compliance (e.g. `-std08` for `ifx`).
+where `app name` can be
 
-#### Scripts
+- `find_solutions_initial`: simulates example cases
+- `gr_integration`: simulates ΛCDM
+- `sr_variance_normalized`: generates data for ϵ_(1,2,3) heatmaps
+- `find_solutions`: simulates selected cases
 
-If using `bash` or similar, you may use
+#### Python scripts
 
-    for SCRIPT in $(ls scripts) ; do echo --$SCRIPT-- && python scripts/$SCRIPT ; done
+    python scripts/<script name>
+    
+where `script name` can be any of
+
+- `universe.py` creates plots for the introduction
+- `initial_plots.py` plots data from `find_solutions_initial`
+- `heatmap.py` generates the heatmap from `sr_variance_normalized` data
+- `selected_plots.py` plots data from `find_solutions`
 
 #### Docs
 
@@ -59,4 +66,7 @@ If using `bash` or similar, you may use
     
 ## To be fixed
 
--  Make parallelization possible
+- Switch directory creation to OS-agnostic implementation (e.g. Python script)
+- Make parallelization possible
+- Fix output formatting for other compilers (output format not usable when
+  compiling with 'ifort')
