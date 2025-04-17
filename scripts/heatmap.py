@@ -15,7 +15,7 @@ data_dir = "data/tab/sr_variance_normalized"
 makedirs(fig_dir, exist_ok=True)
 
 m_min = 3
-m_max = 102
+m_max = 112
 p_min = 1
 p_max = 10
 
