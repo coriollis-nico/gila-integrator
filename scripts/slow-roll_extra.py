@@ -1,9 +1,5 @@
 #!/usr/bin/python
 
-"""
-Plots slow-roll data
-"""
-
 # Modules
 from os import makedirs
 import numpy as np
@@ -11,7 +7,7 @@ import matplotlib.pyplot as plt
 
 plt.style.use("grayscale")
 plt.rcParams["text.usetex"] = True
-plt.rcParams["figure.figsize"] = [6.4, 3]
+plt.rcParams["figure.figsize"] = [6.4, 2]
 
 # Data import
 fig_dir = "plots/slowroll_extra_plots"
@@ -27,290 +23,61 @@ e3 = 0.19
 e3_min = e3 - 0.53
 e3_max = e3 + 0.55
 
+# N of interest
+N_max = -40
+N_min = -60
 
-sr_m87p05l17 = np.loadtxt(data_dir + "/slow-m87p05l1.0E-17.dat", comments="#")
-sr_m87p05l22 = np.loadtxt(data_dir + "/slow-m87p05l1.0E-22.dat", comments="#")
-sr_m87p05l27 = np.loadtxt(data_dir + "/slow-m87p05l1.0E-27.dat", comments="#")
+# Data
+print("Reading data…")
 
-sr_m88p06l17 = np.loadtxt(data_dir + "/slow-m88p06l1.0E-17.dat", comments="#")
-sr_m88p06l22 = np.loadtxt(data_dir + "/slow-m88p06l1.0E-22.dat", comments="#")
-sr_m88p06l27 = np.loadtxt(data_dir + "/slow-m88p06l1.0E-27.dat", comments="#")
+mpl = np.loadtxt(data_dir + "/mpl.dat")
+cases_of_interest = [0, 4, 8]
 
-sr_m89p07l17 = np.loadtxt(data_dir + "/slow-m89p07l1.0E-17.dat", comments="#")
-sr_m89p07l22 = np.loadtxt(data_dir + "/slow-m89p07l1.0E-22.dat", comments="#")
-sr_m89p07l27 = np.loadtxt(data_dir + "/slow-m89p07l1.0E-27.dat", comments="#")
+x = np.loadtxt(data_dir + "/x.dat")
+N = np.loadtxt(data_dir + "/n.dat")
 
-l17_index = [
-    i for i in range(len(sr_m87p05l17[:, 0])) if -60 <= sr_m87p05l17[i, 0] <= -50
-]
-l22_index = [
-    i for i in range(len(sr_m87p05l22[:, 0])) if -60 <= sr_m87p05l22[i, 0] <= -50
-]
-l27_index = [
-    i for i in range(len(sr_m87p05l27[:, 0])) if -60 <= sr_m87p05l27[i, 0] <= -50
-]
+y = np.loadtxt(data_dir + "/y.dat")
+sr1 = np.loadtxt(data_dir + "/sr1.dat")
+sr2 = np.loadtxt(data_dir + "/sr2.dat")
+sr3 = np.loadtxt(data_dir + "/sr3.dat")
 
 # Plotting
-print("Plotting...")
+print("Plotting…")
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
+fig, axs = plt.subplots(
+    nrows=1, ncols=3, sharex="col", layout="constrained", squeeze=True
+)
+for i in range(len(cases_of_interest)):
+    N_index = [
+        j for j in range(len(N[i, :])) if (N_min <= N[i, j]) and (N[i, j] <= N_max)
+    ]
+    axs[0].plot(
+        N[i, N_index],
+        sr1[i, N_index],
+        label=r"$n = {n}$, $p = {p}$, $\log(l) = {ll}$".format(
+            n=int(mpl[i, 0]), p=int(mpl[i, 1]), ll=int(np.log10(mpl[i, 2]))
+        ),
+    )
+    axs[1].plot(N[i, N_index], sr2[i, N_index])
+    axs[2].plot(N[i, N_index], sr3[i, N_index])
 
-axs[0].set_title(r"$l = 1 \times 10^{-17}$")
-axs[0].plot(
-    sr_m87p05l17[l17_index, 0],
-    sr_m87p05l17[l17_index, 2],
-    label=r"$ m=87, p=5   $",
-    color="k",
-    linestyle="solid",
-)
-axs[0].plot(
-    sr_m88p06l17[l17_index, 0],
-    sr_m88p06l17[l17_index, 2],
-    label=r"$ m=88, p=6   $",
-    color="k",
-    linestyle="dashed",
-)
-axs[0].plot(
-    sr_m89p07l17[l17_index, 0],
-    sr_m89p07l17[l17_index, 2],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
+axs[0].fill_between([N_min, N_max], 0, e1_max, alpha=0.14)
+axs[1].fill_between([N_min, N_max], e2_min, e2_max, alpha=0.10)
+axs[2].fill_between([N_min, N_max], e3_min, e3_max, alpha=0.14)
 
-axs[1].set_title(r"$l = 1 \times 10^{-22}$")
-axs[1].plot(
-    sr_m87p05l22[l22_index, 0],
-    sr_m87p05l22[l22_index, 2],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[1].plot(
-    sr_m88p06l22[l22_index, 0],
-    sr_m88p06l22[l22_index, 2],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[1].plot(
-    sr_m89p07l22[l22_index, 0],
-    sr_m89p07l22[l22_index, 2],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
+for i in range(len(cases_of_interest)):
+    axs[i].set_xlabel(r"$ N $")
+    axs[i].set_xlim(N_min, N_max)
 
-axs[2].set_title(r"$l = 1 \times 10^{-27}$")
-axs[2].plot(
-    sr_m87p05l27[l27_index, 0],
-    sr_m87p05l27[l27_index, 2],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[2].plot(
-    sr_m88p06l27[l27_index, 0],
-    sr_m88p06l27[l27_index, 2],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[2].plot(
-    sr_m89p07l27[l27_index, 0],
-    sr_m89p07l27[l27_index, 2],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
-
-axs[1].set_xlabel(r"$N$")
-axs[0].legend(loc="upper left", fontsize=7)
 axs[0].set_ylabel(r"$ \epsilon_1 $")
-for ax in axs:
-    ax.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-    ax.set_xlim(-60, -50)
-    ax.set_ylim(bottom=0)
-    ax.fill_between([-60, -50], e1_max, 0, alpha=0.14)
+axs[1].set_ylabel(r"$ \epsilon_2 $")
+axs[2].set_ylabel(r"$ \epsilon_3 $")
 
-plt.savefig(fig_dir + "/e1.pdf")
 
-plt.close()
+# axs[0].legend(loc="lower left", fontsize=8)
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
-
-axs[0].set_title(r"$l = 1 \times 10^{-17}$")
-axs[0].plot(
-    sr_m87p05l17[l17_index, 0],
-    sr_m87p05l17[l17_index, 3],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[0].plot(
-    sr_m88p06l17[l17_index, 0],
-    sr_m88p06l17[l17_index, 3],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[0].plot(
-    sr_m89p07l17[l17_index, 0],
-    sr_m89p07l17[l17_index, 3],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
-
-axs[1].set_title(r"$l = 1 \times 10^{-22}$")
-axs[1].plot(
-    sr_m87p05l22[l22_index, 0],
-    sr_m87p05l22[l22_index, 3],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[1].plot(
-    sr_m88p06l22[l22_index, 0],
-    sr_m88p06l22[l22_index, 3],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[1].plot(
-    sr_m89p07l22[l22_index, 0],
-    sr_m89p07l22[l22_index, 3],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
-
-axs[2].set_title(r"$l = 1 \times 10^{-27}$")
-axs[2].plot(
-    sr_m87p05l27[l27_index, 0],
-    sr_m87p05l27[l27_index, 3],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[2].plot(
-    sr_m88p06l27[l27_index, 0],
-    sr_m88p06l27[l27_index, 3],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[2].plot(
-    sr_m89p07l27[l27_index, 0],
-    sr_m89p07l27[l27_index, 3],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
-
-axs[1].set_xlabel(r"$N$")
-axs[0].legend(loc="upper left", fontsize=7)
-axs[0].set_ylabel(r"$ \epsilon_2 $")
-for ax in axs:
-    ax.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-    ax.hlines(e2, xmin=-60, xmax=-50, alpha=0.4)
-    ax.set_xlim(-60, -50)
-    ax.fill_between([-60, -50], e2_min, e2_max, alpha=0.1)
-
-plt.savefig(fig_dir + "/e2.pdf")
-
-# for ax in axs:
-#     ax.set_ylim(1.6e-2, 2.25e-2)
-#
-# plt.savefig(fig_dir+"/e2_zoom.pdf")
+plt.savefig(fig_dir+"/extra.pdf")
 
 plt.close()
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
-
-axs[0].set_title(r"$l = 1 \times 10^{-17}$")
-axs[0].plot(
-    sr_m87p05l17[l17_index, 0],
-    sr_m87p05l17[l17_index, 4],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[0].plot(
-    sr_m88p06l17[l17_index, 0],
-    sr_m88p06l17[l17_index, 4],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[0].plot(
-    sr_m89p07l17[l17_index, 0],
-    sr_m89p07l17[l17_index, 4],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
-
-axs[1].set_title(r"$l = 1 \times 10^{-22}$")
-axs[1].plot(
-    sr_m87p05l22[l22_index, 0],
-    sr_m87p05l22[l22_index, 4],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[1].plot(
-    sr_m88p06l22[l22_index, 0],
-    sr_m88p06l22[l22_index, 4],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[1].plot(
-    sr_m89p07l22[l22_index, 0],
-    sr_m89p07l22[l22_index, 4],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
-
-axs[2].set_title(r"$l = 1 \times 10^{-27}$")
-axs[2].plot(
-    sr_m87p05l27[l27_index, 0],
-    sr_m87p05l27[l27_index, 4],
-    label=r"$ m=87, p=5 $",
-    color="k",
-    linestyle="solid",
-)
-axs[2].plot(
-    sr_m88p06l27[l27_index, 0],
-    sr_m88p06l27[l27_index, 4],
-    label=r"$ m=88, p=6 $",
-    color="k",
-    linestyle="dashed",
-)
-axs[2].plot(
-    sr_m89p07l27[l27_index, 0],
-    sr_m89p07l27[l27_index, 4],
-    label=r"$ m=89, p=7 $",
-    color="k",
-    linestyle="dotted",
-)
-
-axs[1].set_xlabel(r"$N$")
-axs[0].set_ylabel(r"$ \epsilon_3 $")
-axs[0].legend(loc="upper left", fontsize=7)
-for ax in axs:
-    ax.hlines(e3, xmin=-60, xmax=-50, alpha=0.4)
-    ax.set_xlim(-60, -50)
-    ax.fill_between([-60, -50], e3_min, e3_max, alpha=0.14)
-
-plt.savefig(fig_dir + "/e3.pdf")
-
-# for ax in axs:
-#     ax.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
-#     ax.set_ylim(0.015, 0.0225)
-#
-# plt.savefig(fig_dir+"/e3_zoom.pdf")
-
-plt.close()
+exit()
