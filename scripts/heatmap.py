@@ -72,7 +72,11 @@ data_l27_e3_mp = data_l27.loc[:, ("m", "p", "de3")]
 data_l27_e3_mp_pivot = data_l27_e3_mp.pivot(index="p", columns="m", values="de3")
 
 
-fig, axs = plt.subplots(3, 3, layout="constrained", sharey="col", sharex="row")
+fig, axs = plt.subplots(3, 3, layout="constrained", sharey=True, sharex=True)
+
+for i in range(3):
+    axs[i, 0].set_ylabel(r"$p$")
+    axs[2, i].set_xlabel(r"$m$")
 
 axs[0, 0].matshow(
     data_l17_e1_mp_pivot,
