@@ -39,7 +39,7 @@ m99p99l27 = np.loadtxt(data_dir + "/m99p99l1.0E-27.dat", comments="#")
 # Plotting
 print("Plotting...")
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
+fig, axs = plt.subplots(1, 3, sharey="row", sharex="col", layout="constrained")
 
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")

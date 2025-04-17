@@ -60,7 +60,7 @@ l27_index = [
 # Plotting
 print("Plotting...")
 
-fig, axs = plt.subplots(1, 3, sharey=True, sharex=True, layout="constrained")
+fig, axs = plt.subplots(1, 3, sharey="row", sharex="col", layout="constrained")
 
 axs[0].set_title(r"$l = 1 \times 10^{-17}$")
 axs[0].plot(
