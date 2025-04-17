@@ -43,7 +43,7 @@ program curve_sandwich
    real(qp), parameter :: rad_density = 8.4e-5_qp
    real(qp), parameter :: dark_density = 0.69_qp
 
-   character(len=*), parameter :: data_dir = "data/sims/curve_sandwich"
+   character(len=*), parameter :: data_dir = "data/sims/repr_data"
    character(len=32) :: filename
 
    integer :: x_grid
