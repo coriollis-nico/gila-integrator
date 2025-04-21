@@ -89,7 +89,7 @@ fig, axs = plt.subplots(
     sharex="col",
     sharey="row",
     layout="constrained",
-    figsize=[6.4, 4.5],
+    figsize=[6.4, 3.5],
 )
 
 for k in range(3):
