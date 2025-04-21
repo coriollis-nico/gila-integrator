@@ -52,7 +52,7 @@ fig, axs = plt.subplots(
     sharex="col",
     sharey="row",
     layout="constrained",
-    figsize=[6.4, 3],
+    figsize=[6.4, 2.5],
     squeeze=True,
 )
 
