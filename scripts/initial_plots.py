@@ -68,7 +68,7 @@ for k in range(3):
             y[3 * i + k, :],
             color="k",
             ls=plot_styles[i],
-            label=r"$ n = {}$, $p = {} $".format(
+            label=r"$ m = {}$, $p = {} $".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
@@ -115,7 +115,7 @@ for k in range(3):
             sr1[3 * i + k, N_index],
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
@@ -124,7 +124,7 @@ for k in range(3):
             sr2[3 * i + k, N_index],
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
@@ -133,7 +133,7 @@ for k in range(3):
             sr3[3 * i + k, N_index],
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
