@@ -392,7 +392,7 @@ contains
       if ( y(i) >= 1._qp/l ) then
         i_index = i
         xi = x(i_index)
-        yi = x(i_index)
+        yi = y(i_index)
         exit
       end if
     end do
