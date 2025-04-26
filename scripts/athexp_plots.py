@@ -58,25 +58,16 @@ sr3_ath = np.loadtxt(data_dir + "/sr3.dat")
 # Plotting
 print("Plotting…")
 
-fig, axs = plt.subplots(nrows=1, ncols=3, squeeze=True,
-                        sharex="col",
-                        sharey="row",
-                        layout="constrained")
+fig, axs = plt.subplots(
+    nrows=1, ncols=3, squeeze=True, sharex="col", sharey="row", layout="constrained"
+)
 
 for k in range(len(l_exp)):
     axs[k].set_xscale("log")
     axs[k].set_yscale("log")
     axs[k].set_title(r"$\log(l) = {}$".format(int(np.log10(l_exp[k]))))
-    axs[k].plot(np.exp(x_exp),
-             y_exp[k, :],
-             color="k",
-             ls="dashed",
-             label="exp")
-    axs[k].plot(np.exp(x_ath),
-             y_ath[k, :],
-             color="k",
-             ls="dotted",
-             label="atanh")
+    axs[k].plot(np.exp(x_exp), y_exp[k, :], color="k", ls="dashed", label="exp")
+    axs[k].plot(np.exp(x_ath), y_ath[k, :], color="k", ls="dotted", label="atanh")
 
 axs[1].set_xlabel(r"$ \bar{a} $")
 axs[0].set_ylabel(r"$ \bar{H} $")
@@ -87,24 +78,15 @@ plt.savefig(fig_dir + "/solutions.png")
 plt.close()
 
 
-fig, axs = plt.subplots(nrows=1, ncols=3, squeeze=True,
-                        sharex="col",
-                        sharey="row",
-                        layout="constrained")
+fig, axs = plt.subplots(
+    nrows=1, ncols=3, squeeze=True, sharex="col", sharey="row", layout="constrained"
+)
 
 for k in range(len(l_exp)):
     axs[k].set_xscale("log")
     axs[k].set_title(r"$\log(l) = {}$".format(int(np.log10(l_exp[k]))))
-    axs[k].plot(np.exp(x_exp),
-             sr1_exp[k, :],
-             color="k",
-             ls="dashed",
-             label="exp")
-    axs[k].plot(np.exp(x_ath),
-             sr1_ath[k, :],
-             color="k",
-             ls="dotted",
-             label="atanh")
+    axs[k].plot(np.exp(x_exp), sr1_exp[k, :], color="k", ls="dashed", label="exp")
+    axs[k].plot(np.exp(x_ath), sr1_ath[k, :], color="k", ls="dotted", label="atanh")
 
 axs[1].set_xlabel(r"$ \bar{a} $")
 axs[0].set_ylabel(r"$ \epsilon_1 $")
@@ -115,10 +97,9 @@ plt.savefig(fig_dir + "/sr1.png")
 plt.close()
 
 
-fig, axs = plt.subplots(nrows=1, ncols=3, squeeze=True,
-                        sharex="col",
-                        sharey="row",
-                        layout="constrained")
+fig, axs = plt.subplots(
+    nrows=1, ncols=3, squeeze=True, sharex="col", sharey="row", layout="constrained"
+)
 
 for k in range(len(l_exp)):
     axs[k].set_title(r"$\log(l) = {}$".format(int(np.log10(l_exp[k]))))
@@ -128,21 +109,17 @@ for k in range(len(l_exp)):
         for index in range(len(N_exp[k, :]))
         if (N_min <= N_exp[k, index]) and (N_exp[k, index] <= N_max)
     ]
-    axs[k].plot(N_exp[k, N_index],
-             sr1_exp[k, N_index],
-             color="k",
-             ls="dashed",
-             label="exp")
+    axs[k].plot(
+        N_exp[k, N_index], sr1_exp[k, N_index], color="k", ls="dashed", label="exp"
+    )
     N_index = [
         index
         for index in range(len(N_ath[k, :]))
         if (N_min <= N_ath[k, index]) and (N_ath[k, index] <= N_max)
     ]
-    axs[k].plot(N_ath[k, N_index],
-             sr1_ath[k, N_index],
-             color="k",
-             ls="dotted",
-             label="atanh")
+    axs[k].plot(
+        N_ath[k, N_index], sr1_ath[k, N_index], color="k", ls="dotted", label="atanh"
+    )
 
 axs[1].set_xlabel(r"$ \bar{a} $")
 axs[0].set_ylabel(r"$ \epsilon_1 $")

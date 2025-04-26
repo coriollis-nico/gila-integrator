@@ -49,11 +49,13 @@ print("Plotting…")
 plt.figure(layout="constrained")
 
 for k in range(len(l)):
-    plt.plot(np.exp(x),
-             y[k, :],
-             color="k",
-             ls=plot_styles[k],
-             label=r"$\log(l) = {}$".format(int(np.log10(l[k]))))
+    plt.plot(
+        np.exp(x),
+        y[k, :],
+        color="k",
+        ls=plot_styles[k],
+        label=r"$\log(l) = {}$".format(int(np.log10(l[k]))),
+    )
 
 plt.xscale("log")
 plt.yscale("log")
@@ -72,11 +74,13 @@ plt.close()
 plt.figure(layout="constrained")
 
 for k in range(len(l)):
-    plt.plot(np.exp(x),
-             sr1[k, :],
-             color="k",
-             ls=plot_styles[k],
-             label=r"$\log(l) = {}$".format(int(np.log10(l[k]))))
+    plt.plot(
+        np.exp(x),
+        sr1[k, :],
+        color="k",
+        ls=plot_styles[k],
+        label=r"$\log(l) = {}$".format(int(np.log10(l[k]))),
+    )
 
 plt.xlim(left=np.exp(x[-1]), right=np.exp(x[0]))
 
@@ -87,7 +91,7 @@ plt.xlabel(r"$ \bar{a} $")
 
 plt.legend(loc="upper left", frameon=False)
 
-plt.savefig(fig_dir+"/sr1.pdf")
+plt.savefig(fig_dir + "/sr1.pdf")
 plt.close()
 
 
@@ -99,11 +103,13 @@ for k in range(len(l)):
         for index in range(len(N[k, :]))
         if (N_min <= N[k, index]) and (N[k, index] <= N_max)
     ]
-    plt.plot(N[k, N_index],
-             sr1[k, N_index],
-             color="k",
-             ls=plot_styles[k],
-             label=r"$\log(l) = {}$".format(int(np.log10(l[k]))))
+    plt.plot(
+        N[k, N_index],
+        sr1[k, N_index],
+        color="k",
+        ls=plot_styles[k],
+        label=r"$\log(l) = {}$".format(int(np.log10(l[k]))),
+    )
 
 plt.xlim(left=N_min, right=N_max)
 
@@ -114,7 +120,7 @@ plt.fill_between([N_min, N_max], 0, e1_max, alpha=0.14)
 
 plt.legend(loc="upper left")
 
-plt.savefig(fig_dir+"/sr1_zoom.pdf")
+plt.savefig(fig_dir + "/sr1_zoom.pdf")
 plt.close()
 
 

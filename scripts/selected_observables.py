@@ -123,7 +123,7 @@ for k in range(3):
             r(sr1[3 * i + k, N_index]),
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
@@ -136,7 +136,7 @@ for k in range(3):
             ),
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
@@ -145,7 +145,7 @@ for k in range(3):
             nT(sr1[3 * i + k, N_index], sr2[3 * i + k, N_index]),
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
@@ -158,7 +158,7 @@ for k in range(3):
             ),
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
@@ -171,7 +171,7 @@ for k in range(3):
             ),
             color="k",
             ls=plot_styles[i],
-            label=r"$n = {}$, $p = {}$".format(
+            label=r"$m = {}$, $p = {}$".format(
                 int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
             ),
         )
