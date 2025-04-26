@@ -12,9 +12,9 @@ program sr_variance_normalized
 
   integer :: i, k, j, l_c, n_c
 
-  integer, dimension(110), parameter  :: mt = [(i, i = 3, 112)]
+  integer, dimension(300), parameter  :: mt = [(i, i = 3, 302)]
   !! [[gila_conditions:m]]
-  integer, dimension(10), parameter  :: pt = [(j, j = 1, 10)]
+  integer, dimension(30), parameter  :: pt = [(j, j = 1, 30)]
   !! [[gila_conditions:p]]
   real(qp), dimension(3), parameter :: lt = [1.e-17_qp, 1.e-22_qp, 1.e-27_qp]
   !! [[gila_conditions:l]]
@@ -46,7 +46,7 @@ program sr_variance_normalized
   real(qp), parameter :: e3 = 0.19_qp
   real(qp), parameter :: e3_max = e3 + 0.55_qp
 
-  real(qp), parameter :: n_min = -60.0_qp, n_max = -40.0_qp
+  real(qp), parameter :: n_min = -60.0_qp, n_max = -30.0_qp
 
   real(qp) :: sr_diff_avg(size(mt), size(pt), size(lt), 3)
 

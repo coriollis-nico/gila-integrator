@@ -15,9 +15,9 @@ data_dir = "data/tab/sr_variance_normalized"
 makedirs(fig_dir, exist_ok=True)
 
 m_min = 3
-m_max = 112
+m_max = 302
 p_min = 1
-p_max = 10
+p_max = 30
 
 data = pd.read_csv(data_dir + "/variance_normalized.dat", sep=r"\s+")
 
