@@ -1,10 +1,8 @@
-module finite_diff
+module fdiff
 !! Module for calculating 5-point finite difference derivatives in
 !! equally spaced curves
   use iso_fortran_env,  &
-    only: sp => real32, &
-    dp => real64, &
-    qp => real128
+    only: qp => real128
   use ieee_arithmetic,  &
     only: ieee_Value, ieee_quiet_nan
   implicit none
@@ -14,7 +12,7 @@ module finite_diff
 
 contains
 
-  function center5_diff(y, h, n)
+  pure function fdiff_c5(y, h, n)
 
     !! Calculates \( y^{(n)} (x_0) \) in the middle point of dimension 5 array `y`
 
@@ -24,28 +22,26 @@ contains
     !! \( h = \Delta x \) (\(x_i\) equally spaced)
     integer, intent(in) :: n
     !! order of differentiation (1 or 2)
-    real(qp) :: center5_diff
+    real(qp) :: fdiff_c5
 
     select case(n)
      case(1)
-      center5_diff = ( -y(2) + 8.0_qp * y(1) - 8.0_qp * y(-1) + y(-2) ) &
+      fdiff_c5 = ( -y(2) + 8.0_qp * y(1) - 8.0_qp * y(-1) + y(-2) ) &
       & / ( 12.0_qp * h )
      case(2)
-      center5_diff = ( -y(2) + 16.0_qp * y(1) - 30.0_qp * y(0) &
+      fdiff_c5 = ( -y(2) + 16.0_qp * y(1) - 30.0_qp * y(0) &
       & + 16.0_qp * y(-1) - y(-2) ) / ( 12.0_qp * h * h )
      case(3)
-      center5_diff = ( y(2) -  2.0_qp * y(1) + 2.0_qp * y(-1) - y(-2) ) &
+      fdiff_c5 = ( y(2) -  2.0_qp * y(1) + 2.0_qp * y(-1) - y(-2) ) &
       & / ( 2.0_qp * h**3 )
      case(4)
-      center5_diff = ( y(2) - 4._qp*y(1) + 6._qp*y(0) - 4._qp*y(-1) + y(-2) ) &
+      fdiff_c5 = ( y(2) - 4._qp*y(1) + 6._qp*y(0) - 4._qp*y(-1) + y(-2) ) &
       & / (h**4)
-     case default
-      error stop "invalid n"
     end select
 
-  end function center5_diff
+  end function fdiff_c5
 
-  function fd_c5curve(y, h, n)
+  function fdiff_c5curve(y, h, n)
 
     !! Returns \( y^{(n)} (x) \)
 
@@ -53,14 +49,14 @@ contains
     real(qp), intent(in) :: h
     integer, intent(in) :: n
 
-    real(qp), dimension( size(y) ) :: fd_c5curve
+    real(qp), dimension( size(y) ) :: fdiff_c5curve
 
     integer :: i
 
-    fd_c5curve(1:2) = ieee_value(fd_c5curve(1), ieee_quiet_nan)
-    fd_c5curve(size(y)-1:size(y)) = ieee_value(fd_c5curve(1), ieee_quiet_nan)
-    fd_c5curve(3:size(y)-2) = [(center5_diff(y(i-2:i+2), h, n), i = 3, size(y)-2)]
+    fdiff_c5curve(1:2) = ieee_value(fdiff_c5curve(1), ieee_quiet_nan)
+    fdiff_c5curve(size(y)-1:size(y)) = ieee_value(fdiff_c5curve(1), ieee_quiet_nan)
+    fdiff_c5curve(3:size(y)-2) = [(fdiff_c5(y(i-2:i+2), h, n), i = 3, size(y)-2)]
 
-  end function fd_c5curve
+  end function fdiff_c5curve
 
-end module finite_diff
+end module fdiff
