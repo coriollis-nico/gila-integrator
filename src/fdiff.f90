@@ -8,7 +8,7 @@ module fdiff
   implicit none
 
   private
-  public center5_diff, fd_c5curve
+  public fdiff_c5, fdiff_c5curve
 
 contains
 
