@@ -4,15 +4,13 @@ module gi
   use iso_fortran_env,  &
     only: qp => real128
   use fdiff
-  use stdlib_strings, &
-    only: sl_tostring => to_string
   implicit none
 
   private
   public gi_conditions, gi_conditions_default
   public write_gi_genconditions
   public gi_friedmann, gi_solution
-  public slowroll0, slowroll
+  public gi_sr0, gi_sr
 
   type :: gi_conditions
     !! Derived type for specifying [[gi:gi_friedmann]] parameters
@@ -33,7 +31,7 @@ module gi
   end type
 
   type(gi_conditions), parameter :: gi_conditions_default &
-                                    = gi_conditions(ld = 1.0_qp,
+                                    = gi_conditions(ld = 1.0_qp, &
                                       l = 1.e-17_qp, &
                                       m = 3, &
                                       p = 1, &
@@ -58,7 +56,7 @@ contains
     write(file_id, *) c//"Ω_R0 = ", conditions%Omega_R
     write(file_id, *) c//"Ω_Λ = ", conditions%Omega_dark
     write(file_id, *) c//"λ = ", conditions%ld
-    write(file_id, *) c//"l = ", sl_tostring(conditions%l, '(es7.1e2)')
+    write(file_id, *) c//"l = ", conditions%l
     write(file_id, *) c//"m = ", conditions%m
     write(file_id, *) c//"p = ", conditions%p
 
@@ -151,7 +149,7 @@ contains
 
     ! Finding a_tilde_i and Hbar_i
     do i = 1, size(x, 1)
-      if ( y(i) >= 1._qp/l ) then
+      if ( y(i) >= 1._qp/cond%l ) then
         i_index = i
         xi = x(i_index)
         yi = y(i_index)
@@ -178,11 +176,10 @@ contains
 
     integer :: i
 
-    real(qp), dimension(size(x, 1)) :: slowroll
+    real(qp), dimension(size(x, 1)-4) :: gi_sr
 
-    slowroll = fdiff_c5curve(log(abs(y(i))), &
-                              x(2) - x(1), &
-                              1)
+    gi_sr = fdiff_c5curve(log(abs(y)), &
+                              x(2) - x(1))
 
   end function gi_sr
 
