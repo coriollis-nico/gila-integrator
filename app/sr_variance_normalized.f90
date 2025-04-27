@@ -6,15 +6,17 @@ program sr_variance_normalized
     stdout => output_unit
   use gi
   use lib_io
+  use nv
   implicit none
 
-  integer :: i, k, j, l_c, n_c, n_x
+  integer :: i, k, j, e_c, n_c, n_x
 
-  integer, dimension(30), parameter  :: mt = [(i, i = 3, 32)]
+  integer, dimension(100), parameter  :: mt = [(i, i = 3, 102)]
   !! [[gila_conditions:m]]
   integer, dimension(10), parameter  :: pt = [(j, j = 1, 10)]
   !! [[gila_conditions:p]]
-  real(qp), dimension(3), parameter :: lt = [1.e-17_qp, 1.e-22_qp, 1.e-27_qp]
+!   real(qp), dimension(1), parameter :: lt = [1.e-17_qp, 1.e-22_qp, 1.e-27_qp]
+  real(qp), dimension(1), parameter :: lt = [1.e-17_qp]
   !! [[gila_conditions:l]]
 
   real(qp), parameter :: xi = 0.0_qp
@@ -38,24 +40,35 @@ program sr_variance_normalized
   real(qp), parameter :: rad_density = 8.4e-5_qp
   real(qp), parameter :: dark_density = 0.69_qp
 
-  real(qp), parameter :: e1 = 0, e1_max = 0.0097_qp
-  real(qp), parameter :: e2 = 0.032_qp
-  real(qp), parameter :: e2_max = e2 + 0.009_qp
-  real(qp), parameter :: e3 = 0.19_qp
-  real(qp), parameter :: e3_max = e3 + 0.55_qp
+  real(qp), dimension(3), parameter :: sr_ref = [0._qp, 0.032_qp, 0.19_qp]
+  real(qp), dimension(3), parameter :: sr_max = [0.0097_qp, sr_ref(2) + 0.009_qp, sr_ref(3) + 0.55_qp]
   real(qp), parameter :: n_min = -60.0_qp, n_max = -30.0_qp
 
   character(len=*), parameter :: data_dir = "data/tab/sr_variance_normalized"
-  integer :: v_id, vn_id
+  integer :: vn1_id, vn2_id, vn3_id, mpl_id
 
 ! ------------------------------------------------------------------------------------ !
 
-!   call safe_open("variance.dat", v_id, file_dir=data_dir)
-!   call safe_open("variance_normalized.dat", vn_id, file_dir=data_dir)
+  call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
 
-  sr_nv(:,:,:,:) = 0
+  do k = 1, size(lt)
+  do j = 1, size(pt)
+  do i = 1, size(mt)
+    write(mpl_id, '(2(i3), (es8.1e2))') mt(i), pt(j), lt(k)
+  end do
+  end do
+  end do
+
+  close(mpl_id)
+
+
+  call safe_open("vn1.dat", vn1_id, file_dir=data_dir)
+  call safe_open("vn2.dat", vn2_id, file_dir=data_dir)
+  call safe_open("vn3.dat", vn3_id, file_dir=data_dir)
+
 
   print *, "Finding solutions"
+  print *, "--------------------"
 
   do concurrent (k = 1:size(lt))
     do concurrent (i = 1:size(mt))
@@ -74,85 +87,94 @@ program sr_variance_normalized
 
         print '(a, i3)', "m = ", mt(i)
         print '(a, i3)', "p = ", pt(j)
-        print '(a, es7.1e2)', "l = ", lt(k)
+        print '(a, es8.1e2)', "l = ", lt(k)
         print '(a)', "-----------"
 
       end do
     end do
   end do
 
-!   print *, "Finding N, ϵ0"
-!
-!   do concurrent (k = 1:size(lt))
-!     do concurrent (i = 1:size(mt))
-!       do concurrent (j = 1:size(pt))
-!
-!         y(:, i, j, k) = gila_solution(x, yi, gi_conditions(&
-!                                               ld = 1.0_qp, &
-!                                               Omega_M = matter_density, &
-!                                               Omega_R = rad_density, &
-!                                               Omega_dark = dark_density, &
-!                                               l = lt(k), &
-!                                               p = pt(j), &
-!                                               m = mt(i) &
-!                                               )&
-!                                       )
-!
-!         print '(a, i3)', "m = ", mt(i)
-!         print '(a, i3)', "p = ", pt(j)
-!         print '(a, es7.1e2)', "l = ", lt(k)
-!         print '(a)', "-----------"
-!
-!       end do
-!     end do
-!   end do
+
+  print *, "Finding N, ϵ0"
+
+  do concurrent (k = 1:size(lt))
+    do concurrent (i = 1:size(mt))
+      do concurrent (j = 1:size(pt))
+
+        sr_data(:, i, j, k, -1:0) = gi_sr0(x, y(:, i, j, k), gi_conditions(&
+                                                              ld = 1.0_qp, &
+                                                              Omega_M = matter_density, &
+                                                              Omega_R = rad_density, &
+                                                              Omega_dark = dark_density, &
+                                                              l = lt(k), &
+                                                              p = pt(j), &
+                                                              m = mt(i) &
+                                                              ))
+
+        print '(a, i3)', "m = ", mt(i)
+        print '(a, i3)', "p = ", pt(j)
+        print '(a, es8.1e2)', "l = ", lt(k)
+        print '(a)', "-----------"
+
+      end do
+    end do
+  end do
 
 
-!         slowroll_data(:,1:2) = slowroll0(x, y, conditions%l)
-!         do l_c = 3, 5
-!           slowroll_data(:,l_c) = slowroll(slowroll_data(:,1), slowroll_data(:,l_c-1))
-!         end do
-!
-!         avg_num01 = 0
-!         avg_num02 = 0
-!         avg_num03 = 0
-!         avg_denom = 0
-!         do n_c = 1, size(slowroll_data, 1)
-!           if ((n_min <= slowroll_data(n_c, 1)) .and. (slowroll_data(n_c, 1) <= n_max)) then
-!             avg_num01 = avg_num01 + (slowroll_data(n_c, 3) - e1)**2
-!             avg_num02 = avg_num02 + (slowroll_data(n_c, 4) - e2)**2
-!             avg_num03 = avg_num03 + (slowroll_data(n_c, 5) - e3)**2
-!             avg_denom = avg_denom + 1
-!           end if
-!         end do
-!
-!         sr_diff_avg(i, j, k, 1) = (avg_num01/avg_denom)
-!         sr_diff_avg(i, j, k, 2) = (avg_num02/avg_denom)
-!         sr_diff_avg(i, j, k, 3) = (avg_num03/avg_denom)
-!
-!
-!   write(v_id, '(a)') "m    p    l    de1    de2    de3"
-!   do i = 1, size(mt)
-!     do j = 1, size(pt)
-!       do k = 1, size(lt)
-!         write(v_id, *) mt(i), pt(j), lt(k), &
-!           sr_diff_avg(i, j, k, 1), sr_diff_avg(i, j, k, 2), sr_diff_avg(i, j, k, 3)
-!       end do
-!     end do
-!   end do
-!   close(v_id)
-!
-!   write(vn_id, '(a)') "m    p    l    de1   de2   de3"
-!   do i = 1, size(mt)
-!     do j = 1, size(pt)
-!       do k = 1, size(lt)
-!         write(vn_id, *) mt(i), pt(j), lt(k), &
-!           sr_diff_avg(i, j, k, 1)/((e1_max - e1)**2), &
-!           sr_diff_avg(i, j, k, 2)/((e2_max - e2)**2), &
-!           sr_diff_avg(i, j, k, 3)/((e3_max - e3)**2)
-!       end do
-!     end do
-!   end do
-!   close(vn_id)
+  do e_c = 1, 3
+    print *, "Finding ϵ_i:", e_c
+    print *, "--------------------"
+    do concurrent (k = 1:size(lt))
+      do concurrent (i = 1:size(mt))
+        do concurrent (j = 1:size(pt))
+
+          sr_data(:, i, j, k, e_c) = gi_sr(x, sr_data(:, i, j, k, e_c - 1))
+
+          print '(a, i3)', "m = ", mt(i)
+          print '(a, i3)', "p = ", pt(j)
+          print '(a, es8.1e2)', "l = ", lt(k)
+          print '(a)', "-----------"
+
+        end do
+      end do
+    end do
+  end do
+
+  do e_c = 1, 3
+    print *, "Finding variances:", e_c
+    print *, "--------------------"
+    do concurrent (k = 1:size(lt))
+      do concurrent (i = 1:size(mt))
+        do concurrent (j = 1:size(pt))
+
+          sr_nv(i, j, k, e_c) = nv_nvar(sr_data(:, i, j, k, -1), &
+                                n_min, n_max, &
+                                sr_data(:, i, j, k, e_c), &
+                                sr_ref(e_c), sr_max(e_c))
+
+          print '(a, i3)', "m = ", mt(i)
+          print '(a, i3)', "p = ", pt(j)
+          print '(a, es8.1e2)', "l = ", lt(k)
+          print '(a)', "-----------"
+
+        end do
+      end do
+    end do
+  end do
+
+
+  do k = 1, size(lt)
+  do j = 1, size(pt)
+  do i = 1, size(mt)
+    write(vn1_id, *) sr_nv(i, j, k, 1)
+    write(vn2_id, *) sr_nv(i, j, k, 2)
+    write(vn3_id, *) sr_nv(i, j, k, 3)
+  end do
+  end do
+  end do
+
+  close(vn1_id)
+  close(vn2_id)
+  close(vn3_id)
 
 end program sr_variance_normalized

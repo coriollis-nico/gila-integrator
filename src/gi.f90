@@ -166,17 +166,15 @@ contains
 
   pure function gi_sr(x, y)
 
-    !! Given nth slow-roll data, finds \( \epsilon_{n+1} \). Assumes `\( x = \ln{a}{a_i} \)
+    !! Given nth slow-roll data, finds \( \epsilon_{n+1} \). Assumes `\( x = \ln{\frac{a}{a_i}} \)
     !! is equally spaced.
 
     real(qp), intent(in) :: x(:)
-    !! `x` output from [[slowroll0]]
+    !! `x` output from TODO
     real(qp), intent(in) :: y(:)
     !! \( \epsilon_n \)
 
-    integer :: i
-
-    real(qp), dimension(size(x, 1)-4) :: gi_sr
+    real(qp), dimension(size(x, 1)) :: gi_sr
 
     gi_sr = fdiff_c5curve(log(abs(y)), &
                               x(2) - x(1))
