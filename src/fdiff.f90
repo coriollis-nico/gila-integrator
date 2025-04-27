@@ -41,7 +41,7 @@ contains
 
   end function fdiff_c5
 
-  function fdiff_c5curve(y, h, n)
+  pure function fdiff_c5curve(y, h, n)
 
     !! Returns \( y^{(n)} (x) \)
 

@@ -4,6 +4,8 @@ license = "MIT"
 author = "Nicolás Celedón-Hernández"
 maintainer = "nicolas.celedonh@ciencias.unam.mx"
 copyright = "Copyright 2025, Nicolás Celedón-Hernández"
+[dependencies]
+stdlib="*"
 [build]
 auto-executables = true
 auto-tests = true
