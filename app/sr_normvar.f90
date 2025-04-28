@@ -1,4 +1,4 @@
-program sr_normvar
+program sr_normvar_01
   !! Finds the variance \( \sigma^2 \) of the \( \epsilon_i \) values wrt the PLANCK reported
   !! values.
   use iso_fortran_env,  &
@@ -11,7 +11,7 @@ program sr_normvar
 
   integer :: i, k, j, e_c, n_c, n_x
 
-  integer, dimension(110), parameter  :: mt = [(i, i = 3, 112)]
+  integer, dimension(40), parameter  :: mt = [(i, i = 3, 42)]
   !! [[gi_conditions:m]]
   integer, dimension(10), parameter  :: pt = [(j, j = 1, 10)]
   !! [[gi_conditions:p]]
@@ -41,7 +41,7 @@ program sr_normvar
   real(qp), dimension(3), parameter :: sr_max = [0.0097_qp, sr_ref(2) + 0.009_qp, sr_ref(3) + 0.55_qp]
   real(qp), parameter :: n_min = -60.0_qp, n_max = -30.0_qp
 
-  character(len=*), parameter :: data_dir = "data/tab/sr_variance_normalized"
+  character(len=*), parameter :: data_dir = "data/tab/sr_normvar/01"
   integer :: vn1_id, vn2_id, vn3_id, mpl_id
 
 ! ------------------------------------------------------------------------------------ !
@@ -159,4 +159,4 @@ program sr_normvar
   close(vn2_id)
   close(vn3_id)
 
-end program sr_normvar
+end program sr_normvar_01
