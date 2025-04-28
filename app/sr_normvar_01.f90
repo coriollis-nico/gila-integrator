@@ -61,7 +61,7 @@ program sr_normvar_01
 
     do concurrent (k = 1:size(lt))
       do concurrent (j = 1:size(pt))
-        do concurrent (i = msize*this_div+1 : msize*(this_div+1))
+        do concurrent (i = 1 : msize)
 
           sr_data(:, i, j, k, -1:0) = gi_sr0(x, &
                                             gi_solution(x,&
@@ -73,7 +73,7 @@ program sr_normvar_01
                                                 Omega_dark = dark_density, &
                                                 l = lt(k), &
                                                 p = pt(j), &
-                                                m = mt(i) &
+                                                m = mt(msize*this_div + i) &
                                               )&
                                               ), &
                                             gi_conditions(&
@@ -83,10 +83,10 @@ program sr_normvar_01
                                               Omega_dark = dark_density, &
                                               l = lt(k), &
                                               p = pt(j), &
-                                              m = mt(i) &
+                                              m = mt(msize*this_div + i) &
                                               ))
 
-          print '(a, i3)', "m = ", mt(i)
+          print '(a, i3)', "m = ", mt(msize*this_div + i)
           print '(a, i3)', "p = ", pt(j)
           print '(a, es8.1e2)', "l = ", lt(k)
           print '(a)', "-----------"
@@ -101,11 +101,11 @@ program sr_normvar_01
       print *, "--------------------"
       do concurrent (k = 1:size(lt))
         do concurrent (j = 1:size(pt))
-          do concurrent (i = msize*this_div+1 : msize*(this_div+1))
+          do concurrent (i = 1 : msize)
 
             sr_data(:, i, j, k, e_c) = gi_sr(x, sr_data(:, i, j, k, e_c - 1))
 
-            print '(a, i3)', "m = ", mt(i)
+            print '(a, i3)', "m = ", mt(msize*this_div + i)
             print '(a, i3)', "p = ", pt(j)
             print '(a, es8.1e2)', "l = ", lt(k)
             print '(a)', "-----------"
@@ -120,14 +120,14 @@ program sr_normvar_01
       print *, "--------------------"
       do concurrent (k = 1:size(lt))
         do concurrent (j = 1:size(pt))
-          do concurrent (i = msize*this_div+1 : msize*(this_div+1))
+          do concurrent (i = 1 : msize)
 
             sr_nv(i, j, k, e_c) = nv_nvar(sr_data(:, i, j, k, -1), &
                                   n_min, n_max, &
                                   sr_data(:, i, j, k, e_c), &
                                   sr_ref(e_c), sr_max(e_c))
 
-            print '(a, i3)', "m = ", mt(i)
+            print '(a, i3)', "m = ", mt(msize*this_div + i)
             print '(a, i3)', "p = ", pt(j)
             print '(a, es8.1e2)', "l = ", lt(k)
             print '(a)', "-----------"
@@ -139,8 +139,8 @@ program sr_normvar_01
 
     do k = 1, size(lt)
     do j = 1, size(pt)
-    do i = msize*this_div + 1, msize*(this_div+1)
-      write(mpl_id, '(2(i3), (es8.1e2))') mt(i), pt(j), lt(k)
+    do i = 1, msize
+      write(mpl_id, '(2(i3), (es8.1e2))') mt(msize*this_div + i), pt(j), lt(k)
       write(vn1_id, *) sr_nv(i, j, k, 1)
       write(vn2_id, *) sr_nv(i, j, k, 2)
       write(vn3_id, *) sr_nv(i, j, k, 3)
