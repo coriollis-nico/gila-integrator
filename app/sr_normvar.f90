@@ -11,8 +11,8 @@ program sr_normvar_01
 
   integer :: i, k, j, e_c, n_c, n_x, this_div
 
-  integer, parameter :: divs = 12
-  integer, parameter :: msize = 20
+  integer, parameter :: divs = 16
+  integer, parameter :: msize = 15
 
   integer, dimension(divs*msize), parameter  :: mt = [(i, i = 3, divs*msize + 2)]
   !! [[gi_conditions:m]]
@@ -45,15 +45,12 @@ program sr_normvar_01
   real(qp), parameter :: n_min = -60.0_qp, n_max = -30.0_qp
 
   character(len=*), parameter :: data_dir = "data/tab/sr_normvar"
-  integer :: vn1_id, vn2_id, vn3_id, mpl_id
+  integer :: vn_id
 
 ! ------------------------------------------------------------------------------------ !
 
-  call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
-
-  call safe_open("vn1.dat", vn1_id, file_dir=data_dir)
-  call safe_open("vn2.dat", vn2_id, file_dir=data_dir)
-  call safe_open("vn3.dat", vn3_id, file_dir=data_dir)
+  call safe_open("vn.dat", vn_id, file_dir=data_dir)
+  write(vn_id, '(6(a6))') "m", "p", "log_l", "v1", "v2", "v3"
 
   do this_div = 0, divs-1
 
@@ -140,20 +137,16 @@ program sr_normvar_01
     do k = 1, size(lt)
     do j = 1, size(pt)
     do i = 1, msize
-      write(mpl_id, '(2(i3), (es8.1e2))') mt(msize*this_div + i), pt(j), lt(k)
-      write(vn1_id, *) sr_nv(i, j, k, 1)
-      write(vn2_id, *) sr_nv(i, j, k, 2)
-      write(vn3_id, *) sr_nv(i, j, k, 3)
+      write(vn_id, '(3(i5), 3(f30.25))') mt(msize*this_div + i), &
+                                          pt(j), &
+                                          int(log10(lt(k))), &
+                                          sr_nv(i, j, k, :)
     end do
     end do
     end do
 
   end do
 
-  close(vn1_id)
-  close(vn2_id)
-  close(vn3_id)
-
-  close(mpl_id)
+  close(vn_id)
 
 end program sr_normvar_01
