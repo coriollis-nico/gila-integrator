@@ -58,7 +58,7 @@ program sr_normvar
 
   do this_div = 0, divs-1
 
-    print '(2(a, i1))', "Working ", this_div, "/", divs
+    print '(2(a, i2))', "Working ", this_div+1, "/", divs
 
     print *, "Finding N, ϵ0"
 
