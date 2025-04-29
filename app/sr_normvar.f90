@@ -9,7 +9,7 @@ program sr_normvar
   use nv
   implicit none
 
-  integer :: i, k, j, e_c, n_c, n_x, this_div
+  integer :: i, k, j, e_c, n_x, this_div
 
   integer, parameter :: divs = 12
   integer, parameter :: msize = 20
@@ -57,6 +57,8 @@ program sr_normvar
   write(vn_id, '(6(a6))') "m", "p", "log_l", "v1", "v2", "v3"
 
   do this_div = 0, divs-1
+
+    print '(2(a, i1))', "Working ", this_div, "/", divs
 
     print *, "Finding N, ϵ0"
 

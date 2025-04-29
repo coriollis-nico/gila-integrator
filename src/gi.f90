@@ -7,7 +7,7 @@ module gi
   implicit none
 
   private
-  public gi_conditions, gi_conditions_default
+  public gi_conditions
   public write_gi_genconditions
   public gi_friedmann, gi_solution
   public gi_sr0, gi_sr
@@ -29,16 +29,6 @@ module gi
     real(qp) :: Omega_dark
     !! \( \Omega_{\Lambda} \) initial dark energy density
   end type
-
-  type(gi_conditions), parameter :: gi_conditions_default &
-                                    = gi_conditions(ld = 1.0_qp, &
-                                      l = 1.e-17_qp, &
-                                      m = 3, &
-                                      p = 1, &
-                                      Omega_M = 0.3153_qp, &
-                                      Omega_R = 9.02e-5_qp, &
-                                      Omega_dark = 0.6847_qp)
-  !! Default parameters for GI integration, defined por convenience
 
 contains
 
