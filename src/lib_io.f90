@@ -1,4 +1,4 @@
-module lib_io
+module io
   !! Utilities for file output
   use iso_fortran_env,  &
     only: sp => real32, &
@@ -111,4 +111,4 @@ contains
 
   end subroutine save_integral_conditions
 
-end module lib_io
+end module io
