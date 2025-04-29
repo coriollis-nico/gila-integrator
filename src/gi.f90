@@ -15,7 +15,7 @@ module gi
   type :: gi_conditions
     !! Derived type for specifying [[gi:gi_friedmann]] parameters
     real(qp) :: ld
-    !! Early universe coefficient
+    !! \(λ\) Early universe coefficient
     real(qp) :: l
     !! \( l = L H_0 \) early universe energy scale
     integer :: m
