@@ -1,18 +1,19 @@
-program sr_normvar_01
-  !! Finds the variance \( \sigma^2 \) of the \( \epsilon_i \) values wrt the PLANCK reported
+program sr_normvar
+  !! Finds the variance \( \sigma_n^2 \) of the \( \epsilon_i \) values wrt the PLANCK reported
   !! values.
   use iso_fortran_env,  &
     only: qp => real128, &
     stdout => output_unit
   use gi
-  use lib_io
+  use io
   use nv
   implicit none
 
   integer :: i, k, j, e_c, n_c, n_x, this_div
 
-  integer, parameter :: divs = 16
-  integer, parameter :: msize = 15
+  integer, parameter :: divs = 12
+  integer, parameter :: msize = 20
+  ! such that divs * msize = 240
 
   integer, dimension(divs*msize), parameter  :: mt = [(i, i = 3, divs*msize + 2)]
   !! [[gi_conditions:m]]
@@ -41,8 +42,11 @@ program sr_normvar_01
   real(qp), parameter :: dark_density = 0.69_qp
 
   real(qp), dimension(3), parameter :: sr_ref = [0._qp, 0.032_qp, 0.19_qp]
-  real(qp), dimension(3), parameter :: sr_max = [0.0097_qp, sr_ref(2) + 0.009_qp, sr_ref(3) + 0.55_qp]
-  real(qp), parameter :: n_min = -60.0_qp, n_max = -30.0_qp
+  real(qp), dimension(3), parameter :: sr_max = [0.0097_qp, &
+                                                sr_ref(2) + 0.009_qp, &
+                                                sr_ref(3) + 0.55_qp]
+  real(qp), parameter :: n_min = -60.0_qp, &
+                         n_max = -30.0_qp
 
   character(len=*), parameter :: data_dir = "data/tab/sr_normvar"
   integer :: vn_id
@@ -83,29 +87,28 @@ program sr_normvar_01
                                               m = mt(msize*this_div + i) &
                                               ))
 
-          print '(a, i3)', "m = ", mt(msize*this_div + i)
-          print '(a, i3)', "p = ", pt(j)
-          print '(a, es8.1e2)', "l = ", lt(k)
-          print '(a)', "-----------"
+!           print '(a, i3)', "m = ", mt(msize*this_div + i)
+!           print '(a, i3)', "p = ", pt(j)
+!           print '(a, es8.1e2)', "l = ", lt(k)
+!           print '(a)', "-----------"
 
         end do
       end do
     end do
 
-
     do e_c = 1, 3
-      print *, "Finding ϵ_i:", e_c
-      print *, "--------------------"
+      print '(a, i1)', "Finding ϵ_i:", e_c
+      print '(a)', "--------------------"
       do concurrent (k = 1:size(lt))
         do concurrent (j = 1:size(pt))
           do concurrent (i = 1 : msize)
 
             sr_data(:, i, j, k, e_c) = gi_sr(x, sr_data(:, i, j, k, e_c - 1))
 
-            print '(a, i3)', "m = ", mt(msize*this_div + i)
-            print '(a, i3)', "p = ", pt(j)
-            print '(a, es8.1e2)', "l = ", lt(k)
-            print '(a)', "-----------"
+!             print '(a, i3)', "m = ", mt(msize*this_div + i)
+!             print '(a, i3)', "p = ", pt(j)
+!             print '(a, es8.1e2)', "l = ", lt(k)
+!             print '(a)', "-----------"
 
           end do
         end do
@@ -113,8 +116,8 @@ program sr_normvar_01
     end do
 
     do e_c = 1, 3
-      print *, "Finding variances:", e_c
-      print *, "--------------------"
+      print '(a, i1)', "Finding variances:", e_c
+      print '(a)', "--------------------"
       do concurrent (k = 1:size(lt))
         do concurrent (j = 1:size(pt))
           do concurrent (i = 1 : msize)
@@ -123,11 +126,11 @@ program sr_normvar_01
                                   n_min, n_max, &
                                   sr_data(:, i, j, k, e_c), &
                                   sr_ref(e_c), sr_max(e_c))
-
-            print '(a, i3)', "m = ", mt(msize*this_div + i)
-            print '(a, i3)', "p = ", pt(j)
-            print '(a, es8.1e2)', "l = ", lt(k)
-            print '(a)', "-----------"
+!
+!             print '(a, i3)', "m = ", mt(msize*this_div + i)
+!             print '(a, i3)', "p = ", pt(j)
+!             print '(a, es8.1e2)', "l = ", lt(k)
+!             print '(a)', "-----------"
 
           end do
         end do
@@ -149,4 +152,4 @@ program sr_normvar_01
 
   close(vn_id)
 
-end program sr_normvar_01
+end program sr_normvar
