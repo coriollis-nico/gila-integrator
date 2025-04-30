@@ -38,6 +38,8 @@ for k in range(l.size):
             data[data["log_l"] == l[k]].pivot_table(
                 values=v[vc], index="p", columns="m"
             ),
+            vmin=0,
+            vmax=1,
             interpolation="none",
             extent=(m[0] - 0.5, m[-1] - 0.5, p[-1] - 0.5, p[0] - 0.5),
             aspect="auto",
