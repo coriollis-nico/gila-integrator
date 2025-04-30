@@ -46,7 +46,7 @@ program sr_normvar
                                                 sr_ref(2) + 0.009_qp, &
                                                 sr_ref(3) + 0.55_qp]
   real(qp), parameter :: n_min = -60.0_qp, &
-                         n_max = -30.0_qp
+                         n_max = -40.0_qp
 
   character(len=*), parameter :: data_dir = "data/tab/sr_normvar"
   integer :: vn_id
@@ -54,7 +54,7 @@ program sr_normvar
 ! ------------------------------------------------------------------------------------ !
 
   call safe_open("vn.dat", vn_id, file_dir=data_dir)
-  write(vn_id, '(6(a6))') "m", "p", "log_l", "v1", "v2", "v3"
+  write(vn_id, '(a)') "m    p    log_l    v1    v2    v3"
 
   do this_div = 0, divs-1
 
