@@ -59,8 +59,8 @@ program sr_normvar
   do this_div = 0, divs-1
 
     print '(2(a, i2))', "Working ", this_div+1, "/", divs
-
-    print *, "Finding N, ϵ0"
+    print '(a)', "! --------------------- !"
+    print '(a)', "Finding N, ϵ0"
 
     do concurrent (k = 1:size(lt))
       do concurrent (j = 1:size(pt))
