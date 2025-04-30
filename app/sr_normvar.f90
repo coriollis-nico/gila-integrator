@@ -99,8 +99,7 @@ program sr_normvar
     end do
 
     do e_c = 1, 3
-      print '(a, i1)', "Finding ϵ_i:", e_c
-      print '(a)', "--------------------"
+      print '(a, i1)', "Finding ϵ", e_c
       do concurrent (k = 1:size(lt))
         do concurrent (j = 1:size(pt))
           do concurrent (i = 1 : msize)
@@ -118,8 +117,7 @@ program sr_normvar
     end do
 
     do e_c = 1, 3
-      print '(a, i1)', "Finding variances:", e_c
-      print '(a)', "--------------------"
+      print '(a, i1)', "Finding σ", e_c
       do concurrent (k = 1:size(lt))
         do concurrent (j = 1:size(pt))
           do concurrent (i = 1 : msize)
@@ -127,7 +125,7 @@ program sr_normvar
             sr_nv(i, j, k, e_c) = nv_nvar(sr_data(:, i, j, k, -1), &
                                   n_min, n_max, &
                                   sr_data(:, i, j, k, e_c), &
-                                  sr_ref(e_c), sr_max(e_c))
+                                  sr_ref(e_c), sr_max(e_c)-sr_ref(e_c))
 !
 !             print '(a, i3)', "m = ", mt(msize*this_div + i)
 !             print '(a, i3)', "p = ", pt(j)
