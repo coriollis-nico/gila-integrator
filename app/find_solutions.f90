@@ -12,9 +12,9 @@ program find_solutions_initial
 
   integer :: i, k
 
-  integer, dimension(3), parameter  :: mt = [ 85, 7, 220 ]
+  integer, dimension(3), parameter  :: mt = [ 85, 210, 220 ]
   !! [[gi_conditions:m]]
-  integer, dimension(size(mt)), parameter  :: pt = [ 3, 200, 8 ]
+  integer, dimension(size(mt)), parameter  :: pt = [ 3, 7, 8 ]
   !! [[gi_conditions:p]]
   real(qp), dimension(3), parameter :: lt = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
   !! [[gi_conditions:l]]
@@ -54,7 +54,7 @@ program find_solutions_initial
 
   do k = 1, size(lt)
     do i = 1, size(mt)
-      write(mpl_id, *) mt(i), pt(i), lt(k)
+      write(mpl_id, '(3(i4))') mt(i), pt(i), int(log10(lt(k)))
     end do
   end do
 
