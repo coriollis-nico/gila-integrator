@@ -49,12 +49,16 @@ program find_solutions_initial
   integer :: srn_id, sr1_id, sr2_id, sr3_id
 ! ------------------------------------------------------------------------------------ !
 
+  write(io_str, '((a), i5, (a))') '(', n, '(es30.20))'
+
+  print '(a)', io_str
+
   print '(a)', "Saving mpl data..."
   call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
 
   do k = 1, size(lt)
     do i = 1, size(mt)
-      write(mpl_id, *) mt(i), pt(i), lt(k)
+      write(mpl_id, '(3(i4))') mt(i), pt(i), int(log10(lt(k)))
     end do
   end do
 
@@ -106,7 +110,7 @@ program find_solutions_initial
   call safe_open("y.dat", y_id, file_dir=data_dir)
   do k = 1, size(lt)
     do i = 1, size(mt)
-      write(y_id, *) y(:, i, k)
+      write(y_id, trim(io_str)) y(:, i, k)
     end do
   end do
   close(y_id)
@@ -114,7 +118,7 @@ program find_solutions_initial
   call safe_open("n.dat", srn_id, file_dir=data_dir)
   do k = 1, size(lt)
     do i = 1, size(mt)
-      write(srn_id, *) sr_n_0(:, i, k, 1)
+      write(srn_id, trim(io_str)) sr_n_0(:, i, k, 1)
     end do
   end do
   close(srn_id)
@@ -122,7 +126,7 @@ program find_solutions_initial
   call safe_open("sr1.dat", sr1_id, file_dir=data_dir)
   do k = 1, size(lt)
     do i = 1, size(mt)
-      write(sr1_id, *) sr1(:, i, k)
+      write(sr1_id, trim(io_str)) sr1(:, i, k)
     end do
   end do
   close(sr1_id)
@@ -130,7 +134,7 @@ program find_solutions_initial
   call safe_open("sr2.dat", sr2_id, file_dir=data_dir)
   do k = 1, size(lt)
     do i = 1, size(mt)
-      write(sr2_id, *) sr2(:, i, k)
+      write(sr2_id, trim(io_str)) sr2(:, i, k)
     end do
   end do
   close(sr2_id)
@@ -138,7 +142,7 @@ program find_solutions_initial
   call safe_open("sr3.dat", sr3_id, file_dir=data_dir)
   do k = 1, size(lt)
     do i = 1, size(mt)
-      write(sr3_id, *) sr3(:, i, k)
+      write(sr3_id, trim(io_str)) sr3(:, i, k)
     end do
   end do
   close(sr3_id)
