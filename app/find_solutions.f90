@@ -12,9 +12,9 @@ program find_solutions_initial
 
   integer :: i, k
 
-  integer, dimension(3), parameter  :: mt = [ 85, 112, 112 ]
+  integer, dimension(3), parameter  :: mt = [ 85, 7, 220 ]
   !! [[gi_conditions:m]]
-  integer, dimension(size(mt)), parameter  :: pt = [ 3, 4, 5 ]
+  integer, dimension(size(mt)), parameter  :: pt = [ 3, 200, 8 ]
   !! [[gi_conditions:p]]
   real(qp), dimension(3), parameter :: lt = [ 1.e-17_qp, 1.e-22_qp, 1.e-27_qp ]
   !! [[gi_conditions:l]]
