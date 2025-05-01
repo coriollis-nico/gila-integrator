@@ -23,7 +23,6 @@ m = np.unique(data["m"].to_numpy())
 p = np.unique(data["p"].to_numpy())
 l = np.unique(data["log_l"].to_numpy())
 
-
 # Plot
 fig, axs = plt.subplots(
     nrows=3, ncols=l.size, sharex="all", sharey="all", layout="constrained"
@@ -41,10 +40,9 @@ for k in range(l.size):
             vmin=0,
             vmax=1,
             interpolation="none",
-            extent=(m[0] - 0.5, m[-1] - 0.5, p[-1] - 0.5, p[0] - 0.5),
+            extent=(m[0] - 0.5, m[-1] + 0.5, p[-1] + 0.5, p[0] - 0.5),
             aspect="auto",
         )
-
         axs[k, 0].set_ylabel(r"$ p $")
 
 plt.savefig(fig_dir + "/heatmap.pdf")
