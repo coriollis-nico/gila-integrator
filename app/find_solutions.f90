@@ -53,8 +53,6 @@ program find_solutions
 
   write(io_str, '((a), i5, (a))') '(', n, '(es30.20))'
 
-  print '(a)', io_str
-
   print '(a)', "Saving mpl data..."
   call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
 

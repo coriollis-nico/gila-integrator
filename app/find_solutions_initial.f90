@@ -43,6 +43,8 @@ program find_solutions_initial
 
   character(len=*), parameter :: data_dir = "data/sims/solutions_initial"
 
+  character(len=16) :: io_str
+
   integer :: x_id
   integer :: y_id
   integer :: mpl_id
@@ -50,8 +52,6 @@ program find_solutions_initial
 ! ------------------------------------------------------------------------------------ !
 
   write(io_str, '((a), i5, (a))') '(', n, '(es30.20))'
-
-  print '(a)', io_str
 
   print '(a)', "Saving mpl data..."
   call safe_open("mpl.dat", mpl_id, file_dir=data_dir)
