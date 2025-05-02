@@ -41,7 +41,7 @@ program gr_integration
   call safe_open(data_file, io_gr, data_dir)
   write(io_gr, '(a)') "# x  y"
   do i = 1, n
-    write(io_gr, *) x(i), y(i)
+    write(io_gr, '((f30.20), (es30.20))') x(i), y(i)
   end do
   close(io_gr)
 

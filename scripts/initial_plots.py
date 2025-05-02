@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 
 plt.style.use("grayscale")
 plt.rcParams["text.usetex"] = True
-plt.rcParams["figure.figsize"] = [6.4, 4.27]
 plt.rcParams["lines.linewidth"] = 1
 plot_styles = ["dashed", "dashdot", "dotted"]
 
@@ -50,7 +49,54 @@ gr = np.loadtxt("data/sims/gr/gr.dat")
 print("Plotting…")
 
 fig, axs = plt.subplots(
-    nrows=3, ncols=l.size, sharex="col", sharey="row", layout="constrained"
+    nrows=1,
+    ncols=l.size,
+    sharex=True,
+    sharey=True,
+    layout="constrained",
+    squeeze=True,
+    figsize=[6.4, 2.133],
+)
+
+axs[0].set_ylabel(r"$ \bar{H} $")
+
+for k in range(l.size):
+    axs[k].set_yscale("log")
+    axs[k].set_xscale("log")
+    axs[k].set_title(r"$ \log(l) = {} $".format(l[k]))
+    axs[k].set_xlabel(r"$ \bar{a} $")
+    axs[k].set_xlim(np.exp(x[-1]), np.exp(x[0]))
+    axs[k].set_ylim(top=1.0e33)
+    axs[k].plot(np.exp(gr[:, 0]), gr[:, 1])
+
+for i in range(len(mpl)):
+    for k in range(l.size):
+        if l[k] == mpl[i, -1]:
+            this_col = k
+    for j in range(len(mp)):
+        if mp[j, 0] == mpl[i, 0] and mp[j, 1] == mpl[i, 1]:
+            this_mp = j
+    axs[this_col].plot(
+        np.exp(x),
+        y[i, :],
+        linestyle=plot_styles[this_mp],
+        color="k",
+        label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
+    )
+
+axs[0].legend(loc="lower left", fontsize=8, frameon=False)
+
+plt.savefig(fig_dir + "/sols.pdf")
+
+plt.close()
+
+fig, axs = plt.subplots(
+    nrows=3,
+    ncols=l.size,
+    sharex="col",
+    sharey="row",
+    layout="constrained",
+    figsize=[6.4, 4.27],
 )
 
 for k in range(l.size):
