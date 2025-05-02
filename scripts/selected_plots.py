@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 plt.style.use("grayscale")
 plt.rcParams["text.usetex"] = True
-plt.rcParams["figure.figsize"] = [6.4, 2]
+plt.rcParams["figure.figsize"] = [6.4, 4.27]
 plt.rcParams["lines.linewidth"] = 1
 plot_styles = ["dashed", "dashdot", "dotted"]
 
@@ -32,7 +32,10 @@ N_min = -60
 # Data
 print("Reading data…")
 
-mpl = np.loadtxt(data_dir + "/mpl.dat")
+mpl = np.loadtxt(data_dir + "/mpl.dat", dtype=int)
+
+mp = np.unique(mpl[:, 0:2], axis=0)
+l = np.unique(mpl[:, 2])
 
 x = np.loadtxt(data_dir + "/x.dat")
 N = np.loadtxt(data_dir + "/n.dat")
@@ -47,102 +50,61 @@ gr = np.loadtxt("data/sims/gr/gr.dat")
 print("Plotting…")
 
 fig, axs = plt.subplots(
-    nrows=1,
-    ncols=3,
-    sharex="col",
-    sharey="row",
-    layout="constrained",
-    figsize=[6.4, 2.5],
-    squeeze=True,
+    nrows=3, ncols=l.size, sharex="col", sharey="row", layout="constrained"
 )
 
-for k in range(3):
-    axs[k].set_yscale("log")
-    axs[k].set_xscale("log")
-    axs[k].set_xlim(np.exp(x[-1]), np.exp(x[0]))
-    axs[k].set_ylim(top=1.0e30)
-    axs[k].set_title(r"$\log(l) = {}$".format(int(np.log10(mpl[k, 2]))))
-    for i in range(3):
-        axs[k].plot(
-            np.exp(x),
-            y[3 * i + k, :],
-            color="k",
-            ls=plot_styles[i],
-            label=r"$ m = {}$, $p = {} $".format(
-                int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
-            ),
-        )
-    axs[k].plot(np.exp(gr[:, 0]), gr[:, 1], label=r"$\Lambda$CDM")
-
-axs[0].set_ylabel(r"$ \bar{H} $")
-axs[1].set_xlabel(r"$ \bar{a} $")
-
-axs[0].legend(loc="lower left", frameon=False)
-
-plt.savefig(fig_dir + "/solutions.pdf")
-plt.close()
-
-
-fig, axs = plt.subplots(
-    nrows=3,
-    ncols=3,
-    sharex="col",
-    sharey="row",
-    layout="constrained",
-    figsize=[6.4, 4],
-)
-
-for k in range(3):
-    axs[0, k].set_title(r"$\log(l) = {}$".format(int(np.log10(mpl[k, 2]))))
-
+for k in range(l.size):
+    axs[0, k].set_title(r"$ \log(l) = {} $".format(l[k]))
     axs[2, k].set_xlabel(r"$ N $")
-
-    axs[0, k].fill_between([N_min, N_max], 0, e1_max, alpha=0.14)
-    axs[1, k].fill_between([N_min, N_max], e2_min, e2_max, alpha=0.10)
-    axs[2, k].fill_between([N_min, N_max], e3_min, e3_max, alpha=0.14)
-
     for j in range(3):
         axs[j, k].set_xlim(N_min, N_max)
-
-    for i in range(3):
-        N_index = [
-            l
-            for l in range(len(N[3 * i + k, :]))
-            if (N_min <= N[3 * i + k, l]) and (N[3 * i + k, l] <= N_max)
-        ]
-        axs[0, k].plot(
-            N[3 * i + k, N_index],
-            sr1[3 * i + k, N_index],
-            color="k",
-            ls=plot_styles[i],
-            label=r"$m = {}$, $p = {}$".format(
-                int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
-            ),
-        )
-        axs[1, k].plot(
-            N[3 * i + k, N_index],
-            sr2[3 * i + k, N_index],
-            color="k",
-            ls=plot_styles[i],
-            label=r"$m = {}$, $p = {}$".format(
-                int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
-            ),
-        )
-        axs[2, k].plot(
-            N[3 * i + k, N_index],
-            sr3[3 * i + k, N_index],
-            color="k",
-            ls=plot_styles[i],
-            label=r"$m = {}$, $p = {}$".format(
-                int(mpl[3 * i + k, 0]), int(mpl[3 * i + k, 1])
-            ),
-        )
 
 axs[0, 0].set_ylabel(r"$ \epsilon_1 $")
 axs[1, 0].set_ylabel(r"$ \epsilon_2 $")
 axs[2, 0].set_ylabel(r"$ \epsilon_3 $")
 
-axs[1, 1].legend(loc="upper left", fontsize=8)
+for i in range(len(mpl)):
+    for k in range(l.size):
+        if l[k] == mpl[i, -1]:
+            this_col = k
+    for j in range(len(mp)):
+        if mp[j, 0] == mpl[i, 0] and mp[j, 1] == mpl[i, 1]:
+            this_mp = j
+    N_index = [
+        index
+        for index in range(len(N[i, :]))
+        if (N_min <= N[i, index]) and (N[i, index] <= N_max)
+    ]
+    axs[0, this_col].plot(
+        N[i, N_index],
+        sr1[i, N_index],
+        linestyle=plot_styles[this_mp],
+        color="k",
+        label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
+    )
+    axs[1, this_col].plot(
+        N[i, N_index],
+        sr2[i, N_index],
+        linestyle=plot_styles[this_mp],
+        color="k",
+        label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
+    )
+    axs[2, this_col].plot(
+        N[i, N_index],
+        sr3[i, N_index],
+        linestyle=plot_styles[this_mp],
+        color="k",
+        label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
+    )
+
+axs[-1, 0].legend(loc="best", fontsize=6)
+
+plt.savefig(fig_dir + "/sr_nocomp.pdf")
+
+for k in range(l.size):
+    axs[0, k].fill_between([N_min, N_max], 0, e1_max, alpha=0.2)
+    axs[1, k].fill_between([N_min, N_max], e2_min, e2_max, alpha=0.1)
+    axs[2, k].fill_between([N_min, N_max], e3_min, e3_max, alpha=0.2)
 
 plt.savefig(fig_dir + "/sr.pdf")
 
