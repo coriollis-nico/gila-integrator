@@ -24,29 +24,27 @@ O_r0 = 9.02e-5
 O_k0_abs = 0.005
 k_sign = np.array([-1, 0, 1])
 # Integration parameters
-t_bar_i = 1
-t_bar_f = 0
-a_bar_i = 1
+t_bar_i = 1.0
+t_bar_f = 0.0
+a_bar_i = 1.0
 n = 50000
-dt = (t_bar_f - t_bar_i) / n
 
 
 # Convenience functions
-def euler_step(derivative, dt, t, x):
-    return derivative(t, x) * dt
-
-
-def density_bracket(a_bar, k):
-    densities = O_r0 / (a_bar**2) + O_m0 / a_bar + k * O_k0_abs + (O_L * a_bar**2)
-    return np.sqrt(densities)
-
-
 def seconds_to_years(t):
     return t / (1e7 * np.pi)
 
 
+# t0H0
 tH0 = np.array(
-    [scint.quad(lambda a_bar: 1 / density_bracket(a_bar, k), 0, 1)[0] for k in k_sign]
+    [
+        scint.quad(
+            lambda a: 1.0 / np.sqrt(O_r0 / a**2 + O_m0 / a + k * O_k0_abs + O_L * a**2),
+            0,
+            1,
+        )[0]
+        for k in k_sign
+    ]
 )
 t0 = tH0 / H0
 
@@ -57,83 +55,76 @@ for j in range(len(k_sign)):
     )
 
 
-def abar_derivative(t, a, i):
-    return tH0[i] * density_bracket(a, k_sign[i])
+# deriavatives
+def da(t, a, i):
+    return tH0[i] * np.sqrt(O_r0 / a**2 + O_m0 / a + k_sign[i] * O_k0_abs + O_L * a**2)
 
 
-t_bar = np.zeros(n)
-t_bar[0] = t_bar_i
+def da2(t, a, i):
+    return -(0.5) * (tH0[i] ** 2) * (2.0 * O_r0 / a**3 + O_m0 / a**2 - 2.0 * O_L * a)
+
+
+# data arrays
+t_bar = np.linspace(t_bar_i, t_bar_f, n)
+dt = t_bar[1] - t_bar[0]
 
 a_bar = np.zeros((n, len(k_sign)))
 a_bar[0, :] = a_bar_i
 
-d_abar_d_tbar = np.zeros((n, len(k_sign)))
-for l_ in range(len(k_sign)):
-    d_abar_d_tbar[0, l_] = abar_derivative(t_bar_i, a_bar_i, l_)
+adot = np.zeros((n, len(k_sign)))
+for k_i in range(len(k_sign)):
+    adot[0, k_i] = da(t_bar[0], a_bar[0, k_i], k_i)
 
-for j in range(n - 1):
-    t_bar[j + 1] = t_bar[j] + dt
-    for l_ in range(len(k_sign)):
-        a_bar[j + 1, l_] = a_bar[j, l_] + euler_step(
-            (lambda t, a: abar_derivative(t, a, k_sign[l_])), dt, t_bar[j], a_bar[j, l_]
-        )
-        d_abar_d_tbar[j + 1, l_] = abar_derivative(t_bar[j + 1], a_bar[j + 1, l_], l_)
+addot = np.zeros((n, len(k_sign)))
+for k_i in range(len(k_sign)):
+    addot[0, k_i] = da2(t_bar[0], a_bar[0, k_i], k_i)
+
+
+# integration
+for k_i in range(len(k_sign)):
+    for n_i in range(n - 1):
+        a_bar[n_i + 1, k_i] = a_bar[n_i, k_i] + (dt * adot[n_i, k_i])
+        adot[n_i + 1, k_i] = da(t_bar[n_i + 1], a_bar[n_i + 1, k_i], k_i)
+        addot[n_i + 1, k_i] = da2(t_bar[n_i + 1], a_bar[n_i + 1, k_i], k_i)
+
 
 # a(t)
 plt.figure(layout="constrained")
 plt.xlim(0, 1)
-for l_ in range(len(k_sign)):
-    plt.plot(t_bar, a_bar[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
+for k_i in range(len(k_sign)):
+    plt.plot(t_bar, a_bar[:, k_i], label=r"$ k = {} $".format(k_sign[k_i]))
 plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \bar{a} $")
 plt.legend(loc="best", frameon=False)
 plt.savefig(fig_dir + "/scale.pdf")
 plt.close()
 
-# 1/a_dot
+# d2a
 plt.figure(layout="constrained")
-plt.xlim(0, 1)
-for l_ in range(len(k_sign)):
-    plt.plot(t_bar, 1 / d_abar_d_tbar[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
-plt.xlabel(r"$ \bar{t} $")
-plt.ylabel(r"$ \left( \frac{\mathrm{d} \bar{a}}{\mathrm{d} \bar{t}} \right)^{-1} $")
+for k_i in range(len(k_sign)):
+    plt.plot(t_bar, addot[:, k_i], label=r"$ k = {} $".format(k_sign[k_i]))
 plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir + "/scale_deriv_inverse.pdf")
+plt.xlim(0, 0.1)
+plt.yscale("symlog")
+plt.ylim(top=0)
+plt.xlabel(r"$ \bar{t} $")
+plt.ylabel(r"$ \ddot{\bar{a}} $")
+plt.savefig(fig_dir + "/ddot_scale.pdf")
 plt.close()
+
 
 # Δa
-plt.figure(layout="constrained")
-plt.xlim(0, 1)
-for l_ in [0, 2]:
-    plt.plot(
-        t_bar,
-        (a_bar[:, l_] - a_bar[:, 1]) / a_bar[:, 1],
-        label=r"$ k = {} $".format(k_sign[l_]),
-    )
-plt.xlabel(r"$ \bar{t} $")
-plt.ylabel(r"$ \frac{\Delta{\bar{a}}}{\bar{a}_{k=0}} $")
-plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir + "/scale_diff.pdf")
-plt.close()
-
-# Ω_k
-O_k = np.zeros((n, len(k_sign)))
-for l_ in range(len(k_sign)):
-    O_k[:, l_] = k_sign[l_] * O_k0_abs * (tH0[l_] / d_abar_d_tbar[:, l_]) ** 2
-
-print("Last values of Ω_k:")
-print("t =", f"{t_bar[-1]:.3e}")
-for l_ in [0, 2]:
-    print(k_sign[l_], "->", f"{O_k[-1, l_]:.3e}")
-
-plt.figure(layout="constrained")
-plt.xlim(0, 1)
-for l_ in [0, 2]:
-    plt.plot(t_bar, O_k[:, l_], label=r"$ k = {} $".format(k_sign[l_]))
-plt.xlabel(r"$ \bar{t} $")
-plt.ylabel(r"$ \Omega_{k} $")
-plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-plt.legend(loc="best", frameon=False)
-plt.savefig(fig_dir + "/O_k.pdf")
-plt.close()
+# plt.figure(layout="constrained")
+# plt.xlim(0, 1)
+# for k_i in range(len(k_sign)):
+#     plt.plot(
+#         t_bar,
+#         (a_bar[:, k_i] - a_bar[:, 1]) / a_bar[:, 1],
+#         label=r"$ k = {} $".format(k_sign[k_i]),
+#     )
+# plt.xlabel(r"$ \bar{t} $")
+# plt.ylabel(r"$ \frac{\Delta{\bar{a}}}{\bar{a}_{k=0}} $")
+# plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
+# plt.legend(loc="best", frameon=False)
+# plt.savefig(fig_dir + "/scale_diff.pdf")
+# plt.close()
