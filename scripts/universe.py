@@ -24,10 +24,12 @@ O_r0 = 9.02e-5
 O_k0_abs = 0.005
 k_sign = np.array([1, 0, -1])
 # Integration parameters
-t_bar_i = 1.0
-t_bar_f = 0.0
-a_bar_i = 1.0
-n = 50000
+t_i = 1.0
+t_l = 0.0
+t_r = 2
+a_i = 1.0
+n_i = 50000
+n = 2 * n_i
 
 
 # Convenience functions
@@ -65,36 +67,43 @@ def da2(t, a, i):
 
 
 # data arrays
-t_bar = np.linspace(t_bar_i, t_bar_f, n)
-dt = t_bar[1] - t_bar[0]
+t = np.linspace(t_l, t_r, n)
+dt = t[1] - t[0]
 
-a_bar = np.zeros((n, len(k_sign)))
-a_bar[0, :] = a_bar_i
+a = np.zeros((n, len(k_sign)))
+a[n_i, :] = a_i
 
 adot = np.zeros((n, len(k_sign)))
 for k_i in range(len(k_sign)):
-    adot[0, k_i] = da(t_bar[0], a_bar[0, k_i], k_i)
+    adot[n_i, k_i] = da(t[n_i], a[n_i, k_i], k_i)
 
 addot = np.zeros((n, len(k_sign)))
 for k_i in range(len(k_sign)):
-    addot[0, k_i] = da2(t_bar[0], a_bar[0, k_i], k_i)
+    addot[n_i, k_i] = da2(t[n_i], a[n_i, k_i], k_i)
 
 
 # integration
 for k_i in range(len(k_sign)):
-    for n_i in range(n - 1):
-        a_bar[n_i + 1, k_i] = a_bar[n_i, k_i] + (dt * adot[n_i, k_i])
-        adot[n_i + 1, k_i] = da(t_bar[n_i + 1], a_bar[n_i + 1, k_i], k_i)
-        addot[n_i + 1, k_i] = da2(t_bar[n_i + 1], a_bar[n_i + 1, k_i], k_i)
-
+    # future
+    for j in range(1, n - n_i):
+        a[n_i + j, k_i] = a[n_i + j - 1, k_i] + (dt * adot[n_i + j - 1, k_i])
+        adot[n_i + j, k_i] = da(t[n_i + j], a[n_i + j, k_i], k_i)
+        addot[n_i + j, k_i] = da2(t[n_i + j], a[n_i + j, k_i], k_i)
+    # past
+    for j in range(1, n_i+1):
+        a[n_i - j, k_i] = a[n_i - j + 1, k_i] - (dt * adot[n_i - j + 1, k_i])
+        adot[n_i - j, k_i] = da(t[n_i - j], a[n_i - j, k_i], k_i)
+        addot[n_i - j, k_i] = da2(t[n_i - j], a[n_i - j, k_i], k_i)
 
 # a(t)
 plt.figure(layout="constrained")
-plt.xlim(0, 1)
+# plt.xlim(0, 2)
+# plt.ylim(bottom=0)
 for k_i in range(len(k_sign)):
-    plt.plot(t_bar, a_bar[:, k_i], label=r"$ k = {} $".format(k_sign[k_i]))
+    plt.plot(t, a[:, k_i], label=r"$ k = {} $".format(k_sign[k_i]))
 plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \bar{a} $")
+# plt.yscale("log")
 plt.legend(loc="best", frameon=False)
 plt.savefig(fig_dir + "/scale.pdf")
 plt.close()
@@ -102,7 +111,7 @@ plt.close()
 # d2a
 plt.figure(layout="constrained")
 for k_i in range(len(k_sign)):
-    plt.plot(t_bar, addot[:, k_i], label=r"$ k = {} $".format(k_sign[k_i]))
+    plt.plot(t, addot[:, k_i], label=r"$ k = {} $".format(k_sign[k_i]))
 plt.legend(loc="best", frameon=False)
 plt.xlim(0, 0.1)
 plt.yscale("symlog")
@@ -111,20 +120,3 @@ plt.xlabel(r"$ \bar{t} $")
 plt.ylabel(r"$ \ddot{\bar{a}} $")
 plt.savefig(fig_dir + "/ddot_scale.pdf")
 plt.close()
-
-
-# Δa
-# plt.figure(layout="constrained")
-# plt.xlim(0, 1)
-# for k_i in range(len(k_sign)):
-#     plt.plot(
-#         t_bar,
-#         (a_bar[:, k_i] - a_bar[:, 1]) / a_bar[:, 1],
-#         label=r"$ k = {} $".format(k_sign[k_i]),
-#     )
-# plt.xlabel(r"$ \bar{t} $")
-# plt.ylabel(r"$ \frac{\Delta{\bar{a}}}{\bar{a}_{k=0}} $")
-# plt.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
-# plt.legend(loc="best", frameon=False)
-# plt.savefig(fig_dir + "/scale_diff.pdf")
-# plt.close()
