@@ -16,7 +16,7 @@ makedirs(fig_dir, exist_ok=True)
 
 # Integration parameters
 t_i = 0.0
-t_f = 1.0
+t_f = 2
 n = 50000
 
 # Functions
@@ -37,7 +37,8 @@ t = np.linspace(t_i, t_f, n)
 
 # Plotting
 plt.figure(layout="constrained")
-
+plt.xlim(0, 2)
+plt.ylim(0,2)
 plt.plot(t, a_L(t), color="k", ls="solid", label=r"$ \Omega_{\Lambda} = 1 $")
 plt.plot(t, a_m(t), color="k", ls="dashed", label=r"$ \Omega_m = 1 $")
 plt.plot(t, a_k(t), color="k", ls="dotted", label=r"$ \Omega_k = 1 $")
