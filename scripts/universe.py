@@ -22,7 +22,7 @@ O_m0 = 0.3153
 O_L = 0.6847
 O_r0 = 9.02e-5
 O_k0_abs = 0.005
-k_sign = np.array([-1, 0, 1])
+k_sign = np.array([1, 0, -1])
 # Integration parameters
 t_bar_i = 1.0
 t_bar_f = 0.0
