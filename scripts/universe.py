@@ -107,6 +107,29 @@ plt.legend(loc="best", frameon=False)
 plt.savefig(fig_dir + "/scale.pdf")
 plt.close()
 
+# relative densities
+a_X = np.logspace(-5, 1, n)
+
+rho_m_norm = O_m0 / (a_X**3)
+rho_r_norm = O_r0 / (a_X**4)
+rho_L_norm = O_L / (a_X**0)
+rho_k_norm_abs = O_k0_abs / (a_X**2)
+
+plt.figure(layout="constrained")
+plt.xscale("log")
+plt.yscale("log")
+plt.plot(a_X, rho_L_norm, label=r"$ \rho_{\Lambda} $")
+plt.plot(a_X, rho_m_norm, label=r"$ \rho_m $")
+plt.plot(a_X, rho_k_norm_abs, label=r"$ \rho_k $ ($ k = -1 $)")
+plt.plot(a_X, rho_r_norm, label=r"$ \rho_r $")
+plt.xlim(1e-5, 10)
+plt.xlabel(r"$ \bar{a} $")
+plt.ylabel(r"$ \frac{\rho_I}{\rho_{c,0}} $")
+plt.legend(loc="best", frameon=False)
+plt.savefig(fig_dir + "/contribution.pdf")
+plt.close()
+
+
 # d2a
 plt.figure(layout="constrained")
 for k_i in range(len(k_sign)):
