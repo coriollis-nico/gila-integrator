@@ -15,34 +15,34 @@ fig_dir = "plots/intro"
 makedirs(fig_dir, exist_ok=True)
 
 # Integration parameters
-t_i = 0.0
-t_f = 2
+tH0_i = 0.0
+tH0_f = 1.
 n = 50000
 
 # Functions
-def a_r(t):
-    return np.sqrt(t)
+def a_r(tH0):
+    return np.sqrt(2.*tH0)
 
-def a_m(t):
-    return t**(2/3)
+def a_m(tH0):
+    return (3.*tH0/2.)**(2/3)
 
-def a_k(t):
-    return t
+def a_k(tH0):
+    return tH0
 
 def a_L(t):
-    return 2**(t) - 1
+    return 2**(tH0/np.log(2)) - 1
 
 # x axis
-t = np.linspace(t_i, t_f, n)
+tH0 = np.linspace(tH0_i, tH0_f, n)
 
 # Plotting
 plt.figure(layout="constrained")
-plt.xlim(0, 2)
-plt.plot(t, a_L(t), label=r"$ \Omega_{\Lambda} = 1 $")
-plt.plot(t, a_m(t), label=r"$ \Omega_m = 1 $")
-plt.plot(t, a_k(t), label=r"$ \Omega_k = 1 $")
-plt.plot(t, a_r(t), label=r"$ \Omega_r = 1 $")
-plt.xlabel(r"$ \bar{t} $")
+plt.xlim(0, tH0_f)
+plt.plot(tH0, a_L(tH0), label=r"$ \Omega_{\Lambda} = 1 $")
+plt.plot(tH0, a_m(tH0), label=r"$ \Omega_m = 1 $")
+plt.plot(tH0, a_k(tH0), label=r"$ \Omega_k = 1 $")
+plt.plot(tH0, a_r(tH0), label=r"$ \Omega_r = 1 $")
+plt.xlabel(r"$ t H_0 $")
 plt.ylabel(r"$ \bar{a}_I $")
 plt.ylim(bottom=0)
 plt.legend(loc="best", frameon=False)
