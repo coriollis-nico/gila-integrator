@@ -98,7 +98,6 @@ for k_i in range(len(k_sign)):
 # a(t)
 plt.figure(layout="constrained")
 plt.xlim(0, 2)
-# plt.ylim(bottom=0)
 for k_i in range(len(k_sign)):
     plt.plot(t, a[:, k_i], label=r"$ k = {} $".format(k_sign[k_i]))
 plt.xlabel(r"$ \bar{t} $")
