@@ -16,21 +16,26 @@ makedirs(fig_dir, exist_ok=True)
 
 # Integration parameters
 tH0_i = 0.0
-tH0_f = 1.
+tH0_f = 1.0
 n = 50000
+
 
 # Functions
 def a_r(tH0):
-    return np.sqrt(2.*tH0)
+    return np.sqrt(2.0 * tH0)
+
 
 def a_m(tH0):
-    return (3.*tH0/2.)**(2/3)
+    return (3.0 * tH0 / 2.0) ** (2 / 3)
+
 
 def a_k(tH0):
     return tH0
 
+
 def a_L(t):
-    return 2**(tH0/np.log(2)) - 1
+    return 2 ** (tH0 / np.log(2)) - 1
+
 
 # x axis
 tH0 = np.linspace(tH0_i, tH0_f, n)

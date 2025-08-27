@@ -90,7 +90,7 @@ for k_i in range(len(k_sign)):
         adot[n_i + j, k_i] = da(t[n_i + j], a[n_i + j, k_i], k_i)
         addot[n_i + j, k_i] = da2(t[n_i + j], a[n_i + j, k_i], k_i)
     # past
-    for j in range(1, n_i+1):
+    for j in range(1, n_i + 1):
         a[n_i - j, k_i] = a[n_i - j + 1, k_i] - (dt * adot[n_i - j + 1, k_i])
         adot[n_i - j, k_i] = da(t[n_i - j], a[n_i - j, k_i], k_i)
         addot[n_i - j, k_i] = da2(t[n_i - j], a[n_i - j, k_i], k_i)
