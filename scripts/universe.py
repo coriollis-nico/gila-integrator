@@ -53,7 +53,7 @@ t0 = tH0 / H0
 print("Age of the universe:")
 for j in range(len(k_sign)):
     print(
-        k_sign[j], "->", f"{t0[j]:.3e}", "s =", f"{seconds_to_years(t0[j]):.3e}", "yr"
+        k_sign[j], "->", f"{t0[j]:.3e}", "m =", f"{seconds_to_years(t0[j]):.3e}", "yr"
     )
 
 
