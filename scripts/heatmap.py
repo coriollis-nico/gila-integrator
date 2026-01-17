@@ -5,7 +5,7 @@ from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.style.use("grayscale")
+plt.style.use("seaborn-v0_8-colorblind")
 plt.rcParams["text.usetex"] = True
 plt.rcParams["figure.figsize"] = [6.4, 6.4]
 import pandas as pd
