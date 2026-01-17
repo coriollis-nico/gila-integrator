@@ -7,7 +7,7 @@ import numpy as np
 import scipy.integrate as scint
 import matplotlib.pyplot as plt
 
-plt.style.use("tableau-colorblind10")
+plt.style.use("seaborn-v0_8-colorblind")
 plt.rcParams["text.usetex"] = True
 plt.rcParams["figure.figsize"] = [6.4, 2.4]
 

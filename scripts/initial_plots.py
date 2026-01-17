@@ -5,10 +5,9 @@ from os import makedirs
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.style.use("grayscale")
+plt.style.use("seaborn-v0_8-colorblind")
 plt.rcParams["text.usetex"] = True
 plt.rcParams["lines.linewidth"] = 1
-plot_styles = ["dashed", "dashdot", "dotted"]
 
 # Data import
 fig_dir = "plots/solutions_initial"
@@ -67,7 +66,7 @@ for k in range(l.size):
     axs[k].set_xlabel(r"$ \bar{a} $")
     axs[k].set_xlim(np.exp(x[-1]), np.exp(x[0]))
     axs[k].set_ylim(top=1.0e33)
-    axs[k].plot(np.exp(gr[:, 0]), gr[:, 1])
+    axs[k].plot(np.exp(gr[:, 0]), gr[:, 1], label="RG")
 
 for i in range(len(mpl)):
     for k in range(l.size):
@@ -79,8 +78,6 @@ for i in range(len(mpl)):
     axs[this_col].plot(
         np.exp(x),
         y[i, :],
-        linestyle=plot_styles[this_mp],
-        color="k",
         label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
     )
 
@@ -124,22 +121,16 @@ for i in range(len(mpl)):
     axs[0, this_col].plot(
         N[i, N_index],
         sr1[i, N_index],
-        linestyle=plot_styles[this_mp],
-        color="k",
         label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
     )
     axs[1, this_col].plot(
         N[i, N_index],
         sr2[i, N_index],
-        linestyle=plot_styles[this_mp],
-        color="k",
         label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
     )
     axs[2, this_col].plot(
         N[i, N_index],
         sr3[i, N_index],
-        linestyle=plot_styles[this_mp],
-        color="k",
         label=r"$ m = {} $, $ p = {} $".format(mpl[i, 0], mpl[i, 1]),
     )
 
