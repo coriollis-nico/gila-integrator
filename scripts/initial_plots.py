@@ -67,6 +67,8 @@ for k in range(l.size):
     axs[k].set_xlim(np.exp(x[-1]), np.exp(x[0]))
     axs[k].set_ylim(top=1.0e33)
     axs[k].plot(np.exp(gr[:, 0]), gr[:, 1], label="RG")
+    axs[k].set_yticks([1e6, 1e12, 1e18, 1e24, 1e30])
+    axs[k].set_xticks([1, 1e-10, 1e-20, 1e-30])
 
 for i in range(len(mpl)):
     for k in range(l.size):
